@@ -1,0 +1,101 @@
+<% layout("/layouts/boilerplate") %>
+
+    <div class="roster-page">
+        <div class="container py-5">
+
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="roster-title">
+                    Players <span class="text-accent">Den</span>
+                </h1>
+
+                <p class="roster-subtitle">
+                    Meet the KingsMan roster
+                </p>
+
+                <div class="roster-divider"></div>
+                <!-- Add Player Button -->
+                <a href="/players/new" class="add-player-btn">
+                    + Register
+                </a>
+            </div>
+
+           
+
+
+            <!-- Players -->
+            <div class="row g-4">
+
+                <% players.forEach(player=> { %>
+
+                    <div class="col-12 col-md-6 col-lg-4">
+
+                        <!-- Entire Card Clickable -->
+                        <a href="/players/<%= player._id %>" class="player-card-link">
+
+                            <div class="player-card">
+
+                                <div class="player-card-body">
+
+                                    <!-- ROLES FIRST -->
+                                    <div class="role-list">
+
+                                        <% const roles=Array.isArray(player.role) ? player.role : (player.role ?
+                                            [player.role] : []); %>
+
+                                            <% if (roles.length> 0) { %>
+
+                                                <% roles.forEach(role=> { %>
+
+                                                    <span class="role-badge role-<%= role.toLowerCase() %>">
+                                                        <%= role %>
+                                                    </span>
+
+                                                    <% }) %>
+
+                                                        <% } else { %>
+
+                                                            <span class="role-badge">
+                                                                No Role
+                                                            </span>
+
+                                                            <% } %>
+
+                                    </div>
+
+
+                                    <!-- BIG WHITE IGN -->
+                                    <h2 class="player-ign-big">
+                                        <%= player.ign %>
+                                    </h2>
+
+
+                                    <!-- UID -->
+                                    <div class="player-uid">
+                                        <span class="detail-label">UID</span>
+
+                                        <span class="detail-value">
+                                            <%= player.uid %>
+                                        </span>
+                                    </div>
+
+
+                                    <!-- STATUS -->
+                                    <span class="status-pill status-<%= player.verificationStatus %>">
+                                        <%= player.verificationStatus %>
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                    </div>
+
+                    <% }) %>
+
+            </div>
+
+        </div>
+    </div>

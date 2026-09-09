@@ -1,0 +1,853 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="edit-page">
+
+        
+        <div class="edit-container">
+
+            <div class="edit-header">
+                <div class="edit-kicker">PLAYER MANAGEMENT</div>
+                <h1>Edit Player Profile</h1>
+                <p>Update your competitive profile information.</p>
+            </div>
+
+
+            <form action="/players/<%= player._id %>?_method=PUT" method="POST"
+                class="player-edit-form needs-validation" novalidate>
+
+                <!-- IGN -->
+                <div class="form-section">
+
+                    <h5>Player Information</h5>
+
+                    <div class="mb-4 text-start">
+                        <label for="ign" class="form-label">
+                            In-Game Name
+                        </label>
+
+                        <input type="text" class="form-control kingsman-input" id="ign" name="ign"
+                            value="<%= player.ign %>" maxlength="30" required>
+
+                        <div class="invalid-feedback">
+                            In-game name is required.
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- ROLES -->
+                <div class="form-section">
+
+                    <h5>Roles</h5>
+
+                    <div class="role-grid">
+
+                        <% const roles=[ "Duelist" , "Initiator" , "Controller" , "Sentinel" , "Flex" ]; %>
+
+                            <% roles.forEach(role=> { %>
+
+                                <div class="role-option">
+
+                                    <input type="checkbox" class="btn-check" name="role" id="role-<%= role %>"
+                                        value="<%= role %>" autocomplete="off" <%=player.role &&
+                                        player.role.includes(role) ? "checked" : "" %>
+                                    >
+
+                                    <label class="role-label" for="role-<%= role %>">
+                                        <%= role %>
+                                    </label>
+
+                                </div>
+
+                                <% }) %>
+
+                    </div>
+
+                </div>
+
+
+                <!-- AGENTS -->
+                <!-- AGENTS -->
+                
+                <div class="form-section">
+                
+                    ```
+                    <h5>Agents</h5>
+                
+                    <div class="agent-grid">
+                
+                        <% const agents=[ "Jett" , "Raze" , "Neon" , "Yoru" , "Iso" , "Phoenix" , "Reyna" , "Waylay" , "Sova" , "Fade"
+                            , "Breach" , "K/O" , "Tejo" , "Gekko" , "Skye" , "Brimstone" , "Omen" , "Harbour" , "Astra" , "Viper"
+                            , "Clove" , "Cypher" , "Killjoy" , "Chamber" , "Vyse" , "Deadlock" , "Sage" ]; %>
+                
+                            <% agents.forEach(agent=> { %>
+                
+                                <label class="agent-option">
+                
+                                    <input type="checkbox" name="agents" value="<%= agent %>" <%=player.agents &&
+                                        player.agents.includes(agent) ? "checked" : "" %>
+                                    >
+                
+                                    <span class="agent-label">
+                                        <%= agent %>
+                                    </span>
+                
+                                </label>
+                
+                                <% }) %>
+                
+                    </div>
+                
+                    <div class="agent-error">
+                        Please select at least one agent.
+                    </div>
+                    ```
+                
+                </div>
+
+
+
+                <!-- TEAM -->
+                <div class="form-section">
+
+                    <h5>Team Information</h5>
+
+                    <div class="team-toggle">
+
+                        <input class="form-check-input" type="checkbox" role="switch" id="inTeam" name="inTeam"
+                            value="true" <%=player.inTeam ? "checked" : "" %>
+                        >
+
+                        <label class="form-check-label" for="inTeam">
+                            Currently in a team
+                        </label>
+
+                    </div>
+
+
+                    <div class="mb-4 text-start" id="teamNameContainer"
+                        style="<%= player.inTeam ? 'display:block;' : 'display:none;' %>">
+
+                        <label for="teamName" class="form-label">
+                            Team Name
+                        </label>
+
+                        <input type="text" class="form-control kingsman-input" id="teamName" name="teamName"
+                            value="<%= player.teamName || '' %>" maxlength="50" <%=player.inTeam ? "required" : "" %>
+                        >
+
+                        <div class="invalid-feedback">
+                            Team name is required.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SOCIAL MEDIA -->
+                <div class="form-section">
+
+                    <h5>Social Media</h5>
+
+                    <p class="section-description">
+                        Update your social media handles.
+                    </p>
+
+                    <!-- Instagram -->
+                    <div class="social-form-grid">
+                        <div class="social-input">
+                        
+                            <label for="instagram">
+                                Instagram
+                            </label>
+                        
+                            <div class="social-field">
+                        
+                                <!-- <span class="social-prefix">@</span> -->
+                        
+                                <input type="text" id="instagram" name="socialMedia[instagram]" value="<%= player.socialMedia?.instagram || '' %>"
+                                    placeholder="username">
+                        
+                            </div>
+                        
+                        </div>
+
+
+                        <!-- Facebook -->
+                        <div class="social-input">
+
+                            <label for="facebook">
+                                Facebook
+                            </label>
+
+                            <div class="social-field">
+
+                                <!-- <span class="social-prefix">@</span> -->
+
+                                <input type="text" id="facebook" name="socialMedia[facebook]"
+                                    value="<%= player.socialMedia?.facebook || '' %>" placeholder="username">
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- YouTube -->
+                        <div class="social-input">
+
+                            <label for="youtube">
+                                YouTube
+                            </label>
+
+                            <div class="social-field">
+
+                                <!-- <span class="social-prefix">@</span> -->
+
+                                <input type="text" id="youtube" name="socialMedia[youtube]"
+                                    value="<%= player.socialMedia?.youtube || '' %>" placeholder="channel">
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Twitch -->
+                        <div class="social-input">
+
+                            <label for="twitch">
+                                Twitch
+                            </label>
+
+                            <div class="social-field">
+<!-- 
+                                <span class="social-prefix">@</span> -->
+
+                                <input type="text" id="twitch" name="socialMedia[twitch]"
+                                    value="<%= player.socialMedia?.twitch || '' %>" placeholder="username">
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Kick -->
+                        <div class="social-input">
+
+                            <label for="kick">
+                                Kick
+                            </label>
+
+                            <div class="social-field">
+
+                                <!-- <span class="social-prefix">@</span> -->
+
+                                <input type="text" id="kick" name="socialMedia[kick]"
+                                    value="<%= player.socialMedia?.kick || '' %>" placeholder="username">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+                <div class="edit-actions">
+
+                    <a href="/players/<%= player._id %>" class="cancel-btn">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="save-btn">
+                        Save Changes
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+        ```
+
+    </div>
+
+    <script>
+
+        // Team toggle
+
+        const teamToggle = document.querySelector("#inTeam");
+        const teamNameContainer = document.querySelector("#teamNameContainer");
+        const teamName = document.querySelector("#teamName");
+
+        if (teamToggle) {
+
+            teamToggle.addEventListener("change", () => {
+
+                if (teamToggle.checked) {
+
+                    teamNameContainer.style.display = "block";
+                    teamName.required = true;
+
+                } else {
+
+                    teamNameContainer.style.display = "none";
+                    teamName.required = false;
+                    teamName.value = "";
+
+                }
+
+            });
+
+        }
+
+
+        // Bootstrap validation
+
+        (() => {
+                "use strict";
+
+                const form = document.querySelector(".needs-validation");
+
+                form.addEventListener("submit", event => {
+
+                    const roles = document.querySelectorAll(
+                        'input[name="role"]:checked'
+                    );
+
+                    const agents = document.querySelectorAll(
+                        'input[name="agents"]:checked'
+                    );
+
+                    if (
+                        !form.checkValidity() ||
+                        roles.length === 0 ||
+                        agents.length === 0
+                    ) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+
+                    form.classList.add("was-validated");
+                });
+
+
+        })();
+
+    </script>
+
+    <style>
+        .edit-page {
+            min-height: calc(100vh - 80px);
+            padding: 50px 20px 70px;
+
+            background:
+                radial-gradient(circle at top,
+                    rgba(230, 57, 70, 0.07),
+                    transparent 45%),
+                #0a0a0c;
+        }
+
+
+        .edit-container {
+            width: 100%;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+
+        .edit-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+
+        .edit-kicker {
+            margin-bottom: 10px;
+
+            color: #e63946;
+
+            font-size: 0.7rem;
+            font-weight: 800;
+
+            letter-spacing: 0.2em;
+        }
+
+
+        .edit-header h1 {
+            margin: 0;
+
+            color: #fff;
+
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+
+        .edit-header p {
+            margin-top: 10px;
+
+            color: rgba(255, 255, 255, 0.45);
+
+            font-size: 0.9rem;
+        }
+
+
+        .player-edit-form {
+            padding: 35px;
+
+            background: rgba(17, 17, 20, 0.95);
+
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.55);
+        }
+
+
+        .form-section {
+            margin-bottom: 38px;
+        }
+
+
+        .form-section h5 {
+            margin-bottom: 22px;
+            padding-bottom: 12px;
+
+            color: #fff;
+
+            font-size: 0.9rem;
+            font-weight: 800;
+
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+
+        .section-description {
+            margin-top: -12px;
+            margin-bottom: 20px;
+
+            color: rgba(255, 255, 255, 0.4);
+
+            font-size: 0.82rem;
+        }
+
+
+        .form-label {
+            margin-bottom: 8px;
+
+            color: rgba(255, 255, 255, 0.7);
+
+            font-size: 0.78rem;
+            font-weight: 700;
+
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+
+        .kingsman-input {
+            padding: 12px 14px;
+
+            color: #fff !important;
+            background: rgba(255, 255, 255, 0.04) !important;
+
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+        }
+
+
+        .kingsman-input:focus {
+            border-color: rgba(230, 57, 70, 0.7);
+
+            box-shadow:
+                0 0 0 3px rgba(230, 57, 70, 0.1);
+
+            outline: none;
+        }
+
+
+        /* Roles */
+
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+
+        .role-label {
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            min-height: 45px;
+            padding: 10px;
+
+            color: rgba(255, 255, 255, 0.55);
+
+            background: rgba(255, 255, 255, 0.035);
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 7px;
+
+            font-size: 0.78rem;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: all 0.2s ease;
+        }
+
+
+        .role-label:hover {
+            color: #fff;
+            border-color: rgba(230, 57, 70, 0.4);
+        }
+
+
+        .btn-check:checked+.role-label {
+            color: #fff;
+
+            background: rgba(230, 57, 70, 0.15);
+
+            border-color: #e63946;
+
+            box-shadow:
+                0 0 15px rgba(230, 57, 70, 0.1);
+        }
+
+
+        /* Agents */
+
+        .agent-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.agent-option {
+    position: relative;
+    cursor: pointer;
+    margin: 0;
+}
+
+.agent-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.agent-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 42px;
+    padding: 8px;
+
+    color: rgba(255, 255, 255, 0.5);
+
+    background: rgba(255, 255, 255, 0.035);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+
+    font-size: 0.75rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.agent-option:hover .agent-label {
+    color: #fff;
+    border-color: rgba(230, 57, 70, 0.4);
+}
+
+.agent-option input:checked + .agent-label {
+    color: #fff;
+
+    background: rgba(230, 57, 70, 0.15);
+
+    border-color: #e63946;
+
+    box-shadow:
+        0 0 15px rgba(230, 57, 70, 0.1);
+}
+
+.agent-error {
+    display: none;
+    margin-top: 10px;
+
+    color: #e63946;
+
+    font-size: 0.78rem;
+}
+
+.player-edit-form.was-validated .agent-error {
+    display: block;
+}
+
+        .agent-label:hover {
+            color: #fff;
+            border-color: rgba(230, 57, 70, 0.35);
+        }
+
+
+        
+
+
+        /* Team */
+
+        .team-toggle {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 20px;
+        }
+
+
+        #inTeam.form-check-input {
+            width: 2.8em;
+            height: 1.45em;
+
+            margin: 0;
+
+            background-color: rgba(255, 255, 255, 0.08);
+
+            border-color: rgba(255, 255, 255, 0.2);
+
+            cursor: pointer;
+        }
+
+
+        #inTeam.form-check-input:checked {
+            background-color: #e63946;
+            border-color: #e63946;
+        }
+
+
+        .team-toggle .form-check-label {
+            color: rgba(255, 255, 255, 0.7);
+
+            font-size: 0.85rem;
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+
+        /* Social */
+
+        .social-form-grid {
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 18px;
+        }
+
+
+        .social-input label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: rgba(255, 255, 255, 0.6);
+
+            font-size: 0.75rem;
+            font-weight: 700;
+
+            text-transform: uppercase;
+        }
+
+
+        .social-field {
+            display: flex;
+
+            align-items: center;
+
+            overflow: hidden;
+
+            background: rgba(255, 255, 255, 0.04);
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 7px;
+        }
+
+
+        .social-prefix {
+            padding-left: 13px;
+
+            color: #e63946;
+
+            font-weight: 700;
+        }
+
+
+        .social-field input {
+            width: 100%;
+
+            padding: 11px 12px;
+
+            color: #fff;
+
+            background: transparent;
+
+            border: none;
+            outline: none;
+
+            font-size: 0.85rem;
+        }
+
+
+        .social-field:focus-within {
+            border-color: rgba(230, 57, 70, 0.6);
+
+            box-shadow:
+                0 0 0 3px rgba(230, 57, 70, 0.08);
+        }
+
+
+        .social-field input::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+        }
+
+
+        /* Buttons */
+
+        .edit-actions {
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 12px;
+
+            padding-top: 25px;
+
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+
+        .cancel-btn,
+        .save-btn {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            min-width: 130px;
+
+            padding: 12px 20px;
+
+            border-radius: 7px;
+
+            font-size: 0.8rem;
+            font-weight: 700;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            transition: all 0.2s ease;
+        }
+
+
+        .cancel-btn {
+            color: rgba(255, 255, 255, 0.65);
+
+            background: rgba(255, 255, 255, 0.04);
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+
+        .cancel-btn:hover {
+            color: #fff;
+
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+
+        .save-btn {
+            color: #fff;
+
+            background: #e63946;
+
+            border: 1px solid #e63946;
+
+            box-shadow:
+                0 0 20px rgba(230, 57, 70, 0.12);
+        }
+
+
+        .save-btn:hover {
+            background: #c92f3c;
+
+            border-color: #c92f3c;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 25px rgba(230, 57, 70, 0.2);
+        }
+
+
+        @media (max-width: 768px) {
+
+            .player-edit-form {
+                padding: 25px 20px;
+            }
+
+            .role-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .agent-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .social-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 480px) {
+
+            .edit-page {
+                padding: 30px 12px 50px;
+            }
+
+            .edit-header h1 {
+                font-size: 1.6rem;
+            }
+
+            .agent-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .edit-actions {
+                flex-direction: column-reverse;
+            }
+
+            .cancel-btn,
+            .save-btn {
+                width: 100%;
+            }
+
+        }
+    </style>

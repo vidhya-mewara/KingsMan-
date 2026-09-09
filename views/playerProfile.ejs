@@ -1,0 +1,252 @@
+<% layout("/layouts/boilerplate") %>
+
+    <div class="roster-page">
+        <div class="container py-5">
+
+            
+            <div class="row justify-content-center">
+
+                <div class="col-12 col-md-6 col-lg-5">
+
+                    <div class="profile-card">
+
+                        <!-- Roles -->
+                        <div class="role-list mb-3">
+                            <% if (player.role && player.role.length) { %>
+
+                                <% player.role.forEach(role=> { %>
+
+                                    <span class="role-badge role-<%= role.toLowerCase() %>">
+                                        <%= role %>
+                                    </span>
+
+                                    <% }) %>
+
+                                        <% } %>
+                        </div>
+
+
+                        <!-- Player Name -->
+                        <h2 class="profile-name mt-3">
+                            <%= player.name %>
+                        </h2>
+
+
+                        <!-- IGN -->
+                        <p class="profile-ign">
+                            @<%= player.ign %>
+                        </p>
+
+
+                        <!-- Verification Status -->
+                        <span class="status-pill status-<%= player.verificationStatus %> mb-4">
+                            <%= player.verificationStatus %>
+                        </span>
+
+
+                        <!-- Player Details -->
+                        <div class="profile-details">
+
+                            <!-- UID -->
+                            <div class="detail-row">
+
+                                <span class="detail-label">
+                                    Player UID
+                                </span>
+
+                                <span class="detail-value">
+                                    <%= player.uid %>
+                                </span>
+
+                            </div>
+
+
+                            <!-- Roles -->
+                            <div class="detail-row">
+
+                                <span class="detail-label">
+                                    Roles
+                                </span>
+
+                                <span class="detail-value">
+
+                                    <% if (player.role && player.role.length) { %>
+
+                                        <%= player.role.join(", ") %>
+
+                            <% } else { %>
+
+                                Not specified
+
+                            <% } %>
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- Agents -->
+                    <div class=" detail-row">
+
+                                            <span class="detail-label">
+                                                Agents
+                                            </span>
+
+                                            <span class="detail-value">
+
+                                                <% if (player.agents && player.agents.length) { %>
+
+                                                    <%= player.agents.join(", ") %>
+
+                            <% } else { %>
+
+                                Not specified
+
+                            <% } %>
+
+                        </span>
+
+                    </div>
+                    
+<!-- Player Location & Team -->
+
+<div class="player-info mt-4">
+
+    <!-- Country -->
+
+    <div class="player-info-item">
+        <span class="info-label">
+            Country
+        </span>
+
+        <span class="info-value">
+            <%= player.country %>
+        </span>
+    </div>
+
+
+    <!-- Region -->
+
+    <div class="player-info-item">
+        <span class="info-label">
+            Region
+        </span>
+
+        <span class="info-value">
+            <%= player.region %>
+        </span>
+    </div>
+
+
+    <!-- Team -->
+
+    <div class="player-info-item">
+        <span class="info-label">
+            Team
+        </span>
+
+        <span class="info-value">
+
+            <% if (player.inTeam) { %>
+
+                <%= player.teamName %>
+
+            <% } else { %>
+
+                Free Agent
+
+            <% } %>
+
+        </span>
+    </div>
+
+</div>
+
+
+                    <!-- Social Media -->
+<div class="social-links">
+
+    <% if (player.socialMedia && player.socialMedia.instagram) { %>
+        <a href="https://instagram.com/<%= player.socialMedia.instagram %>" target="_blank" rel="noopener noreferrer"
+            class="social-icon">
+            <i class="fa-brands fa-instagram"></i>
+        </a>
+        <% } %>
+
+            <% if (player.socialMedia && player.socialMedia.facebook) { %>
+                <a href="https://facebook.com/<%= player.socialMedia.facebook %>" target="_blank"
+                    rel="noopener noreferrer" class="social-icon">
+                    <i class="fa-brands fa-facebook"></i>
+                </a>
+                <% } %>
+
+                    <% if (player.socialMedia && player.socialMedia.youtube) { %>
+                        <a href="https://youtube.com/@<%= player.socialMedia.youtube %>" target="_blank"
+                            rel="noopener noreferrer" class="social-icon">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                        <% } %>
+
+                            <% if (player.socialMedia && player.socialMedia.twitch) { %>
+                                <a href="https://twitch.tv/<%= player.socialMedia.twitch %>" target="_blank"
+                                    rel="noopener noreferrer" class="social-icon">
+                                    <i class="fa-brands fa-twitch"></i>
+                                </a>
+                                <% } %>
+
+                                    <% if (player.socialMedia && player.socialMedia.kick) { %>
+                                        <a href="https://kick.com/<%= player.socialMedia.kick %>" target="_blank"
+                                            rel="noopener noreferrer" class="social-icon">
+                                            Kick
+                                        </a>
+                                        <% } %>
+
+</div>
+                    <!-- Verification -->
+                    <div class=" detail-row">
+
+                                                        <span class="detail-label">
+                                                            Verification
+                                                        </span>
+
+                                                        <span class="detail-value">
+                                                            <%= player.verificationStatus %>
+                                                        </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="profile-actions">
+                        
+                            <a href="/players/<%= player._id %>/edit" class="profile-btn edit-btn">
+                                Edit Profile
+                            </a>
+                        
+                            <form action="/players/<%= player._id %>?_method=DELETE" method="POST"
+                                onsubmit="return confirm('Are you sure you want to delete this player profile?');">
+                        
+                                <button type="submit" class="profile-btn delete-btn">
+                                    Delete Profile
+                                </button>
+                        
+                            </form>
+                        
+                        </div>
+                        
+                
+                        <!-- Back -->
+                        <a href="/players" class="back-link mt-4">
+                            &larr; Back to Players Den
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    
+
+    </div>

@@ -1,0 +1,280 @@
+<% layout("layouts/boilerplate") %>
+
+    <style>
+        /* Make the entire error page dark */
+        body {
+            margin: 0;
+            background: #0a0a0c !important;
+            color: #fff;
+        }
+
+        .error-page {
+            min-height: calc(100vh - 80px);
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 40px 20px;
+            box-sizing: border-box;
+
+            position: relative;
+            overflow: hidden;
+
+            background:
+                radial-gradient(circle at center,
+                    rgba(230, 57, 70, 0.08) 0%,
+                    rgba(10, 10, 12, 1) 55%);
+        }
+
+        /* Subtle Valorant-style red glow */
+        .error-page::before {
+            content: "";
+            position: absolute;
+
+            width: 500px;
+            height: 500px;
+
+            background: rgba(230, 57, 70, 0.07);
+            border-radius: 50%;
+
+            filter: blur(100px);
+
+            pointer-events: none;
+        }
+
+        /* Decorative diagonal lines */
+        .error-page::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+
+            background:
+                linear-gradient(135deg,
+                    transparent 49.8%,
+                    rgba(255, 255, 255, 0.025) 50%,
+                    transparent 50.2%);
+
+            background-size: 80px 80px;
+
+            pointer-events: none;
+        }
+
+        .error-card {
+            width: 100%;
+            max-width: 560px;
+
+            padding: 50px 45px;
+
+            position: relative;
+            z-index: 2;
+
+            text-align: center;
+
+            background: rgba(17, 17, 20, 0.95);
+
+            border: 1px solid rgba(230, 57, 70, 0.3);
+            border-radius: 12px;
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.7),
+                0 0 40px rgba(230, 57, 70, 0.08);
+        }
+
+        /* Red top line */
+        .error-card::before {
+            content: "";
+
+            position: absolute;
+            top: 0;
+            left: 10%;
+            right: 10%;
+
+            height: 2px;
+
+            background: #e63946;
+
+            box-shadow:
+                0 0 12px rgba(230, 57, 70, 0.8);
+        }
+
+        .error-icon {
+            width: 70px;
+            height: 70px;
+
+            margin: 0 auto 25px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 1px solid rgba(230, 57, 70, 0.5);
+            border-radius: 50%;
+
+            background: rgba(230, 57, 70, 0.08);
+
+            box-shadow:
+                0 0 25px rgba(230, 57, 70, 0.12),
+                inset 0 0 15px rgba(230, 57, 70, 0.05);
+        }
+
+        .error-icon span {
+            color: #e63946;
+
+            font-size: 2rem;
+            font-weight: 800;
+
+            text-shadow:
+                0 0 12px rgba(230, 57, 70, 0.8);
+        }
+
+        .error-code {
+            margin-bottom: 10px;
+
+            color: #e63946;
+
+            font-size: 0.7rem;
+            font-weight: 800;
+
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+        }
+
+        .error-title {
+            margin: 0 0 15px;
+
+            color: #fff;
+
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .error-message {
+            max-width: 450px;
+
+            margin: 0 auto;
+
+            color: rgba(255, 255, 255, 0.55);
+
+            font-size: 0.95rem;
+            line-height: 1.7;
+
+            word-break: break-word;
+        }
+
+        .error-line {
+            width: 60px;
+            height: 1px;
+
+            margin: 28px auto;
+
+            background: rgba(230, 57, 70, 0.6);
+
+            box-shadow:
+                0 0 8px rgba(230, 57, 70, 0.4);
+        }
+
+        .error-btn {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 10px;
+
+            padding: 12px 22px;
+
+            color: #fff;
+
+            background: rgba(230, 57, 70, 0.1);
+
+            border: 1px solid rgba(230, 57, 70, 0.4);
+            border-radius: 7px;
+
+            font-size: 0.85rem;
+            font-weight: 700;
+
+            text-decoration: none;
+
+            transition: all 0.2s ease;
+        }
+
+        .error-btn span {
+            color: #e63946;
+            font-size: 1.1rem;
+
+            transition: transform 0.2s ease;
+        }
+
+        .error-btn:hover {
+            color: #fff;
+
+            background: rgba(230, 57, 70, 0.18);
+
+            border-color: #e63946;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.4),
+                0 0 20px rgba(230, 57, 70, 0.15);
+        }
+
+        .error-btn:hover span {
+            transform: translateX(-3px);
+        }
+
+        @media (max-width: 576px) {
+
+            .error-page {
+                min-height: calc(100vh - 60px);
+                padding: 25px 15px;
+            }
+
+            .error-card {
+                padding: 40px 25px;
+            }
+
+            .error-title {
+                font-size: 1.5rem;
+            }
+
+            .error-message {
+                font-size: 0.88rem;
+            }
+        }
+    </style>
+
+    <div class="error-page">
+
+        
+        <div class="error-card">
+
+            <div class="error-icon">
+                <span>!</span>
+            </div>
+
+            <div class="error-code">
+                SYSTEM ERROR
+            </div>
+
+            <h1 class="error-title">
+                Something went wrong
+            </h1>
+
+            <p class="error-message">
+                <%= message %>
+            </p>
+
+            <div class="error-line"></div>
+
+            <a href="/players" class="error-btn">
+                <span>&larr;</span>
+                Return to Players Den
+            </a>
+
+        </div>
+        
+
+    </div>
