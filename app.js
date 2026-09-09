@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import express from 'express';
 import mongoose from 'mongoose';
 import Player from './model/playerProfile.js';
@@ -7,6 +9,7 @@ import upload from './middleware/upload.js';
 import wrapAsync from './utils/wrapasync.js';
 import ExpressError from './utils/expressErrors.js';
 import {playerSchema,userSchema} from './schema.js';
+import User from './model/userSchema.js';
 import methodOverride from "method-override";
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
@@ -15,7 +18,7 @@ const app = express();
 const mongoUrl = 'mongodb://127.0.0.1:27017/playerDB';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
-import 'dotenv/config';
+
 
 
 async function main() {
@@ -46,13 +49,14 @@ app.use(methodOverride("_method"));
 // };
 
 const sessionoptions = {
-  secret: "kingsmansecret",
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
+    // secure: true 
   }
 }
 
@@ -60,14 +64,22 @@ const sessionoptions = {
 app.use(session(sessionoptions));
 app.use(flash());
 
-
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
-  // res.locals.currUser = req.user;
+
+  res.locals.currUser = null;
+
+  if (req.session.userId) {
+    const user = await User.findById(req.session.userId);
+
+    if (user) {
+      res.locals.currUser = user;
+    }
+  }
 
   next();
-})
+});
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -103,7 +115,16 @@ app.post(
   "/players",
   upload.single("verificationScreenshot"),
   wrapAsync(async (req, res) => {
+    const currentUser = await User.findById(req.session.userId);
 
+    if (!currentUser) {
+      throw new ExpressError(401, "User account not found");
+    }
+
+    if (currentUser.player) {
+      req.flash("error", "You already have a player profile.");
+      return res.redirect(`/players/${currentUser.player}`);
+    }
     // Make sure screenshot was uploaded
     if (!req.file) {
       throw new ExpressError(400, "Verification screenshot is required");
@@ -159,9 +180,17 @@ app.post(
     const player = new Player(playerData);
 
     await player.save();
+
+    // Connect this player profile to the logged-in user
+    if (req.session.userId) {
+      await User.findByIdAndUpdate(req.session.userId, {
+        player: player._id
+      });
+    }
+
     req.flash("success", "Player profile created successfully!");
 
-    res.redirect("/players");
+    res.redirect(`/players/${player._id}`);
   })
 );
 
@@ -262,6 +291,13 @@ app.delete("/players/:id", wrapAsync(async (req, res) => {
 app.get("/", (req,res) => {
   res.send("Welcome to the Kingsman Player Profile API");
 });
+
+
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+
 app.post("/register", wrapAsync(async (req, res) => {
 
   const { name, email, password } = req.body;
@@ -386,9 +422,65 @@ app.post("/verify-otp", wrapAsync(async (req, res) => {
 
   req.flash("success", "Email verified successfully!");
 
-  res.redirect("/login");
+  req.session.userId = user._id;
+  req.session.userRole = user.role;
+
+  req.flash("success", "Welcome to KingsMan!");
+  res.redirect("/players");
 }));
 
+
+
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+app.post("/login", wrapAsync(async (req, res) => {
+
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    req.flash("error", "Invalid email or password.");
+    return res.redirect("/login");
+  }
+
+  if (!user.isVerified) {
+    req.flash("error", "Please verify your email first.");
+    req.session.verifyUserId = user._id;
+    return res.redirect("/verify-otp");
+  }
+
+  const isPasswordValid = await bcrypt.compare(
+    password,
+    user.password
+  );
+
+  if (!isPasswordValid) {
+    req.flash("error", "Invalid email or password.");
+    return res.redirect("/login");
+  }
+
+  req.session.userId = user._id;
+
+  req.flash("success", "Logged in successfully!");
+
+  res.redirect("/players");
+}));
+
+app.get("/logout", (req, res) => {
+
+  req.session.destroy((err) => {
+
+    if (err) {
+      return res.redirect("/players");
+    }
+
+    res.redirect("/login");
+  });
+
+});
 app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
 });
@@ -398,7 +490,6 @@ app.use((err, req, res, next) => {
   // res.status(statusCode).send(message);
   res.status(statusCode).render("error", { message });
 })
-
 app.listen(8080, () => {
   console.log("Server is running on http://localhost:8080");
 });

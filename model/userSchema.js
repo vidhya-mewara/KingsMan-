@@ -41,6 +41,11 @@ const userSchema = new mongoose.Schema(
             ref: "Player",
             default: null,
         },
+
+        // -----------------------------
+        // OTP VERIFICATION
+        // -----------------------------
+
         otp: {
             type: String,
             default: null,
@@ -51,12 +56,21 @@ const userSchema = new mongoose.Schema(
             default: null,
         },
 
+        otpAttempts: {
+            type: Number,
+            default: 0,
+        },
+
+        otpLastSent: {
+            type: Date,
+            default: null,
+        },
+
         isVerified: {
             type: Boolean,
             default: false,
         },
     },
-    
     {
         timestamps: true,
     }
@@ -65,5 +79,3 @@ const userSchema = new mongoose.Schema(
 const User = mongoose.model("User", userSchema);
 
 export default User;
-
-
