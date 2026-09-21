@@ -1,0 +1,387 @@
+<% layout("layouts/boilerplate") -%>
+
+    <div class="admin-page">
+
+        <div class="admin-page-header">
+            <div>
+                <p class="admin-eyebrow">KINGSMAN ADMIN</p>
+                <h1>Edit Match</h1>
+                <p class="admin-subtitle">
+                    Update match information and player statistics.
+                </p>
+            </div>
+        </div>
+
+
+        <form action="/admin/matches/<%= match._id %>?_method=PUT" method="POST" class="admin-match-form">
+
+            <!-- MATCH INFORMATION -->
+
+            <div class="admin-form-section">
+
+                <div class="admin-section-heading">
+                    <h2>Match Information</h2>
+                    <p>Update the basic match information.</p>
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="seriesName">Series Name</label>
+
+                        <input type="text" id="seriesName" name="seriesName" value="<%= match.seriesName %>"
+                            maxlength="100" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="teamA">Team A</label>
+
+                        <input type="text" id="teamA" name="teamA" value="<%= match.teamA %>" maxlength="50" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="teamB">Team B</label>
+
+                        <input type="text" id="teamB" name="teamB" value="<%= match.teamB %>" maxlength="50" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="matchDate">Match Date</label>
+
+                        <input type="date" id="matchDate" name="matchDate"
+                            value="<%= new Date(match.date).toISOString().split('T')[0] %>" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="matchTime">Match Time</label>
+
+                        <input type="time" id="matchTime" name="matchTime"
+                            value="<%= new Date(match.date).toTimeString().slice(0, 5) %>" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="status">Status</label>
+
+                        <select id="status" name="status" required>
+
+                            <option value="upcoming" <%=match.status==="upcoming" ? "selected" : "" %>
+                                >
+                                Upcoming
+                            </option>
+
+                            <option value="ongoing" <%=match.status==="ongoing" ? "selected" : "" %>
+                                >
+                                Ongoing
+                            </option>
+
+                            <option value="past" <%=match.status==="past" ? "selected" : "" %>
+                                >
+                                Past
+                            </option>
+
+                        </select>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SCORE -->
+
+            <div class="admin-form-section">
+
+                <div class="admin-section-heading">
+                    <h2>Match Score</h2>
+                </div>
+
+                <div class="score-grid">
+
+                    <div class="score-team">
+
+                        <label for="teamAScore">
+                            <%= match.teamA %>
+                        </label>
+
+                        <input type="number" id="teamAScore" name="teamAScore" min="0" value="<%= match.teamAScore %>"
+                            required>
+
+                    </div>
+
+
+                    <div class="score-vs">
+                        VS
+                    </div>
+
+
+                    <div class="score-team">
+
+                        <label for="teamBScore">
+                            <%= match.teamB %>
+                        </label>
+
+                        <input type="number" id="teamBScore" name="teamBScore" min="0" value="<%= match.teamBScore %>"
+                            required>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PLAYER STATISTICS -->
+
+            <div class="admin-form-section">
+
+                <div class="admin-section-heading">
+
+                    <h2>Player Statistics</h2>
+
+                    <p>
+                        Select the players and enter their match statistics.
+                    </p>
+
+                </div>
+
+
+                <div class="player-stats-table">
+
+
+                    <!-- TABLE HEADER -->
+
+                    <div class="player-stat-row player-stat-header">
+
+                        <div class="player-stat-field">
+                            <label>Player</label>
+                        </div>
+
+                        <div class="player-stat-field">
+                            <label>Team</label>
+                        </div>
+
+                        <div class="player-stat-field">
+                            <label>Kills</label>
+                        </div>
+
+                        <div class="player-stat-field">
+                            <label>Deaths</label>
+                        </div>
+
+                        <div class="player-stat-field">
+                            <label>Assists</label>
+                        </div>
+
+                        <div class="player-stat-field player-mvp-field">
+                            <label>MVP</label>
+                        </div>
+
+                    </div>
+
+
+                    <% for (let i=0; i < 10; i++) { %>
+
+                        <% const stat=match.players[i]; let selectedPlayerId="" ; if (stat && stat.player) {
+                            selectedPlayerId=stat.player._id ? stat.player._id.toString() : stat.player.toString(); } %>
+
+
+                            <div class="player-stat-row">
+
+
+                                <!-- PLAYER -->
+
+                                <div class="player-stat-field player-search-field">
+                                
+                                    <input type="text" class="player-search-input" placeholder="Search player..." autocomplete="off" value="<%
+                                      const selectedPlayer = players.find(
+                                        p => p._id.toString() === selectedPlayerId
+                                      );
+                                      %><%= selectedPlayer ? selectedPlayer.ign : "" %>">
+                                
+                                    <input type="hidden" name="players[<%= i %>][player]" class="player-id-input" value="<%= selectedPlayerId %>">
+                                
+                                    <div class="player-search-results"></div>
+                                
+                                </div>
+
+                                <!-- TEAM -->
+
+                                <div class="player-stat-field">
+
+                                    <select name="players[<%= i %>][team]">
+
+                                        <option value="teamA" <%=!stat || stat.team==="teamA" ? "selected" : "" %>
+                                            >
+                                            Team A
+                                        </option>
+
+                                        <option value="teamB" <%=stat && stat.team==="teamB" ? "selected" : "" %>
+                                            >
+                                            Team B
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <!-- KILLS -->
+
+                                <div class="player-stat-field">
+
+                                    <input type="number" name="players[<%= i %>][kills]" min="0"
+                                        value="<%= stat ? stat.kills : 0 %>">
+
+                                </div>
+
+
+                                <!-- DEATHS -->
+
+                                <div class="player-stat-field">
+
+                                    <input type="number" name="players[<%= i %>][deaths]" min="0"
+                                        value="<%= stat ? stat.deaths : 0 %>">
+
+                                </div>
+
+
+                                <!-- ASSISTS -->
+
+                                <div class="player-stat-field">
+
+                                    <input type="number" name="players[<%= i %>][assists]" min="0"
+                                        value="<%= stat ? stat.assists : 0 %>">
+
+                                </div>
+
+
+                                <!-- MVP -->
+
+                                <div class="player-stat-field player-mvp-field">
+
+                                    <input type="checkbox" name="players[<%= i %>][mvp]" value="true" <%=stat &&
+                                        stat.mvp ? "checked" : "" %>
+                                    >
+
+                                </div>
+
+                            </div>
+
+                            <% } %>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="admin-form-actions">
+
+                <a href="/matches/<%= match._id %>" class="admin-cancel-btn">
+                    Cancel
+                </a>
+
+
+                <button type="submit" class="admin-submit-btn">
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const players = <%-JSON.stringify(
+                players.map(player => ({
+                    id: player._id.toString(),
+                    ign: player.ign,
+                    name: player.name
+                }))
+            )%>;
+
+            document.querySelectorAll(".player-search-field").forEach(field => {
+
+                const input = field.querySelector(".player-search-input");
+                const hiddenInput = field.querySelector(".player-id-input");
+                const results = field.querySelector(".player-search-results");
+
+                input.addEventListener("input", () => {
+
+                    const search = input.value.trim().toLowerCase();
+
+                    hiddenInput.value = "";
+                    results.innerHTML = "";
+
+                    if (!search) {
+                        results.style.display = "none";
+                        return;
+                    }
+
+                    const matches = players
+                        .filter(player =>
+                            player.ign.toLowerCase().includes(search) ||
+                            player.name.toLowerCase().includes(search)
+                        )
+                        .slice(0, 8);
+
+                    if (matches.length === 0) {
+                        results.innerHTML = `
+                        <div class="player-search-empty">
+                            No players found
+                        </div>
+                    `;
+
+                        results.style.display = "block";
+                        return;
+                    }
+
+                    matches.forEach(player => {
+
+                        const item = document.createElement("button");
+
+                        item.type = "button";
+                        item.className = "player-search-result";
+
+                        item.innerHTML = `
+                        <span class="player-result-ign">
+                            ${player.ign}
+                        </span>
+                        <span class="player-result-name">
+                            ${player.name}
+                        </span>
+                    `;
+
+                        item.addEventListener("click", () => {
+
+                            input.value = player.ign;
+                            hiddenInput.value = player.id;
+
+                            results.innerHTML = "";
+                            results.style.display = "none";
+                        });
+
+                        results.appendChild(item);
+                    });
+
+                    results.style.display = "block";
+                });
+
+                document.addEventListener("click", event => {
+                    if (!field.contains(event.target)) {
+                        results.style.display = "none";
+                    }
+                });
+
+            });
+
+        });
+    </script>

@@ -1,0 +1,796 @@
+/* ============================= */
+/* HERO SLIDER */
+/* ============================= */
+/* =========================================
+   HERO SLIDER
+========================================= */
+
+.hero-slider {
+    width: 96%;
+    max-width: 1400px;
+
+    height: 520px;
+
+    margin: 0 auto;
+
+    background: #050505;
+
+    position: relative;
+
+    overflow: hidden;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.slider-container {
+    width: 100%;
+    height: 100%;
+
+    position: relative;
+
+    background: #050505;
+}
+
+.slide {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: none;
+
+    background: #050505;
+}
+
+.slide.active {
+    display: block;
+}
+
+.slide a {
+    display: flex;
+
+    width: 100%;
+    height: 100%;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #050505;
+}
+
+.slide a img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: contain;
+    object-position: center;
+
+    background: #050505;
+}
+/* ============================= */
+/* PREVIOUS / NEXT BUTTONS */
+/* ============================= */
+
+.slider-arrow {
+    position: absolute;
+
+    top: 50%;
+    transform: translateY(-50%);
+
+    z-index: 10;
+
+    width: 50px;
+    height: 50px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    color: white;
+
+    font-size: 30px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        background 0.3s ease,
+        transform 0.3s ease;
+}
+
+
+/* Hover */
+
+.slider-arrow:hover {
+    background: rgba(0, 0, 0, 0.85);
+
+    transform: translateY(-50%) scale(1.08);
+}
+
+
+/* Previous */
+
+.slider-arrow.prev {
+    left: 20px;
+}
+
+
+/* Next */
+
+.slider-arrow.next {
+    right: 20px;
+}
+
+
+/* ============================= */
+/* DOTS */
+/* ============================= */
+
+.slider-dots {
+    position: absolute;
+
+    bottom: 20px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 10;
+
+    display: flex;
+
+    gap: 10px;
+}
+
+
+/* Individual dot */
+
+.dot {
+    width: 12px;
+    height: 12px;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.5);
+
+    cursor: pointer;
+
+    transition:
+        background 0.3s ease,
+        transform 0.3s ease;
+}
+
+
+/* Active dot */
+
+.dot.active {
+    background: white;
+
+    transform: scale(1.25);
+}
+
+
+/* Hover dot */
+
+.dot:hover {
+    background: white;
+}
+
+
+/* ============================= */
+/* MOBILE */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+    
+    .hero-slider {
+            width: 100%;
+            height: 300px;
+    
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+    }
+
+    .slider-arrow {
+        width: 40px;
+        height: 40px;
+
+        font-size: 24px;
+    }
+
+    .slider-arrow.prev {
+        left: 10px;
+    }
+
+    .slider-arrow.next {
+        right: 10px;
+    }
+
+    .slider-dots {
+        bottom: 12px;
+        gap: 8px;
+    }
+
+    .dot {
+        width: 9px;
+        height: 9px;
+    }
+/* ============================= */
+/* PROMOTION WRAPPER */
+/* ============================= */
+
+.promotion-wrapper {
+    width: 96%;
+
+    margin: 0 auto;
+
+    padding: 40px 0;
+}
+/* ============================= */
+/* PROMOTION SECTION */
+/* ============================= */
+
+.promotion-section {
+    width: 100%;
+    background: #111;
+    overflow: hidden;
+}
+/* ============================= */
+/* PROMOTION IMAGE */
+/* ============================= */
+
+.promotion-image {
+    width: 100%;
+    height: 320px;
+
+    overflow: hidden;
+}
+
+.promotion-image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+/* ============================= */
+/* SOCIAL LINKS */
+/* ============================= */
+
+.promotion-links {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 18px;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 11px 18px;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    border: 1px solid #333;
+
+    transition: all 0.3s ease;
+}
+
+.social-link.youtube:hover {
+    background: #ff0000;
+    border-color: #ff0000;
+}
+
+.social-link.instagram:hover {
+    background: #e1306c;
+    border-color: #e1306c;
+}
+
+.social-link.discord:hover {
+    background: #5865f2;
+    border-color: #5865f2;
+}
+
+/* ============================= */
+/* MOBILE */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+    .hero-slider {
+        width: 100%;
+        height: 35vh;
+        min-height: 220px;
+    }
+
+    .promotion-wrapper {
+        width: 100%;
+        padding: 30px 15px;
+    }
+
+    .promotion-section {
+        width: 100%;
+    }
+
+    .promotion-image {
+        height: 220px;
+    }
+
+    .promotion-links {
+        flex-direction: column;
+    }
+
+    .social-link {
+        width: 100%;
+    }
+
+}/* =========================================
+   KINGSMAN HOME CONTENT
+   PROMOTION + MATCHES + EVENTS
+   ========================================= */
+
+.home-main-grid {
+    width: 96%;
+    max-width: 1400px;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: 40% 30% 30%;
+
+    align-items: start;
+}
+
+
+/* =========================================
+   PROMOTION COLUMN
+   ========================================= */
+
+.home-main-grid>.promotion-wrapper {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =========================================
+   MATCHES COLUMN
+   ========================================= */
+
+.matches-wrapper {
+    width: 100%;
+    margin: 0;
+    padding: 0 5px;
+
+    box-sizing: border-box;
+}
+
+.matches-section {
+    width: 100%;
+}
+
+
+/* =========================================
+   MATCHES HEADER
+   ========================================= */
+
+.matches-header {
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.matches-header h2 {
+    position: relative;
+
+    margin: 0;
+    padding-left: 12px;
+
+    color: #ffffff;
+
+    font-size: 24px;
+    font-weight: 900;
+
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+
+/* Red vertical line */
+
+.matches-header h2::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 2px;
+
+    width: 4px;
+    height: 22px;
+
+    background: #ff4655;
+}
+
+
+/* =========================================
+   MATCH CATEGORY
+   ========================================= */
+
+.match-category {
+    margin-bottom: 22px;
+}
+
+.match-category>h3 {
+    margin: 0 0 9px;
+
+    color: #858b94;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+
+/* =========================================
+   MATCH LIST
+   ========================================= */
+
+.matches-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+/* =========================================
+   MATCH CARD
+   ========================================= */
+
+.match-card {
+    position: relative;
+
+    display: block;
+
+    width: 100%;
+
+    padding: 14px;
+
+    box-sizing: border-box;
+
+    color: #ffffff;
+    text-decoration: none;
+
+    background:
+        linear-gradient(110deg,
+            #101319,
+            #151920);
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    overflow: hidden;
+
+    /* Touch-friendly */
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* Red side indicator */
+
+.match-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 3px;
+    height: 100%;
+
+    background: transparent;
+}
+
+
+/* =========================================
+   SERIES NAME
+   ========================================= */
+
+.match-series {
+    margin-bottom: 10px;
+
+    color: #777e88;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================
+   TEAMS
+   ========================================= */
+
+.match-teams {
+    display: grid;
+
+    grid-template-columns: 1fr auto 1fr;
+
+    align-items: center;
+
+    gap: 7px;
+
+    width: 100%;
+}
+
+.team-name {
+    min-width: 0;
+
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 900;
+
+    text-transform: uppercase;
+    text-align: center;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vs {
+    color: #ff4655;
+
+    font-size: 8px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   SCORE
+   ========================================= */
+
+.match-score {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 10px;
+
+    color: #ffffff;
+
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.match-score span:nth-child(2) {
+    color: #555b64;
+
+    font-size: 11px;
+}
+
+
+/* =========================================
+   DATE
+   ========================================= */
+
+.match-date {
+    margin-top: 8px;
+
+    color: #777e88;
+
+    text-align: center;
+
+    font-size: 9px;
+    font-weight: 600;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   STATUS
+   ========================================= */
+
+.match-status {
+    display: table;
+
+    margin: 10px auto 0;
+
+    padding: 4px 8px;
+
+    font-size: 8px;
+    font-weight: 900;
+
+    letter-spacing: 0.8px;
+
+    text-transform: uppercase;
+
+    border: 1px solid;
+}
+
+
+/* =========================================
+   ONGOING
+   ========================================= */
+
+.match-status.ongoing {
+    color: #ff4655;
+
+    background: rgba(255, 70, 85, 0.08);
+
+    border-color: rgba(255, 70, 85, 0.4);
+}
+
+
+/* =========================================
+   UPCOMING
+   ========================================= */
+
+.match-status.upcoming {
+    color: #e7c66a;
+
+    background: rgba(231, 198, 106, 0.06);
+
+    border-color: rgba(231, 198, 106, 0.3);
+}
+
+
+/* =========================================
+   PAST
+   ========================================= */
+
+.match-status.past {
+    color: #777e88;
+
+    background: rgba(255, 255, 255, 0.03);
+
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================================
+   NO MATCHES
+   ========================================= */
+
+.no-matches {
+    padding: 25px 10px;
+
+    color: #777e88;
+
+    text-align: center;
+
+    background: #101319;
+
+    border: 1px dashed rgba(255, 255, 255, 0.08);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   TABLET
+   ========================================= */
+
+@media (max-width: 1000px) {
+
+    .home-main-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .matches-wrapper {
+        padding: 0 8px;
+    }
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    .home-main-grid {
+        width: 100%;
+
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    /* Promotion first */
+
+    .home-main-grid>.promotion-wrapper {
+        width: 100%;
+        padding: 0;
+    }
+
+
+    /* Matches second */
+
+    .matches-wrapper {
+        width: 100%;
+
+        margin: 0;
+
+        padding: 30px 15px;
+
+        box-sizing: border-box;
+    }
+
+
+    .matches-header h2 {
+        font-size: 21px;
+    }
+
+
+    .match-card {
+        padding: 14px;
+    }
+
+
+    .match-series {
+        font-size: 9px;
+    }
+
+
+    .team-name {
+        font-size: 12px;
+    }
+
+
+    .match-score {
+        font-size: 18px;
+    }
+}

@@ -1,0 +1,1107 @@
+/* =========================================================
+   KINGSMAN ADMIN
+   MOBILE-FIRST / VALORANT STYLE
+   ========================================================= */
+
+:root {
+    --km-bg: #08090b;
+    --km-card: #111216;
+    --km-card-dark: #0c0d0f;
+    --km-input: #17191d;
+
+    --km-red: #ff4655;
+    --km-red-dark: #d91e30;
+    --km-red-glow: rgba(255, 70, 85, 0.18);
+
+    --km-white: #f5f5f5;
+    --km-text: #d8d8dc;
+    --km-muted: #8a8d94;
+
+    --km-border: #25272c;
+    --km-border-light: #303238;
+
+    --km-radius: 7px;
+}
+
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    overflow-x: hidden;
+    background: var(--km-bg);
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+
+    background:
+        radial-gradient(circle at 50% -10%,
+            rgba(255, 70, 85, 0.09),
+            transparent 38%),
+        var(--km-bg);
+
+    color: var(--km-text);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* Prevent mobile horizontal scrolling */
+
+body,
+main,
+section,
+.admin-container {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   ADMIN CONTAINER
+   ========================================================= */
+
+.admin-container {
+    width: min(90%, 1000px);
+
+    margin: 28px auto;
+
+    padding-bottom:
+        calc(30px + env(safe-area-inset-bottom));
+}
+
+
+/* =========================================================
+   PAGE TITLE
+   ========================================================= */
+
+.admin-container h1 {
+    position: relative;
+
+    margin: 0 0 24px;
+
+    color: var(--km-white);
+
+    font-size: clamp(26px, 7vw, 40px);
+    line-height: 1.05;
+
+    font-weight: 900;
+    letter-spacing: -0.8px;
+}
+
+
+/* Small red line */
+
+.admin-container h1::after {
+    content: "";
+
+    display: block;
+
+    width: 42px;
+    height: 3px;
+
+    margin-top: 10px;
+
+    background: var(--km-red);
+
+    box-shadow:
+        0 0 12px var(--km-red-glow);
+}
+
+
+/* =========================================================
+   ADMIN CARD
+   ========================================================= */
+
+.admin-card {
+    position: relative;
+
+    width: 100%;
+
+    padding: 18px;
+
+    background:
+        linear-gradient(145deg,
+            rgba(255, 255, 255, 0.025),
+            transparent 45%),
+        var(--km-card);
+
+    border: 1px solid var(--km-border);
+
+    border-radius: var(--km-radius);
+
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.35);
+
+    overflow: hidden;
+}
+
+
+/* Valorant corner accent */
+
+.admin-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 55px;
+    height: 2px;
+
+    background: var(--km-red);
+
+    box-shadow:
+        0 0 14px var(--km-red-glow);
+}
+
+
+.admin-card h2 {
+    margin: 0 0 22px;
+
+    color: var(--km-white);
+
+    font-size: 18px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   FORM GROUP
+   ========================================================= */
+
+.form-group {
+    width: 100%;
+
+    margin-bottom: 18px;
+}
+
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #bfc1c7;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="file"],
+.form-group input[type="date"],
+.form-group input[type="time"],
+.form-group select,
+.form-group textarea {
+
+    display: block;
+
+    width: 100%;
+
+    min-height: 46px;
+
+    padding: 11px 13px;
+
+    background: var(--km-input);
+
+    color: var(--km-white);
+
+    border: 1px solid var(--km-border-light);
+
+    border-radius: 5px;
+
+    outline: none;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+/* File input */
+
+.form-group input[type="file"] {
+    padding: 9px;
+}
+
+
+/* Focus */
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+
+    background: #1a1c21;
+
+    border-color: var(--km-red);
+
+    box-shadow:
+        0 0 0 3px rgba(255, 70, 85, 0.08),
+        0 0 18px rgba(255, 70, 85, 0.07);
+}
+
+
+/* Placeholder */
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #64666d;
+}
+
+
+/* Textarea */
+
+.form-group textarea {
+    min-height: 120px;
+
+    resize: vertical;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   CHECKBOX
+   ========================================================= */
+
+.checkbox-group label {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    min-height: 44px;
+
+    color: var(--km-text);
+
+    cursor: pointer;
+}
+
+
+.checkbox-group input[type="checkbox"] {
+    width: 19px;
+    height: 19px;
+
+    margin: 0;
+
+    accent-color: var(--km-red);
+}
+
+
+/* =========================================================
+   ADMIN BUTTON
+   ========================================================= */
+
+.admin-button {
+
+    position: relative;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 46px;
+
+    padding: 0 20px;
+
+    background:
+        linear-gradient(135deg,
+            var(--km-red),
+            var(--km-red-dark));
+
+    color: white;
+
+    border: none;
+
+    border-radius: 3px;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 12px;
+    font-weight: 900;
+
+    letter-spacing: 0.8px;
+
+    text-transform: uppercase;
+
+    text-decoration: none;
+
+    clip-path: polygon(0 0,
+            calc(100% - 9px) 0,
+            100% 9px,
+            100% 100%,
+            9px 100%,
+            0 calc(100% - 9px));
+
+    box-shadow:
+        0 7px 20px rgba(255, 70, 85, 0.16);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        background 0.18s ease;
+}
+
+
+.admin-button:hover {
+
+    color: white;
+
+    background:
+        linear-gradient(135deg,
+            #ff5967,
+            #e51e31);
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(255, 70, 85, 0.28);
+}
+
+
+.admin-button:active {
+    transform: scale(0.97);
+}
+
+
+/* =========================================================
+   SLIDER MANAGEMENT
+   ========================================================= */
+
+.slider-admin-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+.slider-admin-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 14px;
+
+    background:
+        linear-gradient(145deg,
+            rgba(255, 255, 255, 0.02),
+            transparent),
+        var(--km-card-dark);
+
+    border: 1px solid var(--km-border);
+
+    border-radius: var(--km-radius);
+
+    overflow: hidden;
+
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.slider-admin-item:hover {
+
+    border-color: rgba(255, 70, 85, 0.35);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   SLIDER IMAGE
+   ========================================================= */
+
+.slider-admin-image {
+
+    width: 200px;
+    height: 105px;
+
+    flex-shrink: 0;
+
+    overflow: hidden;
+
+    background: #050505;
+
+    border-radius: 4px;
+
+    border: 1px solid #202126;
+}
+
+
+.slider-admin-image img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+    transition: transform 0.35s ease;
+}
+
+
+.slider-admin-item:hover .slider-admin-image img {
+
+    transform: scale(1.04);
+}
+
+
+/* =========================================================
+   SLIDER INFO
+   ========================================================= */
+
+.slider-admin-info {
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.slider-admin-info h3 {
+
+    margin: 0 0 8px;
+
+    color: var(--km-white);
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.slider-admin-info p {
+
+    margin: 5px 0;
+
+    color: var(--km-muted);
+
+    font-size: 13px;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status-active {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    color: var(--km-red);
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+.status-active::before {
+
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    background: var(--km-red);
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 8px var(--km-red);
+}
+
+
+.status-inactive {
+
+    color: #777;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   SLIDER ACTIONS
+   ========================================================= */
+
+.slider-admin-actions {
+
+    display: flex;
+
+    gap: 8px;
+
+    flex-shrink: 0;
+}
+
+
+.slider-admin-actions .admin-button {
+
+    text-decoration: none;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   EDIT SLIDER PREVIEW
+   ========================================================= */
+
+.edit-slider-preview {
+
+    width: 100%;
+    max-width: 700px;
+
+    background: #050505;
+
+    border: 1px solid var(--km-border);
+
+    border-radius: 6px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+
+.edit-slider-preview img {
+
+    width: 100%;
+    height: auto;
+
+    display: block;
+}
+
+
+/* =========================================================
+   EDIT SLIDER ACTIONS
+   ========================================================= */
+
+.edit-slider-actions {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 22px;
+}
+
+
+/* =========================================================
+   CANCEL BUTTON
+   ========================================================= */
+
+.admin-cancel-button {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 46px;
+
+    padding: 0 20px;
+
+    background: #191b1f;
+
+    color: #ddd;
+
+    border: 1px solid #303238;
+
+    border-radius: 3px;
+
+    text-decoration: none;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.admin-cancel-button:hover {
+
+    background: #24262b;
+
+    color: white;
+
+    border-color: #44464d;
+}
+
+
+/* =========================================================
+   FORM HELP TEXT
+   ========================================================= */
+
+.form-group small {
+
+    display: block;
+
+    margin-top: 7px;
+
+    color: #707279;
+
+    font-size: 11px;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   STATUS TOGGLE
+   ========================================================= */
+
+.status-toggle {
+
+    display: inline-flex !important;
+
+    align-items: center;
+
+    gap: 11px;
+
+    width: fit-content !important;
+
+    min-height: 44px;
+
+    cursor: pointer;
+
+    user-select: none;
+}
+
+
+/* Hide native checkbox */
+
+.status-toggle input {
+
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+
+/* Toggle */
+
+.toggle-slider {
+
+    position: relative;
+
+    width: 52px;
+    height: 29px;
+
+    flex-shrink: 0;
+
+    background: #202227;
+
+    border: 1px solid #3b3d43;
+
+    border-radius: 30px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* Toggle circle */
+
+.toggle-slider::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 21px;
+    height: 21px;
+
+    left: 3px;
+    top: 3px;
+
+    background: #777;
+
+    border-radius: 50%;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+
+/* Active */
+
+.status-toggle input:checked+.toggle-slider {
+
+    background: var(--km-red);
+
+    border-color: var(--km-red);
+
+    box-shadow:
+        0 0 14px rgba(255, 70, 85, 0.25);
+}
+
+
+.status-toggle input:checked+.toggle-slider::before {
+
+    transform: translateX(23px);
+
+    background: white;
+}
+
+
+/* Toggle text */
+
+.toggle-label {
+
+    min-width: 70px;
+
+    color: #777;
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.8px;
+
+    text-transform: uppercase;
+}
+
+
+.status-toggle input:checked~.toggle-label {
+
+    color: var(--km-red);
+}
+
+/* edit match button */
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .admin-container {
+
+        width: 100%;
+
+        margin: 0;
+
+        padding:
+            20px 14px calc(35px + env(safe-area-inset-bottom));
+    }
+
+
+    .admin-container h1 {
+
+        margin-bottom: 20px;
+
+        font-size: 28px;
+    }
+
+
+    .admin-card {
+
+        padding: 15px;
+
+        border-radius: 6px;
+    }
+
+
+    .admin-card h2 {
+
+        margin-bottom: 18px;
+
+        font-size: 17px;
+    }
+
+
+    .form-group {
+
+        margin-bottom: 16px;
+    }
+
+
+    .form-group label {
+
+        margin-bottom: 6px;
+
+        font-size: 10px;
+    }
+
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group input[type="file"],
+    .form-group input[type="date"],
+    .form-group input[type="time"],
+    .form-group select,
+    .form-group textarea {
+
+        min-height: 48px;
+
+        padding: 12px;
+
+        font-size: 15px;
+    }
+
+
+    .form-group textarea {
+
+        min-height: 130px;
+    }
+
+
+    /* Full-width mobile buttons */
+
+    .admin-button {
+
+        width: 100%;
+
+        min-height: 50px;
+    }
+
+
+    /* Slider cards */
+
+    .slider-admin-list {
+
+        gap: 12px;
+    }
+
+
+    .slider-admin-item {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 13px;
+
+        padding: 12px;
+    }
+
+
+    .slider-admin-image {
+
+        width: 100%;
+
+        height: auto;
+
+        aspect-ratio: 16 / 9;
+    }
+
+
+    .slider-admin-info h3 {
+
+        font-size: 16px;
+    }
+
+
+    .slider-admin-info p {
+
+        font-size: 12px;
+    }
+
+
+    /* Buttons side-by-side */
+
+    .slider-admin-actions {
+
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 8px;
+    }
+
+
+    .slider-admin-actions .admin-button {
+
+        width: 100%;
+
+        min-height: 46px;
+
+        padding: 0 8px;
+
+        font-size: 11px;
+    }
+
+
+    /* Edit preview */
+
+    .edit-slider-preview {
+
+        border-radius: 5px;
+    }
+
+
+    /* Edit buttons */
+
+    .edit-slider-actions {
+
+        flex-direction: column;
+
+        gap: 8px;
+
+        margin-top: 18px;
+    }
+
+
+    .edit-slider-actions .admin-button,
+    .edit-slider-actions .admin-cancel-button {
+
+        width: 100%;
+
+        min-height: 50px;
+    }
+
+
+    /* Toggle */
+
+    .status-toggle {
+
+        min-height: 48px;
+    }
+
+
+    .toggle-slider {
+
+        width: 54px;
+
+        height: 30px;
+    }
+
+
+    .toggle-slider::before {
+
+        width: 22px;
+        height: 22px;
+    }
+
+
+    .status-toggle input:checked+.toggle-slider::before {
+
+        transform: translateX(24px);
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    .admin-container {
+
+        padding-left: 11px;
+        padding-right: 11px;
+    }
+
+
+    .admin-card {
+
+        padding: 13px;
+    }
+
+
+    .admin-container h1 {
+
+        font-size: 25px;
+    }
+
+
+    .slider-admin-actions {
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .slider-admin-actions .admin-button {
+
+        min-height: 48px;
+    }
+}
+
+
+/* =========================================================
+   TABLET / DESKTOP
+   ========================================================= */
+
+@media (min-width: 769px) {
+
+    .admin-container {
+
+        margin-top: 40px;
+    }
+
+
+    .admin-card {
+
+        padding: 28px;
+    }
+}

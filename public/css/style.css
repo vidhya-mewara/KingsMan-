@@ -16,95 +16,502 @@ main {
 
 footer {
     flex-shrink: 0;
+    
+}
+.kingsman-footer {
+    position: relative;
+
+    background:
+        linear-gradient(180deg,
+            #16181b 0%,
+            #101114 100%);
+
+    color: #ffffff;
+
+    border-top: 1px solid #292a2e;
+    overflow: hidden;
 }
 
+/* Red esports accent */
+.kingsman-footer::before {
+    content: "";
 
-/* =========================================
-   NAVBAR - DARK THEME
-========================================= */
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
 
-.kingsman-navbar {
-    background-color: #0a0a0a;
-    border-bottom: 2px solid #e63946;
-    padding: 0.75rem 1.5rem;
+    height: 2px;
+
+    background: linear-gradient(90deg,
+            transparent,
+            #ff4655,
+            #ffffff,
+            #ff4655,
+            transparent);
+
+    box-shadow: 0 0 15px rgba(255, 70, 85, 0.5);
 }
 
-.kingsman-navbar .navbar-brand {
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: 2px;
+/* Headings */
+.kingsman-footer h4,
+.kingsman-footer h5 {
     color: #ffffff;
 }
 
-.kingsman-navbar .navbar-brand:hover {
-    color: #e63946;
-}
-
-.kingsman-navbar .nav-link {
-    color: #cccccc;
-    font-weight: 500;
-    margin-right: 1rem;
+/* Links */
+.kingsman-footer a {
     transition: color 0.2s ease;
 }
 
-.kingsman-navbar .nav-link:hover,
-.kingsman-navbar .nav-link.active {
-    color: #e63946;
+.kingsman-footer a:hover {
+    color: #ff4655 !important;
 }
 
-.kingsman-navbar .navbar-toggler {
-    border-color: #555;
+/* Horizontal line */
+.kingsman-footer hr {
+    border-color: #292a2e;
+    opacity: 1;
+}
+/*/* =========================================
+   KINGSMAN NAVBAR
+========================================= */
+
+.kingsman-navbar {
+    background: #101114;
+    border-bottom: 1px solid #292a2e;
+    padding: 0;
+    position: relative;
+    z-index: 1000;
 }
 
-.kingsman-navbar .navbar-toggler-icon {
-    filter: invert(1);
+.kingsman-navbar .container-fluid {
+    min-height: 64px;
 }
+.footer-description {
+    max-width: 320px;
 
-.kingsman-navbar .dropdown-menu {
-    background-color: #1a1a1a;
-    border: 1px solid #333;
+    margin-top: 12px;
+
+    color: #85868b;
+
+    font-size: 14px;
+    line-height: 1.7;
 }
-
-.kingsman-navbar .dropdown-item {
-    color: #cccccc;
-}
-
-.kingsman-navbar .dropdown-item:hover,
-.kingsman-navbar .dropdown-item:focus {
-    background-color: #e63946;
-    color: #ffffff;
-}
-
-.kingsman-navbar .theme-toggle-btn {
-    width: 38px;
-    height: 38px;
+.kingsman-footer .d-flex a {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-color: #555;
-    color: #cccccc;
-    background: transparent;
+
+    width: 40px;
+    height: 40px;
+
+    color: #aaa !important;
+
+    background: #1c1e22;
+
+    border: 1px solid #303238;
+    border-radius: 4px;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
 }
 
-.kingsman-navbar .theme-toggle-btn:hover {
-    border-color: #e63946;
-    color: #e63946;
+.kingsman-footer .d-flex a:hover {
+    color: #ffffff !important;
+
+    background: #ff4655;
+
+    border-color: #ff4655;
+
+    transform: translateY(-3px);
 }
 
 
 /* =========================================
-   ROSTER PAGE BACKGROUND
+   LOGO
 ========================================= */
 
-.roster-page {
-    background: radial-gradient(circle at top,
-            #151515 0%,
-            #0a0a0a 60%);
+.kingsman-navbar .navbar-brand {
+    color: #ff4655 !important;
 
-    min-height: 100vh;
-    padding: 20px 0 60px;
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    padding: 0;
+    margin-right: 40px;
+
+    text-decoration: none;
 }
 
+.kingsman-navbar .navbar-brand:hover {
+    color: #ff4655 !important;
+}
+
+
+/* =========================================
+   NAVIGATION
+========================================= */
+.kingsman-navbar .nav-link {
+    position: relative;
+
+    color: #aaa !important;
+
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    padding: 23px 16px !important;
+
+    text-transform: uppercase;
+    text-decoration: none;
+
+    border-bottom: 3px solid transparent;
+}
+
+.kingsman-navbar .nav-link:hover {
+    color: #ff4655 !important;
+}
+
+.kingsman-navbar .nav-link.active {
+    color: #ffffff !important;
+    border-bottom: 3px solid #ff4655;
+}
+
+
+/* =========================================
+   DROPDOWN
+========================================= */
+
+.kingsman-navbar .dropdown-menu {
+    background: #18191c;
+
+    border: 1px solid #292a2e;
+
+    border-radius: 4px;
+
+    padding: 5px;
+}
+
+.kingsman-navbar .dropdown-item {
+    color: #aaa;
+
+    font-size: 14px;
+
+    padding: 9px 12px;
+}
+
+.kingsman-navbar .dropdown-item:hover {
+    color: #ff4655;
+
+    background: #25262a;
+}
+
+
+/* =========================================
+   AUTH SECTION
+========================================= */
+
+.kingsman-navbar>div:last-child {
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    margin-left: auto;
+}
+
+
+/* Welcome */
+
+.kingsman-navbar>div:last-child span {
+    color: #aaa;
+
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.kingsman-navbar>div:last-child span strong {
+    color: #ffffff;
+}
+
+
+/* Online dot */
+
+.kingsman-navbar .status-dot {
+    display: inline-block;
+
+    width: 7px;
+    height: 7px;
+
+    margin-right: 6px;
+
+    background: #4cff88;
+
+    border-radius: 50%;
+}
+
+
+/* =========================================
+   LOGIN
+========================================= */
+
+.kingsman-navbar>div:last-child a {
+    color: #ffffff;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.kingsman-navbar>div:last-child a:hover {
+    color: #ff4655;
+}
+
+
+/* =========================================
+   REGISTER + LOGOUT
+========================================= */
+
+.kingsman-navbar>div:last-child a[href="/register"],
+.kingsman-navbar>div:last-child a[href="/logout"] {
+    color: #ffffff !important;
+
+    background: #ff4655;
+
+    padding: 10px 18px;
+
+    border: 1px solid #ff4655;
+
+    border-radius: 3px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+.kingsman-navbar>div:last-child a[href="/register"]:hover,
+.kingsman-navbar>div:last-child a[href="/logout"]:hover {
+    color: #ffffff !important;
+
+    background: #e63e4d;
+
+    border-color: #e63e4d;
+}
+
+
+/* =========================================
+   HAMBURGER
+========================================= */
+
+.kingsman-navbar .navbar-toggler {
+    border: 1px solid #333438;
+
+    border-radius: 5px;
+
+    padding: 8px;
+}
+
+.kingsman-navbar .navbar-toggler-icon {
+    background-image: none;
+
+    width: 22px;
+    height: 16px;
+
+    position: relative;
+
+    display: block;
+
+    border-top: 2px solid #aaa;
+    border-bottom: 2px solid #aaa;
+}
+
+.kingsman-navbar .navbar-toggler-icon::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 5px;
+
+    width: 22px;
+    height: 2px;
+
+    background: #aaa;
+}
+
+.kingsman-navbar .navbar-toggler:hover {
+    border-color: #ff4655;
+}
+
+.kingsman-navbar .navbar-toggler:hover .navbar-toggler-icon {
+    border-color: #ff4655;
+}
+
+.kingsman-navbar .navbar-toggler:hover .navbar-toggler-icon::after {
+    background: #ff4655;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 991.98px) {
+
+    .kingsman-navbar .container-fluid {
+        min-height: 64px;
+    }
+
+    .kingsman-navbar .navbar-brand {
+        margin-right: 0;
+    }
+
+    /* Hamburger stays on right */
+
+    .kingsman-navbar .navbar-toggler {
+        margin-left: auto;
+    }
+
+
+    /* RIGHT SIDE SLIDE MENU */
+
+    .kingsman-navbar .navbar-collapse {
+        position: fixed;
+
+        top: 64px;
+        right: 0;
+
+        width: 280px;
+        height: calc(100vh - 64px);
+
+        padding: 20px;
+
+        background: #101114;
+
+        border-left: 1px solid #292a2e;
+
+        overflow-y: auto;
+
+        transform: translateX(100%);
+
+        transition: transform 0.25s ease;
+
+        z-index: 999;
+    }
+
+    .kingsman-navbar .navbar-collapse.show {
+        transform: translateX(0);
+    }
+
+
+    /* Mobile links */
+
+    .kingsman-navbar .navbar-nav {
+        flex-direction: column;
+
+        gap: 0;
+
+        margin: 0;
+    }
+
+    .kingsman-navbar .nav-link {
+        width: 100%;
+
+        padding: 15px 10px !important;
+    }
+
+
+    /* Active line on mobile */
+
+    .kingsman-navbar .nav-link[aria-current="page"]::after {
+        left: 10px;
+        right: auto;
+
+        width: 35px;
+
+        bottom: 5px;
+    }
+
+
+    /* Dropdown */
+
+    .kingsman-navbar .dropdown-menu {
+        position: static !important;
+
+        width: 100%;
+
+        margin: 0;
+
+        border: 0;
+
+        background: #18191c;
+    }
+
+
+    /* AUTH */
+
+    .kingsman-navbar>div:last-child {
+        position: absolute;
+
+        right: 65px;
+        top: 50%;
+
+        transform: translateY(-50%);
+
+        margin: 0;
+
+        gap: 8px;
+
+        z-index: 1001;
+    }
+
+
+    /* Hide welcome on mobile */
+
+    .kingsman-navbar>div:last-child span {
+        display: none;
+    }
+
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 576px) {
+
+    .kingsman-navbar>div:last-child {
+        right: 60px;
+    }
+
+    .kingsman-navbar>div:last-child a {
+        font-size: 12px;
+    }
+
+    .kingsman-navbar>div:last-child a[href="/register"],
+    .kingsman-navbar>div:last-child a[href="/logout"] {
+        padding: 8px 12px;
+
+        font-size: 11px;
+    }
+
+    .kingsman-navbar .navbar-collapse {
+        width: 260px;
+    }
+}
 
 /* =========================================
    ROSTER HEADER
@@ -1614,4 +2021,324 @@ footer {
     .agent-selection {
         grid-template-columns: 1fr;
     }
+}
+
+/* =========================================
+   CONTACT PAGE
+========================================= */
+
+.contact-page {
+    min-height: calc(100vh - 64px);
+
+    background: #0b0c0e;
+
+    color: #ffffff;
+
+    padding-bottom: 80px;
+}
+
+
+/* =========================================
+   HERO
+========================================= */
+
+.contact-hero {
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    text-align: center;
+
+    padding: 80px 20px 55px;
+}
+
+.contact-label {
+    color: #ff4655;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 12px;
+}
+
+.contact-hero h1 {
+    margin: 0;
+
+    font-size: clamp(38px, 5vw, 64px);
+
+    font-weight: 800;
+
+    letter-spacing: -1px;
+}
+
+.contact-hero h1 span {
+    color: #ff4655;
+}
+
+.contact-intro {
+    max-width: 600px;
+
+    margin: 18px auto 0;
+
+    color: #96979c;
+
+    font-size: 16px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.contact-content {
+    padding: 20px 0;
+}
+
+
+/* =========================================
+   LEFT SIDE
+========================================= */
+
+.support-info {
+    padding: 20px 10px;
+}
+
+.section-label {
+    color: #ff4655;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 10px;
+}
+
+.support-info h2 {
+    font-size: 32px;
+
+    font-weight: 700;
+
+    margin-bottom: 15px;
+}
+
+.support-text {
+    color: #929398;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+
+    max-width: 480px;
+
+    margin-bottom: 35px;
+}
+
+
+/* =========================================
+   SUPPORT ITEMS
+========================================= */
+
+.support-item {
+    display: flex;
+
+    gap: 18px;
+
+    padding: 18px 0;
+
+    border-top: 1px solid #25262a;
+}
+
+.support-number {
+    color: #ff4655;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    min-width: 25px;
+}
+
+.support-item h3 {
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    margin: 0 0 5px;
+}
+
+.support-item p {
+    color: #85868b;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    margin: 0;
+}
+
+
+/* =========================================
+   CONTACT CARD
+========================================= */
+
+.contact-card {
+    background: #151619;
+
+    border: 1px solid #292a2e;
+
+    padding: 35px;
+
+    border-radius: 5px;
+}
+
+.contact-card-header {
+    margin-bottom: 25px;
+}
+
+.contact-card-header h2 {
+    color: #ffffff;
+
+    font-size: 25px;
+    font-weight: 700;
+
+    margin-bottom: 7px;
+}
+
+.contact-card-header p {
+    color: #85868b;
+
+    font-size: 14px;
+
+    margin: 0;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+
+    color: #d0d0d3;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    margin-bottom: 7px;
+
+    text-transform: uppercase;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+
+    color: #ffffff;
+
+    background: #0f1012;
+
+    border: 1px solid #303136;
+
+    border-radius: 3px;
+
+    padding: 11px 13px;
+
+    font-size: 14px;
+
+    outline: none;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #66676c;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #ff4655;
+}
+
+.form-group select {
+    cursor: pointer;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+
+/* =========================================
+   SUBMIT BUTTON
+========================================= */
+
+.contact-submit {
+    width: 100%;
+
+    padding: 12px;
+
+    color: #ffffff;
+
+    background: #ff4655;
+
+    border: 1px solid #ff4655;
+
+    border-radius: 3px;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+}
+
+.contact-submit:hover {
+    background: #e63e4d;
+
+    border-color: #e63e4d;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 767px) {
+
+    .contact-hero {
+        padding: 55px 20px 35px;
+    }
+
+    .contact-hero h1 {
+        font-size: 38px;
+    }
+
+    .contact-intro {
+        font-size: 14px;
+    }
+
+    .support-info {
+        padding: 10px 5px 25px;
+    }
+
+    .support-info h2 {
+        font-size: 27px;
+    }
+
+    .contact-card {
+        padding: 22px;
+    }
+
 }

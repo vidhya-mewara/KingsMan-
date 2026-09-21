@@ -1,5 +1,5 @@
 import 'dotenv/config';
-
+import fs from "fs";
 import express from 'express';
 import mongoose from 'mongoose';
 import Player from './model/playerProfile.js';
@@ -18,7 +18,12 @@ const app = express();
 const mongoUrl = 'mongodb://127.0.0.1:27017/playerDB';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
-
+import { requireLogin, requireAdmin, saveRedirectUrl, loadUser, hasNoPlayer, isPlayerOwner } from './middleware.js';
+import Slider from './model/slider.js';
+import Promotion from "./model/promotion.js";
+import sliderUpload from "./middleware/sliderUpload.js";
+import promotionUpload from "./middleware/promotionUpload.js";
+import Match from "./model/match.js";
 
 
 async function main() {
@@ -64,22 +69,16 @@ const sessionoptions = {
 app.use(session(sessionoptions));
 app.use(flash());
 
-app.use(async (req, res, next) => {
+app.use(saveRedirectUrl);
+app.use(loadUser);
+
+app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
-
-  res.locals.currUser = null;
-
-  if (req.session.userId) {
-    const user = await User.findById(req.session.userId);
-
-    if (user) {
-      res.locals.currUser = user;
-    }
-  }
-
   next();
 });
+
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -95,15 +94,28 @@ const validateUser = (req, res, next) => {
   next(); 
 };
 
-
-
-app.get("/players", wrapAsync(async (req, res) => {
-  let players = await Player.find({});
-  res.render("players", { players });
-}))
-app.get("/players/new", (req, res) => {
-  res.render("new.ejs");
+app.use((req, res, next) => {
+  res.locals.currentPage = req.path;
+  next();
 });
+
+app.get(
+  "/players",
+  wrapAsync(async (req, res) => {
+    const players = await Player.find({});
+
+    res.render("players", { players });
+  })
+);
+
+app.get(
+  "/players/new",
+  requireLogin,
+  hasNoPlayer,
+  (req, res) => {
+    res.render("new.ejs");
+  }
+);
 
 app.get("/players/:id",wrapAsync( async(req,res) => {
   const { id } = req.params;
@@ -111,39 +123,51 @@ app.get("/players/:id",wrapAsync( async(req,res) => {
   res.render("playerProfile", { player });
 })
 )
+
+// Create player profile
+
 app.post(
   "/players",
+  requireLogin,
+  hasNoPlayer,
   upload.single("verificationScreenshot"),
   wrapAsync(async (req, res) => {
+
+    // Get currently logged-in user
     const currentUser = await User.findById(req.session.userId);
 
     if (!currentUser) {
       throw new ExpressError(401, "User account not found");
     }
 
+    // Prevent user from creating multiple player profiles
     if (currentUser.player) {
       req.flash("error", "You already have a player profile.");
       return res.redirect(`/players/${currentUser.player}`);
     }
-    // Make sure screenshot was uploaded
+
+    // Screenshot required
     if (!req.file) {
-      throw new ExpressError(400, "Verification screenshot is required");
+      throw new ExpressError(
+        400,
+        "Verification screenshot is required"
+      );
     }
 
     // Checkbox → boolean
     const inTeam = req.body.inTeam === "true";
 
-    // Single role → array
+    // Role → array
     const roles = Array.isArray(req.body.role)
       ? req.body.role
       : [req.body.role];
 
-    // Single agent → array
+    // Agents → array
     const selectedAgents = Array.isArray(req.body.agents)
       ? req.body.agents
       : [req.body.agents];
 
-    // Prepare data
+    // Prepare player data
     const playerData = {
       name: req.body.name,
       ign: req.body.ign,
@@ -166,49 +190,68 @@ app.post(
         kick: req.body.socialMedia?.kick || ""
       },
 
-      verificationScreenshot: req.file.path
+      verificationScreenshot: req.file.path,
+
+      //  THIS FIXES YOUR ERROR
+      owner: currentUser._id.toString()
     };
-   
+
     // Joi validation
     const { error } = playerSchema.validate(playerData);
 
     if (error) {
-      throw new ExpressError(400, error.details[0].message);
+      throw new ExpressError(
+        400,
+        error.details[0].message
+      );
     }
 
-    // Create and save MongoDB document
+    // Create player
     const player = new Player(playerData);
 
     await player.save();
 
-    // Connect this player profile to the logged-in user
-    if (req.session.userId) {
-      await User.findByIdAndUpdate(req.session.userId, {
-        player: player._id
-      });
-    }
+    // Link player to user
+    currentUser.player = player._id;
 
-    req.flash("success", "Player profile created successfully!");
+    await currentUser.save();
+
+    req.flash(
+      "success",
+      "Player profile created successfully!"
+    );
 
     res.redirect(`/players/${player._id}`);
   })
 );
 
 
-app.get("/players/:id/edit", wrapAsync(async (req, res) => {
-  const { id } = req.params;
 
-  const player = await Player.findById(id);
+// Edit player profile
+app.get(
+  "/players/:id/edit",
+  requireLogin,
+  isPlayerOwner,
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
 
-  if (!player) {
-    throw new ExpressError(404, "Player Not Found");
-  }
+    const player = await Player.findById(id);
 
-  res.render("edit", { player });
-}));
+    if (!player) {
+      throw new ExpressError(404, "Player Not Found");
+    }
+
+    res.render("edit", { player });
+  })
+);
 
 
-app.put("/players/:id", wrapAsync(async (req, res) => {
+// update player profile
+app.put(
+  "/players/:id",
+  requireLogin,
+  isPlayerOwner,
+  wrapAsync(async (req, res) => {
 
   const { id } = req.params;
 
@@ -232,7 +275,7 @@ app.put("/players/:id", wrapAsync(async (req, res) => {
     inTeam: inTeam,
 
     teamName: inTeam
-      ? req.body.teamName || ""
+      ? req.body.teamName || ""  
       : "",
 
     socialMedia: {
@@ -276,27 +319,40 @@ app.put("/players/:id", wrapAsync(async (req, res) => {
   res.redirect(`/players/${id}`);
   
 }));
-app.delete("/players/:id", wrapAsync(async (req, res) => {
-  const { id } = req.params;
+// delete player profile
+app.delete(
+  "/players/:id",
+  requireLogin,
+  isPlayerOwner,
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
 
-  const deletedPlayer = await Player.findByIdAndDelete(id);
+    const deletedPlayer = await Player.findByIdAndDelete(id);
 
-  if (!deletedPlayer) {
-    throw new ExpressError(404, "Player Not Found");
-  }
+    if (!deletedPlayer) {
+      throw new ExpressError(404, "Player Not Found");
+    }
 
-  res.redirect("/players");
-}));
+    const user = await User.findById(req.session.userId);
 
-app.get("/", (req,res) => {
-  res.send("Welcome to the Kingsman Player Profile API");
-});
+    if (user) {
+      user.player = null;
+      await user.save();
+    }
+
+    req.flash(
+      "success",
+      "Player profile deleted successfully!"
+    );
+
+    res.redirect("/players");
+  })
+);
 
 
 app.get("/register", (req, res) => {
   res.render("register");
 });
-
 
 app.post("/register", wrapAsync(async (req, res) => {
 
@@ -313,35 +369,56 @@ app.post("/register", wrapAsync(async (req, res) => {
     throw new ExpressError(400, error.details[0].message);
   }
 
-  // Check existing user
+  // Check if email already exists
   const existingUser = await User.findOne({ email });
 
-  if (existingUser) {
+  // If email belongs to a verified account
+  if (existingUser && existingUser.isVerified) {
     req.flash("error", "Email is already registered.");
     return res.redirect("/register");
   }
 
-  // Hash password
-  const hashedPassword = await bcrypt.hash(password, 12);
-
   // Generate OTP
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  // Hash password
+  const hashedPassword = await bcrypt.hash(password, 12);
 
   // Hash OTP
   const hashedOtp = await bcrypt.hash(otp, 10);
 
-  // Create user
-  const user = new User({
-    name,
-    email,
-    password: hashedPassword,
-    otp: hashedOtp,
-    otpExpires: new Date(Date.now() + 5 * 60 * 1000),
-    isVerified: false
-  });
+  let user;
 
-  // Save to MongoDB
-  await user.save();
+  if (existingUser && !existingUser.isVerified) {
+
+    // Existing account but not verified
+    existingUser.name = name;
+    existingUser.password = hashedPassword;
+    existingUser.otp = hashedOtp;
+    existingUser.otpExpires = new Date(Date.now() + 5 * 60 * 1000);
+    existingUser.otpAttempts = 0;
+    existingUser.otpLastSent = new Date();
+
+    await existingUser.save();
+
+    user = existingUser;
+
+  } else {
+
+    // Completely new user
+    user = new User({
+      name,
+      email,
+      password: hashedPassword,
+      otp: hashedOtp,
+      otpExpires: new Date(Date.now() + 5 * 60 * 1000),
+      otpAttempts: 0,
+      otpLastSent: new Date(),
+      isVerified: false
+    });
+
+    await user.save();
+  }
 
   // Send OTP
   await transporter.sendMail({
@@ -349,21 +426,26 @@ app.post("/register", wrapAsync(async (req, res) => {
     to: email,
     subject: "KingsMan Email Verification",
     html: `
-            <h2>KingsMan Email Verification</h2>
-            <p>Your OTP is:</p>
-            <h1>${otp}</h1>
-            <p>This OTP expires in 5 minutes.</p>
-        `
+      <h2>KingsMan Email Verification</h2>
+      <p>Your OTP is:</p>
+      <h1>${otp}</h1>
+      <p>This OTP expires in 5 minutes.</p>
+    `
   });
 
+  // Save user ID in verification session
   req.session.verifyUserId = user._id;
 
-  req.flash("success", "OTP sent to your email.");
+  req.flash(
+    "success",
+    "OTP sent to your email."
+  );
+
   res.redirect("/verify-otp");
 }));
-
-
+// Show OTP verification page
 app.get("/verify-otp", (req, res) => {
+
   if (!req.session.verifyUserId) {
     req.flash("error", "Please register first.");
     return res.redirect("/register");
@@ -371,7 +453,81 @@ app.get("/verify-otp", (req, res) => {
 
   res.render("verify-otp");
 });
+// Resend OTP
+app.post("/resend-otp", wrapAsync(async (req, res) => {
 
+  const userId = req.session.verifyUserId;
+
+  if (!userId) {
+    req.flash("error", "Please register first.");
+    return res.redirect("/register");
+  }
+
+  const user = await User.findById(userId);
+
+  if (!user) {
+    req.flash("error", "User not found.");
+    return res.redirect("/register");
+  }
+
+  // Don't resend if already verified
+  if (user.isVerified) {
+    req.flash("success", "Your email is already verified.");
+    return res.redirect("/login");
+  }
+
+  // Wait 60 seconds between OTP requests
+  if (
+    user.otpLastSent &&
+    Date.now() - user.otpLastSent.getTime() < 60 * 1000
+  ) {
+
+    const remainingSeconds = Math.ceil(
+      (60 * 1000 - (Date.now() - user.otpLastSent.getTime())) / 1000
+    );
+
+    req.flash(
+      "error",
+      `Please wait ${remainingSeconds} seconds before requesting another OTP.`
+    );
+
+    return res.redirect("/verify-otp");
+  }
+
+  // Generate new OTP
+  const otp = Math.floor(
+    100000 + Math.random() * 900000
+  ).toString();
+
+  // Hash OTP
+  const hashedOtp = await bcrypt.hash(otp, 10);
+
+  // Update user
+  user.otp = hashedOtp;
+  user.otpExpires = new Date(Date.now() + 5 * 60 * 1000);
+  user.otpAttempts = 0;
+  user.otpLastSent = new Date();
+
+  await user.save();
+
+  // Send new OTP
+  await transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to: user.email,
+    subject: "KingsMan - New Verification OTP",
+    html: `
+      <h2>KingsMan Email Verification</h2>
+      <p>Your new OTP is:</p>
+      <h1>${otp}</h1>
+      <p>This OTP expires in 5 minutes.</p>
+    `
+  });
+
+  req.flash("success", "A new OTP has been sent to your email.");
+
+  res.redirect("/verify-otp");
+}));
+// Verify OTP
 app.post("/verify-otp", wrapAsync(async (req, res) => {
 
   const { otp } = req.body;
@@ -391,21 +547,28 @@ app.post("/verify-otp", wrapAsync(async (req, res) => {
   }
 
   // Check OTP expiry
-  if (!user.otpExpires || user.otpExpires < new Date()) {
+  if (!user.otp || !user.otpExpires || user.otpExpires < new Date()) {
 
     user.otp = null;
     user.otpExpires = null;
 
     await user.save();
 
-    req.flash("error", "OTP has expired. Please request a new one.");
+    req.flash(
+      "error",
+      "OTP has expired. Please request a new one."
+    );
+
     return res.redirect("/verify-otp");
   }
 
-  // Compare OTP
+  // Compare entered OTP with hashed OTP
   const isValid = await bcrypt.compare(otp, user.otp);
 
   if (!isValid) {
+    user.otpAttempts += 1;
+    await user.save();
+
     req.flash("error", "Invalid OTP.");
     return res.redirect("/verify-otp");
   }
@@ -414,18 +577,19 @@ app.post("/verify-otp", wrapAsync(async (req, res) => {
   user.isVerified = true;
   user.otp = null;
   user.otpExpires = null;
+  user.otpAttempts = 0;
 
   await user.save();
 
   // Remove temporary verification session
   delete req.session.verifyUserId;
 
-  req.flash("success", "Email verified successfully!");
-
+  // Log the user in
   req.session.userId = user._id;
   req.session.userRole = user.role;
 
-  req.flash("success", "Welcome to KingsMan!");
+  req.flash("success", "Email verified successfully!");
+
   res.redirect("/players");
 }));
 
@@ -463,6 +627,7 @@ app.post("/login", wrapAsync(async (req, res) => {
   }
 
   req.session.userId = user._id;
+  req.session.userRole = user.role;
 
   req.flash("success", "Logged in successfully!");
 
@@ -477,10 +642,729 @@ app.get("/logout", (req, res) => {
       return res.redirect("/players");
     }
 
-    res.redirect("/login");
+    res.redirect("/players");
   });
 
 });
+
+// GET CONTACT PAGE
+
+app.get("/contact", (req, res) => {
+
+  res.render("contact", {
+    currUser: req.user || null,
+    success: null,
+    error: null
+  });
+
+});
+
+
+// POST CONTACT FORM
+app.post("/contact", async (req, res) => {
+
+  try {
+
+    const { name, email, subject, message } = req.body;
+
+    if (!name || !email || !subject || !message) {
+      req.flash("error", "Please fill in all fields.");
+      return res.redirect("/contact");
+    }
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.ADMIN_EMAIL,
+      replyTo: email,
+      subject: `KingsMan Support: ${subject}`,
+
+      text: `
+Name: ${name}
+Email: ${email}
+Subject: ${subject}
+
+Message:
+${message}
+            `
+    });
+
+    req.flash("success", "Your message has been sent successfully.");
+
+    res.redirect("/contact");
+
+  } catch (error) {
+
+    console.error("Contact form error:", error);
+
+    req.flash(
+      "error",
+      "Something went wrong while sending your message."
+    );
+
+    res.redirect("/contact");
+  }
+
+});
+
+app.get("/", async (req, res) => {
+  try {
+    const sliders = await Slider.find({
+      active: true
+    }).sort({
+      position: 1
+    });
+
+    const promotion = await Promotion.findOne({
+      active: true
+    });
+    const ongoingMatches = await Match.find({
+      status: "ongoing"
+    }).sort({ date: 1 }).limit(3);
+
+    const upcomingMatches = await Match.find({
+      status: "upcoming"
+    }).sort({ date: 1 }).limit(3);
+
+    const pastMatches = await Match.find({
+      status: "past"
+    }).sort({ date: -1 }).limit(3);
+
+    console.log("SLIDERS:", sliders);
+    console.log("PROMOTION:", promotion);
+    console.log("ONGOING MATCHES:", ongoingMatches);
+    console.log("UPCOMING MATCHES:", upcomingMatches);
+    console.log("PAST MATCHES:", pastMatches);
+
+    res.render("home", {
+      sliders,
+      promotion,
+      ongoingMatches,
+      upcomingMatches,
+      pastMatches
+    });
+
+  } catch (error) {
+    console.error("HOME ERROR:", error);
+    res.status(500).send("Home Page Error");
+  }
+});
+app.get("/admin/sliders", async (req, res) => {
+  try {
+
+    const sliders = await Slider.find().sort({
+      position: 1
+    });
+
+    res.render("admin/sliders", {
+      sliders
+    });
+
+  } catch (error) {
+
+    console.error("ADMIN SLIDERS ERROR:", error);
+
+    res.status(500).send("Unable to load sliders.");
+
+  }
+});
+app.post(
+  "/admin/sliders",
+  sliderUpload.single("image"),
+  async (req, res) => {
+
+    try {
+      
+      console.log("FORM DATA:", req.body);
+      console.log("UPLOADED FILE:", req.file);
+
+      const slider = new Slider({
+
+        image: "/uploads/sliders/" + req.file.filename,
+
+        title: req.body.title,
+
+        description: req.body.description || "",
+
+        eventDate: req.body.eventDate || "",
+
+        eventLocation: req.body.eventLocation || "",
+
+        eventDescription: req.body.eventDescription || "",
+
+        eventLink: req.body.eventLink || "",
+
+        buttonText: req.body.buttonText || "",
+
+        buttonLink: req.body.buttonLink || "",
+
+        active: req.body.active === "true",
+
+        position: Number(req.body.position) || 0
+
+      });
+
+      await slider.save();
+
+      console.log("SLIDER SAVED:", slider);
+
+      res.redirect("/admin/sliders");
+
+    } catch (error) {
+
+      console.error("SLIDER SAVE ERROR:", error);
+
+      res.status(500).send("Slider upload failed.");
+
+    }
+
+  }
+);
+// EDIT SLIDER PAGE
+
+app.get("/admin/sliders/:id/edit", async (req, res) => {
+
+  try {
+
+    const slider = await Slider.findById(req.params.id);
+
+    if (!slider) {
+      return res.status(404).send("Slider not found.");
+    }
+
+    res.render("admin/edit-slider", {
+      slider
+    });
+
+  } catch (error) {
+
+    console.error("EDIT SLIDER ERROR:", error);
+
+    res.status(500).send("Unable to load slider.");
+
+  }
+
+});
+// UPDATE SLIDER
+// UPDATE SLIDER
+
+app.put(
+  "/admin/sliders/:id",
+  sliderUpload.single("image"),
+  async (req, res) => {
+
+    try {
+
+      const slider = await Slider.findById(req.params.id);
+
+      if (!slider) {
+        return res.status(404).send("Slider not found.");
+      }
+
+      // Keep the old image path before changing it
+      const oldImage = slider.image;
+
+      // Update text/content fields
+      slider.title = req.body.title;
+      slider.description = req.body.description || "";
+
+      slider.eventDate = req.body.eventDate || "";
+      slider.eventLocation = req.body.eventLocation || "";
+      slider.eventDescription = req.body.eventDescription || "";
+      slider.eventLink = req.body.eventLink || "";
+
+      slider.buttonText = req.body.buttonText || "";
+      slider.buttonLink = req.body.buttonLink || "";
+
+      slider.position = Number(req.body.position) || 0;
+
+      // Checkbox handling
+      slider.active = req.body.active === "true";
+
+      // If a new image was uploaded
+      if (req.file) {
+
+        // Save new image path
+        slider.image =
+          "/uploads/sliders/" + req.file.filename;
+
+        // Delete old image from disk
+        if (oldImage) {
+
+          const oldImagePath =
+            "public" + oldImage;
+
+          if (fs.existsSync(oldImagePath)) {
+
+            fs.unlinkSync(oldImagePath);
+
+            console.log(
+              "OLD SLIDER IMAGE DELETED:",
+              oldImagePath
+            );
+
+          }
+
+        }
+
+      }
+
+      await slider.save();
+
+      console.log("SLIDER UPDATED:", slider);
+
+      res.redirect("/admin/sliders");
+
+    } catch (error) {
+
+      console.error("SLIDER UPDATE ERROR:", error);
+
+      res.status(500).send("Unable to update slider.");
+
+    }
+
+  }
+);
+app.get("/events/:id", async (req, res) => {
+
+  try {
+
+    const slider = await Slider.findById(req.params.id);
+
+    if (!slider) {
+      return res.status(404).send("Event not found.");
+    }
+
+    res.render("events/show", {
+      slider
+    });
+
+  } catch (error) {
+
+    console.error("EVENT PAGE ERROR:", error);
+
+    res.status(500).send("Unable to load event.");
+
+  }
+
+});
+app.get("/test-promotion", async (req, res) => {
+  try {
+    const promotions = await Promotion.find();
+
+    console.log("PROMOTIONS:", promotions);
+
+    res.json(promotions);
+  } catch (error) {
+    console.error("PROMOTION ERROR:", error);
+    res.status(500).send("Promotion Error");
+  }
+});
+app.get("/matches/:id", wrapAsync(async (req, res) => {
+
+  const match = await Match.findById(req.params.id)
+    .populate("players.player");
+
+  if (!match) {
+    throw new ExpressError(404, "Match Not Found");
+  }
+
+  const teamAPlayers = match.players.filter(
+    player => player.team === "teamA"
+  );
+
+  const teamBPlayers = match.players.filter(
+    player => player.team === "teamB"
+  );
+
+  res.render("matches/show", {
+    match,
+    teamAPlayers,
+    teamBPlayers
+  });
+}));
+app.get(
+  "/admin/matches/new",
+  requireLogin,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const players = await Player.find({
+        verificationStatus: "verified"
+      }).sort({ ign: 1 });
+
+      res.render("admin/matches/newMatch", {
+        players
+      });
+
+    } catch (error) {
+      console.error("ADMIN MATCH FORM ERROR:", error);
+      res.status(500).send("Unable to load match form.");
+    }
+  }
+);// CREATE MATCH
+app.post(
+  "/admin/matches",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const {
+      seriesName,
+      teamA,
+      teamB,
+      teamAScore,
+      teamBScore,
+      matchDate,
+      matchTime,
+      status
+    } = req.body;
+
+
+    // =============================
+    // DATE + TIME
+    // =============================
+
+    const date = new Date(`${matchDate}T${matchTime}`);
+
+    if (isNaN(date.getTime())) {
+      req.flash("error", "Please enter a valid match date and time.");
+      return res.redirect("/admin/matches/new");
+    }
+
+
+    // =============================
+    // PLAYER STATISTICS
+    // =============================
+
+    let players = [];
+
+    if (req.body.players) {
+
+      players = Array.isArray(req.body.players)
+        ? req.body.players
+        : Object.values(req.body.players);
+
+    }
+
+
+    // =============================
+    // VALIDATE PLAYERS
+    // =============================
+
+    const playerIds = players
+      .map(player => player.player)
+      .filter(Boolean);
+
+
+    // Prevent duplicate players
+    const uniquePlayerIds = new Set(playerIds);
+
+    if (uniquePlayerIds.size !== playerIds.length) {
+      req.flash(
+        "error",
+        "A player cannot be added more than once to the same match."
+      );
+
+      return res.redirect("/admin/matches/new");
+    }
+
+
+    // Make sure selected players actually exist
+    if (playerIds.length > 0) {
+
+      const existingPlayers = await Player.find({
+        _id: { $in: playerIds },
+        verificationStatus: "verified"
+      });
+
+      if (existingPlayers.length !== uniquePlayerIds.size) {
+
+        req.flash(
+          "error",
+          "One or more selected players are invalid or not verified."
+        );
+
+        return res.redirect("/admin/matches/new");
+      }
+
+    }
+
+
+    // =============================
+    // PREPARE PLAYER DATA
+    // =============================
+
+    const playerStats = players.map(player => {
+
+      const kills = Number(player.kills || 0);
+      const deaths = Number(player.deaths || 0);
+      const assists = Number(player.assists || 0);
+
+      if (
+        !Number.isInteger(kills) ||
+        !Number.isInteger(deaths) ||
+        !Number.isInteger(assists) ||
+        kills < 0 ||
+        deaths < 0 ||
+        assists < 0
+      ) {
+        throw new ExpressError(
+          400,
+          "Kills, deaths and assists must be valid non-negative numbers."
+        );
+      }
+
+
+      if (!["teamA", "teamB"].includes(player.team)) {
+        throw new ExpressError(
+          400,
+          "Invalid team selected for a player."
+        );
+      }
+
+
+      return {
+        player: player.player,
+        team: player.team,
+        kills,
+        deaths,
+        assists,
+        mvp: player.mvp === "true"
+      };
+
+    });
+
+
+    // =============================
+    // CREATE MATCH
+    // =============================
+
+    const match = new Match({
+
+      seriesName,
+
+      teamA,
+
+      teamB,
+
+      teamAScore: Number(teamAScore),
+
+      teamBScore: Number(teamBScore),
+
+      date,
+
+      status,
+
+      players: playerStats
+
+    });
+
+
+    await match.save();
+
+
+    // =============================
+    // SUCCESS
+    // =============================
+
+    req.flash(
+      "success",
+      "Match created successfully."
+    );
+
+
+    res.redirect(`/matches/${match._id}`);
+
+  })
+);
+
+// SHOW EDIT MATCH FORM
+app.get(
+  "/admin/matches/:id/edit",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+    const match = await Match.findById(req.params.id);
+
+    if (!match) {
+      throw new ExpressError(404, "Match Not Found");
+    }
+
+    const players = await Player.find({
+      verificationStatus: "verified"
+    }).sort({ ign: 1 });
+
+    res.render("admin/matches/editMatch", {
+      match,
+      players
+    });
+  })
+);
+
+// UPDATE MATCH
+app.put(
+  "/admin/matches/:id",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+    const {
+      seriesName,
+      teamA,
+      teamB,
+      teamAScore,
+      teamBScore,
+      matchDate,
+      matchTime,
+      status
+    } = req.body;
+
+    const match = await Match.findById(req.params.id);
+
+    if (!match) {
+      throw new ExpressError(404, "Match Not Found");
+    }
+
+    // -----------------------------
+    // Validate date and time
+    // -----------------------------
+    const date = new Date(`${matchDate}T${matchTime}`);
+
+    if (isNaN(date.getTime())) {
+      req.flash("error", "Please enter a valid match date and time.");
+      return res.redirect(`/admin/matches/${match._id}/edit`);
+    }
+
+    // -----------------------------
+    // Convert player form rows
+    // -----------------------------
+    let players = [];
+
+    if (req.body.players) {
+      players = Array.isArray(req.body.players)
+        ? req.body.players
+        : Object.values(req.body.players);
+    }
+
+    // Remove empty player rows
+    players = players.filter(
+      player => player && player.player
+    );
+
+    // -----------------------------
+    // Check duplicate players
+    // -----------------------------
+    const playerIds = players.map(
+      player => player.player
+    );
+
+    const uniquePlayerIds = new Set(playerIds);
+
+    if (uniquePlayerIds.size !== playerIds.length) {
+      req.flash(
+        "error",
+        "A player cannot be added more than once to the same match."
+      );
+
+      return res.redirect(`/admin/matches/${match._id}/edit`);
+    }
+
+    // -----------------------------
+    // Validate selected players
+    // -----------------------------
+    if (playerIds.length > 0) {
+      const existingPlayers = await Player.find({
+        _id: { $in: playerIds }
+      });
+
+      if (existingPlayers.length !== uniquePlayerIds.size) {
+        req.flash(
+          "error",
+          "One or more selected players are invalid."
+        );
+
+        return res.redirect(`/admin/matches/${match._id}/edit`);
+      }
+    }
+
+    // -----------------------------
+    // Build player statistics
+    // -----------------------------
+    const playerStats = players.map(player => {
+      const kills = Number(player.kills || 0);
+      const deaths = Number(player.deaths || 0);
+      const assists = Number(player.assists || 0);
+
+      if (
+        !Number.isInteger(kills) ||
+        !Number.isInteger(deaths) ||
+        !Number.isInteger(assists) ||
+        kills < 0 ||
+        deaths < 0 ||
+        assists < 0
+      ) {
+        throw new ExpressError(
+          400,
+          "Kills, deaths and assists must be valid non-negative numbers."
+        );
+      }
+
+      if (!["teamA", "teamB"].includes(player.team)) {
+        throw new ExpressError(
+          400,
+          "Invalid team selected for a player."
+        );
+      }
+
+      return {
+        player: player.player,
+        team: player.team,
+        kills,
+        deaths,
+        assists,
+        mvp: player.mvp === "true"
+      };
+    });
+
+    // -----------------------------
+    // Update match
+    // -----------------------------
+    match.seriesName = seriesName;
+    match.teamA = teamA;
+    match.teamB = teamB;
+    match.teamAScore = Number(teamAScore);
+    match.teamBScore = Number(teamBScore);
+    match.date = date;
+    match.status = status;
+
+    // Update player statistics
+    match.players = playerStats;
+
+    await match.save();
+
+    req.flash("success", "Match updated successfully.");
+
+    res.redirect(`/matches/${match._id}`);
+  })
+);
+// DELETE MATCH
+app.delete(
+  "/admin/matches/:id",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const match = await Match.findByIdAndDelete(req.params.id);
+
+    if (!match) {
+      throw new ExpressError(404, "Match Not Found");
+    }
+
+    req.flash("success", "Match deleted successfully.");
+
+    res.redirect("/");
+  })
+);
+
 app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
 });

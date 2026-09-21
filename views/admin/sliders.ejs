@@ -1,0 +1,224 @@
+<% layout("/layouts/boilerplate") %>
+<link rel="stylesheet" href="/css/admin.css">
+
+    <div class="admin-container">
+
+        <h1>Manage Sliders</h1>
+
+        <!-- ADD SLIDER -->
+        <section class="admin-card">
+
+            <h2>Add New Slider</h2>
+
+            <form action="/admin/sliders" method="POST" enctype="multipart/form-data">
+
+                <!-- Image -->
+                <div class="form-group">
+
+                    <label for="image">
+                        Slider Image
+                    </label>
+
+                    <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp" required>
+
+                </div>
+
+
+                <!-- Title -->
+                <div class="form-group">
+
+                    <label for="title">
+                        Title
+                    </label>
+
+                    <input type="text" id="title" name="title" placeholder="RISE. FIGHT. CONQUER." required>
+
+                </div>
+
+
+                <!-- Description -->
+                <div class="form-group">
+
+                    <label for="description">
+                        Description
+                    </label>
+
+                    <textarea id="description" name="description"
+                        placeholder="Welcome to Kingsman Valorant Esports."></textarea>
+
+                </div>
+                <div class="form-group">
+                    <label for="eventDate">Event Date</label>
+                    <input type="text" id="eventDate" name="eventDate" placeholder="25 September 2026">
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventLocation">Event Location</label>
+                    <input type="text" id="eventLocation" name="eventLocation" placeholder="Delhi, India">
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventDescription">Event Description</label>
+                    <textarea id="eventDescription" name="eventDescription" placeholder="Tell users about this event..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="eventLink">Event Link</label>
+                    <input type="text" id="eventLink" name="eventLink" placeholder="https://example.com/register">
+                </div>
+
+
+                <!-- Button Text -->
+                <div class="form-group">
+
+                    <label for="buttonText">
+                        Button Text
+                    </label>
+
+                    <input type="text" id="buttonText" name="buttonText" placeholder="MEET THE TEAM">
+
+                </div>
+
+
+                <!-- Button Link -->
+                <div class="form-group">
+
+                    <label for="buttonLink">
+                        Button Link
+                    </label>
+
+                    <input type="text" id="buttonLink" name="buttonLink" placeholder="/players">
+
+                </div>
+
+
+                <!-- Position -->
+                <div class="form-group">
+
+                    <label for="position">
+                        Position
+                    </label>
+
+                    <input type="number" id="position" name="position" value="0" min="0">
+
+                </div>
+
+
+               
+                <!-- ACTIVE TOGGLE -->
+                <!-- ACTIVE TOGGLE -->
+                
+                <div class="form-group">
+                
+                    <label>Slider Status</label>
+                
+                    <label class="status-toggle">
+                
+                        <input type="checkbox" name="active" value="true" checked>
+                
+                        <span class="toggle-slider"></span>
+                
+                        <span class="toggle-label">ACTIVE</span>
+                
+                    </label>
+                
+                    <small>
+                        Active sliders are displayed on the homepage.
+                    </small>
+                
+                </div>
+
+
+                <!-- Submit -->
+                <button type="submit" class="admin-button">
+                    Add Slider
+                </button>
+
+            </form>
+
+        </section>
+        <!-- MANAGE EXISTING SLIDERS -->
+        
+        <section class="admin-card">
+        
+            <h2>Manage Existing Sliders</h2>
+        
+            <% if (!sliders || sliders.length===0) { %>
+        
+                <p>No sliders found.</p>
+        
+                <% } else { %>
+        
+                    <div class="slider-admin-list">
+        
+                        <% sliders.forEach(slider=> { %>
+        
+                            <div class="slider-admin-item">
+        
+                                <div class="slider-admin-image">
+        
+                                    <img src="<%= slider.image %>" alt="<%= slider.title %>">
+        
+                                </div>
+        
+        
+                                <div class="slider-admin-info">
+        
+                                    <h3>
+                                        <%= slider.title %>
+                                    </h3>
+        
+                                    <p>
+                                        Position:
+                                        <strong>
+                                            <%= slider.position %>
+                                        </strong>
+                                    </p>
+        
+                                    <p>
+        
+                                        Status:
+        
+                                        <% if (slider.active) { %>
+        
+                                            <span class="status-active">
+                                                ACTIVE
+                                            </span>
+        
+                                            <% } else { %>
+        
+                                                <span class="status-inactive">
+                                                    INACTIVE
+                                                </span>
+        
+                                                <% } %>
+        
+                                    </p>
+        
+                                </div>
+        
+        
+                                <div class="slider-admin-actions">
+        
+                                    <a href="/admin/sliders/<%= slider._id %>/edit" class="admin-button">
+                                        Edit
+                                    </a>
+        
+                                    <button type="button" class="admin-button">
+                                        Delete
+                                    </button>
+        
+                                </div>
+        
+                            </div>
+        
+                            <% }) %>
+        
+                    </div>
+        
+                    <% } %>
+        
+        </section>
+        
+
+    </div>

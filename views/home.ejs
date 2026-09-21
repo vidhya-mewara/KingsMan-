@@ -1,0 +1,330 @@
+<% layout("/layouts/boilerplate") %>
+<section class="hero-slider">
+    <div class="slider-container">
+
+        <% sliders.forEach((slide, index)=> { %>
+        
+            <div class="slide <%= index === 0 ? 'active' : '' %>">
+        
+                <a href="/events/<%= slide._id %>">
+        
+                    <img src="<%= slide.image %>" alt="<%= slide.title %>">
+        
+                </a>
+        
+            </div>
+        
+            <% }) %>
+
+                <% if (sliders.length> 1) { %>
+                    <button class="slider-arrow prev" type="button">&#10094;</button>
+                    <button class="slider-arrow next" type="button">&#10095;</button>
+
+                    <div class="slider-dots">
+                        <% sliders.forEach((slide, index)=> { %>
+                            <button class="dot <%= index === 0 ? 'active' : '' %>" data-slide="<%= index %>"
+                                type="button">
+                            </button>
+                            <% }) %>
+                    </div>
+                    <% } %>
+
+    </div>
+</section>
+<!-- ============================= -->
+<!-- PROMOTION SECTION -->
+<!-- ============================= -->
+<div class="home-main-grid">
+
+<% if (promotion && promotion.image) { %>
+
+    <section class="promotion-wrapper">
+
+        <div class="promotion-section">
+
+            <!-- Promotion Image -->
+            <div class="promotion-image">
+
+                <img src="<%= promotion.image %>" alt="Kingsman Esports Promotion">
+
+            </div>
+
+            <!-- Social Links -->
+            <div class="promotion-links">
+
+                <% if (promotion.youtubeLink) { %>
+
+                    <a href="<%= promotion.youtubeLink %>" target="_blank" rel="noopener noreferrer"
+                        class="social-link youtube">
+                        <span>▶</span>
+                        YouTube
+                    </a>
+
+                    <% } %>
+
+
+                        <% if (promotion.instagramLink) { %>
+
+                            <a href="<%= promotion.instagramLink %>" target="_blank" rel="noopener noreferrer"
+                                class="social-link instagram">
+                                <span>◎</span>
+                                Instagram
+                            </a>
+
+                            <% } %>
+
+
+                                <% if (promotion.discordLink) { %>
+
+                                    <a href="<%= promotion.discordLink %>" target="_blank" rel="noopener noreferrer"
+                                        class="social-link discord">
+                                        <span>💬</span>
+                                        Discord
+                                    </a>
+
+                                    <% } %>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <% } %>
+    <!-- ============================= -->
+    <!-- MATCHES SECTION -->
+    <!-- ============================= -->
+    
+    <section class="matches-wrapper">
+    
+        <div class="matches-section">
+    
+            <div class="matches-header">
+                <h2>Matches</h2>
+    
+                
+            </div>
+    
+    
+            <!-- ================= -->
+            <!-- ONGOING MATCHES -->
+            <!-- ================= -->
+    
+            <% if (ongoingMatches && ongoingMatches.length> 0) { %>
+    
+                <div class="match-category">
+    
+                    <h3>Ongoing</h3>
+    
+                    <div class="matches-list">
+    
+                        <% ongoingMatches.forEach(match=> { %>
+    
+                            <a href="/matches/<%= match._id %>" class="match-card">
+    
+                                <div class="match-series">
+                                    <%= match.seriesName %>
+                                </div>
+    
+                                <div class="match-teams">
+    
+                                    <span class="team-name">
+                                        <%= match.teamA %>
+                                    </span>
+    
+                                    <span class="vs">
+                                        VS
+                                    </span>
+    
+                                    <span class="team-name">
+                                        <%= match.teamB %>
+                                    </span>
+    
+                                </div>
+    
+                                <div class="match-score">
+    
+                                    <span>
+                                        <%= match.teamAScore %>
+                                    </span>
+    
+                                    <span>-</span>
+    
+                                    <span>
+                                        <%= match.teamBScore %>
+                                    </span>
+    
+                                </div>
+    
+                                <div class="match-status ongoing">
+                                    LIVE
+                                </div>
+    
+                            </a>
+    
+                            <% }) %>
+    
+                    </div>
+    
+                </div>
+    
+                <% } %>
+    
+    
+    
+                    <!-- ================= -->
+                    <!-- UPCOMING MATCHES -->
+                    <!-- ================= -->
+    
+                    <% if (upcomingMatches && upcomingMatches.length> 0) { %>
+    
+                        <div class="match-category">
+    
+                            <h3>Upcoming</h3>
+    
+                            <div class="matches-list">
+    
+                                <% upcomingMatches.forEach(match=> { %>
+    
+                                    <a href="/matches/<%= match._id %>" class="match-card">
+    
+                                        <div class="match-series">
+                                            <%= match.seriesName %>
+                                        </div>
+    
+                                        <div class="match-teams">
+    
+                                            <span class="team-name">
+                                                <%= match.teamA %>
+                                            </span>
+    
+                                            <span class="vs">
+                                                VS
+                                            </span>
+    
+                                            <span class="team-name">
+                                                <%= match.teamB %>
+                                            </span>
+    
+                                        </div>
+    
+                                        <div class="match-date">
+    
+                                            <%= new Date(match.date).toLocaleDateString() %>
+    
+                                                <span>•</span>
+    
+                                                <%= new Date(match.date).toLocaleTimeString([], { hour: "2-digit" ,
+                                                    minute: "2-digit" }) %>
+    
+                                        </div>
+    
+                                        <div class="match-status upcoming">
+                                            UPCOMING
+                                        </div>
+    
+                                    </a>
+    
+                                    <% }) %>
+    
+                            </div>
+    
+                        </div>
+    
+                        <% } %>
+    
+    
+    
+                            <!-- ================= -->
+                            <!-- PAST MATCHES -->
+                            <!-- ================= -->
+    
+                            <% if (pastMatches && pastMatches.length> 0) { %>
+    
+                                <div class="match-category">
+    
+                                    <h3>Past</h3>
+    
+                                    <div class="matches-list">
+    
+                                        <% pastMatches.forEach(match=> { %>
+    
+                                            <a href="/matches/<%= match._id %>" class="match-card">
+    
+                                                <div class="match-series">
+                                                    <%= match.seriesName %>
+                                                </div>
+    
+                                                <div class="match-teams">
+    
+                                                    <span class="team-name">
+                                                        <%= match.teamA %>
+                                                    </span>
+    
+                                                    <span class="vs">
+                                                        VS
+                                                    </span>
+    
+                                                    <span class="team-name">
+                                                        <%= match.teamB %>
+                                                    </span>
+    
+                                                </div>
+    
+                                                <div class="match-score">
+    
+                                                    <span>
+                                                        <%= match.teamAScore %>
+                                                    </span>
+    
+                                                    <span>-</span>
+    
+                                                    <span>
+                                                        <%= match.teamBScore %>
+                                                    </span>
+    
+                                                </div>
+    
+                                                <div class="match-date">
+    
+                                                    <%= new Date(match.date).toLocaleDateString() %>
+    
+                                                </div>
+    
+                                                <div class="match-status past">
+                                                    COMPLETED
+                                                </div>
+    
+                                            </a>
+    
+                                            <% }) %>
+    
+                                    </div>
+    
+                                </div>
+    
+                                <% } %>
+    
+    
+    
+                                    <!-- ================= -->
+                                    <!-- NO MATCHES -->
+                                    <!-- ================= -->
+    
+                                    <% if ( (!ongoingMatches || ongoingMatches.length===0) && (!upcomingMatches ||
+                                        upcomingMatches.length===0) && (!pastMatches || pastMatches.length===0) ) { %>
+    
+                                        <div class="no-matches">
+                                            No matches available.
+                                        </div>
+    
+                                        <% } %>
+    
+        </div>
+    
+    </section>
+    
+</div>
+
+<script src="/js/home.js"></script>
+

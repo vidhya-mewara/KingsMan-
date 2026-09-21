@@ -1,0 +1,83 @@
+<% layout("/layouts/boilerplate") %>
+<link rel="stylesheet" href="/css/events.css">
+
+    <section class="event-page">
+
+        <div class="event-hero">
+
+            <img src="<%= slider.image %>" alt="<%= slider.title %>">
+
+        </div>
+
+        <div class="event-content">
+
+            <% if (slider.tag) { %>
+                <p class="event-tag">
+                    <%= slider.tag %>
+                </p>
+                <% } %>
+
+                    <h1>
+                        <%= slider.title %>
+                    </h1>
+
+                    <% if (slider.eventDate || slider.eventLocation) { %>
+
+                        <div class="event-meta">
+
+                            <% if (slider.eventDate) { %>
+                                <div class="event-meta-item">
+                                    <strong>DATE</strong>
+                                    <span>
+                                        <%= slider.eventDate %>
+                                    </span>
+                                </div>
+                                <% } %>
+
+                                    <% if (slider.eventLocation) { %>
+                                        <div class="event-meta-item">
+                                            <strong>LOCATION</strong>
+                                            <span>
+                                                <%= slider.eventLocation %>
+                                            </span>
+                                        </div>
+                                        <% } %>
+
+                        </div>
+
+                        <% } %>
+
+
+                            <% if (slider.eventDescription) { %>
+
+                                <div class="event-description">
+
+                                    <h2>About the Event</h2>
+
+                                    <p>
+                                        <%= slider.eventDescription %>
+                                    </p>
+
+                                </div>
+
+                                <% } %>
+
+
+                                    <% if (slider.eventLink) { %>
+
+                                        <a href="<%= slider.eventLink %>" target="_blank" rel="noopener noreferrer"
+                                            class="event-button">
+                                            JOIN EVENT
+                                        </a>
+
+                                        <% } %>
+
+
+                                            <a href="/" class="event-back">
+                                                ← Back to Home
+                                            </a>
+
+        </div>
+        
+
+    </section>

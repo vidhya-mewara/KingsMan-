@@ -140,3 +140,4 @@ import mongoose from 'mongoose';
     const Player = mongoose.model("Player", playerSchema);
 
     export default Player;
+    

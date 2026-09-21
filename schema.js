@@ -81,6 +81,10 @@ export const playerSchema = Joi.object({
 
         verificationScreenshot: Joi.string()
             .required(),
+        owner: Joi.string()
+            .hex()
+            .length(24)
+            .required(),
 
         verificationStatus: Joi.string()
             .valid("pending", "verified", "unverified")

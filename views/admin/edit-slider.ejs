@@ -1,0 +1,218 @@
+<% layout("/layouts/boilerplate") %>
+
+    <link rel="stylesheet" href="/css/admin.css">
+
+
+    <div class="admin-container">
+
+        <h1>Edit Slider</h1>
+
+
+        <section class="admin-card">
+
+            <form action="/admin/sliders/<%= slider._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+
+
+                <!-- CURRENT IMAGE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Current Slider Image
+                    </label>
+
+                    <div class="edit-slider-preview">
+
+                        <img src="<%= slider.image %>" alt="<%= slider.title %>">
+
+                    </div>
+
+                </div>
+
+
+                <!-- NEW IMAGE -->
+
+                <div class="form-group">
+
+                    <label for="image">
+                        Change Image
+                    </label>
+
+                    <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp">
+
+                    <small>
+                        Leave empty to keep the current image.
+                    </small>
+
+                </div>
+
+
+                <!-- TITLE -->
+
+                <div class="form-group">
+
+                    <label for="title">
+                        Title
+                    </label>
+
+                    <input type="text" id="title" name="title" value="<%= slider.title %>" required>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group">
+
+                    <label for="description">
+                        Description
+                    </label>
+
+                    <textarea id="description" name="description"><%= slider.description || "" %></textarea>
+
+                </div>
+
+
+                <!-- EVENT DATE -->
+
+                <div class="form-group">
+
+                    <label for="eventDate">
+                        Event Date
+                    </label>
+
+                    <input type="text" id="eventDate" name="eventDate" value="<%= slider.eventDate || "" %>"
+                        placeholder="25 September 2026">
+
+                </div>
+
+
+                <!-- EVENT LOCATION -->
+
+                <div class="form-group">
+
+                    <label for="eventLocation">
+                        Event Location
+                    </label>
+
+                    <input type="text" id="eventLocation" name="eventLocation" value="<%= slider.eventLocation || "" %>"
+                        placeholder="Delhi, India">
+
+                </div>
+
+
+                <!-- EVENT DESCRIPTION -->
+
+                <div class="form-group">
+
+                    <label for="eventDescription">
+                        Event Description
+                    </label>
+
+                    <textarea id="eventDescription" name="eventDescription"
+                        placeholder="Tell users about this event..."><%= slider.eventDescription || "" %></textarea>
+
+                </div>
+
+
+                <!-- EVENT LINK -->
+
+                <div class="form-group">
+
+                    <label for="eventLink">
+                        Event Link
+                    </label>
+
+                    <input type="text" id="eventLink" name="eventLink" value="<%= slider.eventLink || "" %>"
+                        placeholder="https://example.com/register">
+
+                </div>
+
+
+                <!-- BUTTON TEXT -->
+
+                <div class="form-group">
+
+                    <label for="buttonText">
+                        Button Text
+                    </label>
+
+                    <input type="text" id="buttonText" name="buttonText" value="<%= slider.buttonText || "" %>"
+                        placeholder="MEET THE TEAM">
+
+                </div>
+
+
+                <!-- BUTTON LINK -->
+
+                <div class="form-group">
+
+                    <label for="buttonLink">
+                        Button Link
+                    </label>
+
+                    <input type="text" id="buttonLink" name="buttonLink" value="<%= slider.buttonLink || "" %>"
+                        placeholder="/players">
+
+                </div>
+
+
+                <!-- POSITION -->
+
+                <div class="form-group">
+
+                    <label for="position">
+                        Position
+                    </label>
+
+                    <input type="number" id="position" name="position" value="<%= slider.position %>" min="0">
+
+                </div>
+
+
+            <!-- ACTIVE TOGGLE -->
+            
+            <div class="form-group">
+            
+                <label>Slider Status</label>
+            
+                <label class="status-toggle">
+            
+                    <input type="checkbox" name="active" value="true" <%=slider.active ? "checked" : "" %>
+                    >
+            
+                    <span class="toggle-slider"></span>
+            
+                    <span class="toggle-label">
+                        <%= slider.active ? "ACTIVE" : "INACTIVE" %>
+                    </span>
+            
+                </label>
+            
+                <small>
+                    Active sliders are displayed on the homepage.
+                </small>
+            
+            </div>
+
+                <!-- BUTTONS -->
+
+                <div class="edit-slider-actions">
+
+                    <button type="submit" class="admin-button">
+                        Save Changes
+                    </button>
+
+
+                    <a href="/admin/sliders" class="admin-button admin-cancel-button">
+                        Cancel
+                    </a>
+
+                </div>
+
+
+            </form>
+
+        </section>
+
+    </div>

@@ -1,0 +1,422 @@
+<% layout("/layouts/boilerplate") %>
+
+    <div class="admin-match-page">
+
+        <div class="admin-match-header">
+            <h1>Add Match</h1>
+            <p>Create a new match for the KingsMan website.</p>
+        </div>
+
+
+        <form action="/admin/matches" method="POST" class="admin-match-form">
+
+            <!-- ============================= -->
+            <!-- SERIES -->
+            <!-- ============================= -->
+
+            <div class="form-group">
+
+                <label for="seriesName">
+                    Series / Tournament
+                </label>
+
+                <input type="text" id="seriesName" name="seriesName" maxlength="100" required
+                    placeholder="KingsMan Invitational - Semi Final">
+
+            </div>
+
+
+            <!-- ============================= -->
+            <!-- TEAMS -->
+            <!-- ============================= -->
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="teamA">
+                        Team A
+                    </label>
+
+                    <input type="text" id="teamA" name="teamA" maxlength="50" required placeholder="KingsMan">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="teamB">
+                        Team B
+                    </label>
+
+                    <input type="text" id="teamB" name="teamB" maxlength="50" required placeholder="Phoenix">
+
+                </div>
+
+            </div>
+
+
+        
+        <!-- ============================= -->
+        <!-- DATE & TIME -->
+        <!-- ============================= -->
+        
+        <div class="form-group match-datetime-group">
+        
+            <label class="form-section-label">
+                Match Date & Time
+            </label>
+        
+            <div class="datetime-row">
+        
+                <!-- DATE -->
+                <div class="datetime-field">
+        
+                    <label for="matchDate">
+                        Match Date
+                    </label>
+        
+                    <div class="datetime-input-wrapper">
+                        <span class="datetime-icon">📅</span>
+        
+                        <input type="date" id="matchDate" name="matchDate" required>
+                    </div>
+        
+                </div>
+        
+                <!-- time -->
+                <div class="datetime-field">
+                    <label for="matchTime">Match Time</label>
+                
+                    <div class="datetime-input-wrapper">
+                        <span class="datetime-icon">🕐</span>
+                
+                        <input type="time" id="matchTime" name="matchTime" required>
+                    </div>
+                </div>
+        
+            </div>
+        
+            <small class="datetime-help">
+                Select the date and starting time for the match.
+            </small>
+        
+        </div>
+        
+
+
+
+            <!-- ============================= -->
+            <!-- STATUS -->
+            <!-- ============================= -->
+
+            <div class="form-group">
+
+                <label for="status">
+                    Match Status
+                </label>
+
+                <select id="status" name="status" required>
+
+                    <option value="upcoming">
+                        Upcoming
+                    </option>
+
+                    <option value="ongoing">
+                        Ongoing
+                    </option>
+
+                    <option value="past">
+                        Past
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ============================= -->
+            <!-- SCORE -->
+            <!-- ============================= -->
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="teamAScore">
+                        Team A Score
+                    </label>
+
+                    <input type="number" id="teamAScore" name="teamAScore" min="0" value="0" required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="teamBScore">
+                        Team B Score
+                    </label>
+
+                    <input type="number" id="teamBScore" name="teamBScore" min="0" value="0" required>
+
+                </div>
+
+            </div>
+            <div class="player-stats-section">
+            
+                <div class="player-stats-header">
+                    <div>
+                        <h2>Player Statistics</h2>
+                        <p>
+                            Type a player's IGN and select the matching player.
+                        </p>
+                    </div>
+                </div>
+            
+            
+                <div class="player-stats-table">
+            
+                    <!-- Header -->
+                    <div class="player-stat-row player-stat-header">
+            
+                        <div class="player-stat-field">
+                            <label>Player</label>
+                        </div>
+            
+                        <div class="player-stat-field">
+                            <label>Team</label>
+                        </div>
+            
+                        <div class="player-stat-field">
+                            <label>Kills</label>
+                        </div>
+            
+                        <div class="player-stat-field">
+                            <label>Deaths</label>
+                        </div>
+            
+                        <div class="player-stat-field">
+                            <label>Assists</label>
+                        </div>
+            
+                        <div class="player-stat-field player-mvp-field">
+                            <label>MVP</label>
+                        </div>
+            
+                    </div>
+            
+            
+                    <% for (let i=0; i < 10; i++) { %>
+            
+                        <div class="player-stat-row">
+            
+                            <!-- PLAYER -->
+                            <div class="player-stat-field player-search-field">
+            
+                                <input type="text" name="players[<%= i %>][playerName]" class="player-search-input"
+                                    placeholder="Type player IGN..." autocomplete="off">
+            
+                                <input type="hidden" name="players[<%= i %>][player]" class="player-id-input">
+            
+                                <div class="player-search-results"></div>
+            
+                            </div>
+            
+            
+                            <!-- TEAM -->
+                            <div class="player-stat-field">
+            
+                                <select name="players[<%= i %>][team]">
+            
+                                    <option value="teamA">
+                                        Team A
+                                    </option>
+            
+                                    <option value="teamB">
+                                        Team B
+                                    </option>
+            
+                                </select>
+            
+                            </div>
+            
+            
+                            <!-- KILLS -->
+                            <div class="player-stat-field">
+            
+                                <input type="number" name="players[<%= i %>][kills]" min="0" value="0">
+            
+                            </div>
+            
+            
+                            <!-- DEATHS -->
+                            <div class="player-stat-field">
+            
+                                <input type="number" name="players[<%= i %>][deaths]" min="0" value="0">
+            
+                            </div>
+            
+            
+                            <!-- ASSISTS -->
+                            <div class="player-stat-field">
+            
+                                <input type="number" name="players[<%= i %>][assists]" min="0" value="0">
+            
+                            </div>
+            
+            
+                            <!-- MVP -->
+                            <div class="player-stat-field player-mvp-field">
+            
+                                <input type="checkbox" name="players[<%= i %>][mvp]" value="true">
+            
+                            </div>
+            
+                        </div>
+            
+                        <% } %>
+            
+                </div>
+            
+            </div>
+
+            <!-- ============================= -->
+            <!-- SUBMIT -->
+            <!-- ============================= -->
+
+            <button type="submit" class="admin-match-submit">
+                Add Match
+            </button>
+
+
+            
+        </form>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+
+                const players = <%-JSON.stringify(players||[])%>;
+
+                const searchInputs = document.querySelectorAll(".player-search-input");
+
+                searchInputs.forEach(function (input) {
+
+                    const row = input.closest(".player-stat-row");
+
+                    const hiddenInput =
+                        row.querySelector(".player-id-input");
+
+                    const resultsContainer =
+                        row.querySelector(".player-search-results");
+
+
+                    input.addEventListener("input", function () {
+
+                        const searchText =
+                            input.value.trim().toLowerCase();
+
+                        // Clear selected player if admin changes the name
+                        hiddenInput.value = "";
+
+                        resultsContainer.innerHTML = "";
+
+
+                        if (!searchText) {
+                            return;
+                        }
+
+
+                        const matchingPlayers = players.filter(function (player) {
+
+                            const ign =
+                                (player.ign || "").toLowerCase();
+
+                            const name =
+                                (player.name || "").toLowerCase();
+
+                            return (
+                                ign.includes(searchText) ||
+                                name.includes(searchText)
+                            );
+
+                        }).slice(0, 8);
+
+
+                        matchingPlayers.forEach(function (player) {
+
+                            const result =
+                                document.createElement("button");
+
+                            result.type = "button";
+
+                            result.className =
+                                "player-search-result";
+
+
+                            result.innerHTML = `
+                                <strong>${escapeHtml(player.ign)}</strong>
+                                <span>${escapeHtml(player.name)}</span>
+                            `;
+
+
+                            result.addEventListener("click", function () {
+
+                                input.value = player.ign;
+
+                                hiddenInput.value = player._id;
+
+                                resultsContainer.innerHTML = "";
+
+                            });
+
+
+                            resultsContainer.appendChild(result);
+
+                        });
+
+
+                        if (matchingPlayers.length === 0) {
+
+                            const noResult =
+                                document.createElement("div");
+
+                            noResult.className =
+                                "player-search-no-result";
+
+                            noResult.textContent =
+                                "No verified player found.";
+
+                            resultsContainer.appendChild(noResult);
+
+                        }
+
+                    });
+
+
+                    // Close suggestions when clicking elsewhere
+                    document.addEventListener("click", function (event) {
+
+                        if (!row.contains(event.target)) {
+                            resultsContainer.innerHTML = "";
+                        }
+
+                    });
+
+                });
+
+
+                function escapeHtml(value) {
+
+                    return String(value)
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#039;");
+
+                }
+
+            });
+        </script>
+    </div>
