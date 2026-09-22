@@ -1,0 +1,75 @@
+<% layout("layouts/boilerplate") -%>
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Tournament Events</h2>
+
+        <a href="/admin/tournament-events/new" class="btn btn-primary">
+            Add Tournament Event
+        </a>
+    </div>
+
+    <% if (events.length===0) { %>
+
+        <div class="alert alert-info">
+            No tournament events found.
+        </div>
+
+        <% } else { %>
+
+            <div class="row g-4">
+
+                <% events.forEach(event=> { %>
+
+                    <div class="col-12 col-md-6 col-lg-4">
+
+                        <div class="card h-100">
+
+                            <img src="<%= event.logo %>" class="card-img-top" alt="<%= event.name %>"
+                                style="height: 220px; object-fit: cover;">
+
+                            <div class="card-body">
+
+                                <h5 class="card-title">
+                                    <%= event.name %>
+                                </h5>
+
+                                <p class="mb-1">
+                                    <strong>Start:</strong>
+                                    <%= new Date(event.startDate).toLocaleDateString() %>
+                                </p>
+
+                                <p class="mb-2">
+                                    <strong>End:</strong>
+                                    <%= new Date(event.endDate).toLocaleDateString() %>
+                                </p>
+
+                                <span class="badge bg-secondary">
+                                    <%= event.status %>
+                                </span>
+
+                                <span class="badge bg-dark">
+                                    <%= event.mode %>
+                                </span>
+
+                            </div>
+
+                            <div class="card-footer">
+
+                                <a href="/tournament-events/<%= event._id %>" class="btn btn-outline-primary btn-sm">
+                                    View Event
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <% }) %>
+
+            </div>
+
+            <% } %>
+
+</div>

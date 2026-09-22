@@ -1,0 +1,435 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="tm-page">
+
+        <!-- HERO -->
+        <section class="tm-events-hero">
+            <div class="tm-hero-grid"></div>
+            <div class="tm-hero-content">
+
+                <div class="tm-eyebrow">
+                    <span class="tm-eyebrow-line"></span>
+                    KINGSMAN // COMPETITION
+                </div>
+
+                <h1>
+                    TOURNAMENT<br>
+                    <span>EVENTS</span>
+                </h1>
+
+                <p class="tm-hero-subtitle">
+                    Compete. Adapt. Dominate.
+                </p>
+
+                <p class="tm-hero-description">
+                    Discover upcoming competitions, follow live events
+                    and prove yourself on the KingsMan battlefield.
+                </p>
+
+            </div>
+
+            <div class="tm-hero-corner tm-corner-top"></div>
+            <div class="tm-hero-corner tm-corner-bottom"></div>
+        </section>
+
+
+        <!-- ONGOING -->
+        <% const ongoingEvents=events.filter( event=> event.status === "ongoing"
+            );
+            %>
+
+            <% if (ongoingEvents.length> 0) { %>
+
+                <section class="tm-event-section tm-live-section">
+
+                    <div class="tm-section-heading">
+                        <div>
+                            <span class="tm-section-number">01 // LIVE</span>
+                            <h2>ONGOING EVENTS</h2>
+                        </div>
+
+                        <span class="tm-live-indicator">
+                            <i></i> LIVE
+                        </span>
+                    </div>
+
+
+                    <div class="tm-events-grid">
+
+                        <% ongoingEvents.forEach((event)=> { %>
+
+                            <article class="tm-event-card tm-event-live">
+
+                                <a href="/tournament-events/<%= event._id %>" class="tm-event-image">
+
+                                    <% if (event.logo) { %>
+                                        <img src="<%= event.logo %>" alt="<%= event.name %>">
+                                        <% } else { %>
+                                            <div class="tm-no-image">
+                                                KINGSMAN
+                                            </div>
+                                            <% } %>
+
+                                                <div class="tm-image-overlay"></div>
+
+                                                <span class="tm-card-status live">
+                                                    <i></i>
+                                                    LIVE NOW
+                                                </span>
+
+                                                <span class="tm-card-arrow">
+                                                    ↗
+                                                </span>
+
+                                </a>
+
+
+                                <div class="tm-event-content">
+
+                                    <span class="tm-card-kicker">
+                                        KINGSMAN TOURNAMENT SERIES
+                                    </span>
+
+                                    <h3>
+                                        <%= event.name %>
+                                    </h3>
+
+
+                                    <div class="tm-event-stats">
+
+                                        <div class="tm-stat">
+                                            <span>PRIZE</span>
+                                            <strong>
+                                                ₹<%= Number(event.prizeAmount || 0).toLocaleString("en-IN") %>
+                                            </strong>
+                                        </div>
+
+                                        <div class="tm-stat">
+                                            <span>MODE</span>
+                                            <strong>
+                                                <%= event.mode || "—" %>
+                                            </strong>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="tm-event-date">
+
+                                        <div>
+                                            <span>START</span>
+                                            <strong>
+                                                <%= new Date(event.startDate).toLocaleDateString("en-IN", {
+                                                    day: "2-digit" , month: "short" , year: "numeric" }) %>
+                                            </strong>
+                                        </div>
+
+                                        <span class="tm-date-arrow">→</span>
+
+                                        <div>
+                                            <span>END</span>
+                                            <strong>
+                                                <%= new Date(event.endDate).toLocaleDateString("en-IN", { day: "2-digit"
+                                                    , month: "short" , year: "numeric" }) %>
+                                            </strong>
+                                        </div>
+
+                                    </div>
+
+
+                                    <a href="/tournament-events/<%= event._id %>" class="tm-event-button">
+                                        VIEW EVENT
+                                        <span>→</span>
+                                    </a>
+
+                                </div>
+
+                            </article>
+
+                            <% }) %>
+
+                    </div>
+
+                </section>
+
+                <% } %>
+
+
+                    <!-- UPCOMING -->
+                    <% const upcomingEvents=events.filter( event=> event.status === "upcoming"
+                        );
+                        %>
+
+                        <% if (upcomingEvents.length> 0) { %>
+
+                            <section class="tm-event-section">
+
+                                <div class="tm-section-heading">
+                                    <div>
+                                        <span class="tm-section-number">02 // NEXT</span>
+                                        <h2>UPCOMING EVENTS</h2>
+                                    </div>
+                                </div>
+
+
+                                <div class="tm-events-grid">
+
+                                    <% upcomingEvents.forEach((event)=> { %>
+
+                                        <article class="tm-event-card">
+
+                                            <a href="/tournament-events/<%= event._id %>" class="tm-event-image">
+
+                                                <% if (event.logo) { %>
+
+                                                    <img src="<%= event.logo %>" alt="<%= event.name %>">
+
+                                                    <% } else { %>
+
+                                                        <div class="tm-no-image">
+                                                            KINGSMAN
+                                                        </div>
+
+                                                        <% } %>
+
+                                                            <div class="tm-image-overlay"></div>
+
+                                                            <span class="tm-card-status upcoming">
+                                                                UPCOMING
+                                                            </span>
+
+                                                            <span class="tm-card-arrow">
+                                                                ↗
+                                                            </span>
+
+                                            </a>
+
+
+                                            <div class="tm-event-content">
+
+                                                <span class="tm-card-kicker">
+                                                    KINGSMAN TOURNAMENT SERIES
+                                                </span>
+
+                                                <h3>
+                                                    <%= event.name %>
+                                                </h3>
+
+
+                                                <div class="tm-event-stats">
+
+                                                    <div class="tm-stat">
+                                                        <span>PRIZE</span>
+                                                        <strong>
+                                                            ₹<%= Number(event.prizeAmount || 0).toLocaleString("en-IN")
+                                                                %>
+                                                        </strong>
+                                                    </div>
+
+                                                    <div class="tm-stat">
+                                                        <span>MODE</span>
+                                                        <strong>
+                                                            <%= event.mode || "—" %>
+                                                        </strong>
+                                                    </div>
+
+                                                </div>
+
+
+                                                <div class="tm-event-date">
+
+                                                    <div>
+                                                        <span>START</span>
+                                                        <strong>
+                                                            <%= new Date(event.startDate).toLocaleDateString("en-IN", {
+                                                                day: "2-digit" , month: "short" , year: "numeric" }) %>
+                                                        </strong>
+                                                    </div>
+
+                                                    <span class="tm-date-arrow">→</span>
+
+                                                    <div>
+                                                        <span>END</span>
+                                                        <strong>
+                                                            <%= new Date(event.endDate).toLocaleDateString("en-IN", {
+                                                                day: "2-digit" , month: "short" , year: "numeric" }) %>
+                                                        </strong>
+                                                    </div>
+
+                                                </div>
+
+
+                                                <a href="/tournament-events/<%= event._id %>" class="tm-event-button">
+                                                    VIEW EVENT
+                                                    <span>→</span>
+                                                </a>
+
+                                            </div>
+
+                                        </article>
+
+                                        <% }) %>
+
+                                </div>
+
+                            </section>
+
+                            <% } %>
+
+
+                                <!-- COMPLETED -->
+                                <% const completedEvents=events.filter( event=>
+                                    event.status === "completed" ||
+                                    event.status === "past"
+                                    );
+                                    %>
+
+                                    <% if (completedEvents.length> 0) { %>
+
+                                        <section class="tm-event-section tm-completed-section">
+
+                                            <div class="tm-section-heading">
+                                                <div>
+                                                    <span class="tm-section-number">03 // ARCHIVE</span>
+                                                    <h2>COMPLETED EVENTS</h2>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="tm-events-grid">
+
+                                                <% completedEvents.forEach((event)=> { %>
+
+                                                    <article class="tm-event-card tm-event-completed">
+
+                                                        <a href="/tournament-events/<%= event._id %>"
+                                                            class="tm-event-image">
+
+                                                            <% if (event.logo) { %>
+
+                                                                <img src="<%= event.logo %>" alt="<%= event.name %>">
+
+                                                                <% } else { %>
+
+                                                                    <div class="tm-no-image">
+                                                                        KINGSMAN
+                                                                    </div>
+
+                                                                    <% } %>
+
+                                                                        <div class="tm-image-overlay"></div>
+
+                                                                        <span class="tm-card-status completed">
+                                                                            COMPLETED
+                                                                        </span>
+
+                                                                        <span class="tm-card-arrow">
+                                                                            ↗
+                                                                        </span>
+
+                                                        </a>
+
+
+                                                        <div class="tm-event-content">
+
+                                                            <span class="tm-card-kicker">
+                                                                KINGSMAN TOURNAMENT SERIES
+                                                            </span>
+
+                                                            <h3>
+                                                                <%= event.name %>
+                                                            </h3>
+
+
+                                                            <div class="tm-event-stats">
+
+                                                                <div class="tm-stat">
+                                                                    <span>PRIZE</span>
+                                                                    <strong>
+                                                                        ₹<%= Number(event.prizeAmount ||
+                                                                            0).toLocaleString("en-IN") %>
+                                                                    </strong>
+                                                                </div>
+
+                                                                <div class="tm-stat">
+                                                                    <span>MODE</span>
+                                                                    <strong>
+                                                                        <%= event.mode || "—" %>
+                                                                    </strong>
+                                                                </div>
+
+                                                            </div>
+
+
+                                                            <div class="tm-event-date">
+
+                                                                <div>
+                                                                    <span>START</span>
+                                                                    <strong>
+                                                                        <%= new
+                                                                            Date(event.startDate).toLocaleDateString("en-IN",
+                                                                            { day: "2-digit" , month: "short" ,
+                                                                            year: "numeric" }) %>
+                                                                    </strong>
+                                                                </div>
+
+                                                                <span class="tm-date-arrow">→</span>
+
+                                                                <div>
+                                                                    <span>END</span>
+                                                                    <strong>
+                                                                        <%= new
+                                                                            Date(event.endDate).toLocaleDateString("en-IN",
+                                                                            { day: "2-digit" , month: "short" ,
+                                                                            year: "numeric" }) %>
+                                                                    </strong>
+                                                                </div>
+
+                                                            </div>
+
+
+                                                            <a href="/tournament-events/<%= event._id %>"
+                                                                class="tm-event-button">
+                                                                VIEW EVENT
+                                                                <span>→</span>
+                                                            </a>
+
+                                                        </div>
+
+                                                    </article>
+
+                                                    <% }) %>
+
+                                            </div>
+
+                                        </section>
+
+                                        <% } %>
+
+
+                                            <!-- EMPTY STATE -->
+                                            <% if (events.length===0) { %>
+
+                                                <section class="tm-empty-state">
+
+                                                    <div class="tm-empty-mark">
+                                                        KM
+                                                    </div>
+
+                                                    <span>NO EVENTS FOUND</span>
+
+                                                    <h2>
+                                                        THE BATTLEFIELD<br>
+                                                        IS QUIET.
+                                                    </h2>
+
+                                                    <p>
+                                                        New tournament events will appear here.
+                                                        Stay ready.
+                                                    </p>
+
+                                                </section>
+
+                                                <% } %>
+
+    </div>

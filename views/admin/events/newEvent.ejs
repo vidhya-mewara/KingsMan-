@@ -1,0 +1,95 @@
+<% layout("layouts/boilerplate") -%>
+
+    <div class="container mt-4">
+
+        <h2>Create Event</h2>
+
+        <form action="/admin/tournament-events" method="POST" enctype="multipart/form-data">
+
+            <!-- Event Name -->
+            <div class="mb-3">
+                <label for="name" class="form-label">
+                    Event Name
+                </label>
+
+                <input type="text" id="name" name="name" class="form-control" maxlength="100" required>
+            </div>
+
+
+            <!-- Event Logo -->
+            <div class="mb-3">
+                <label for="logo" class="form-label">
+                    Event Logo
+                </label>
+
+                <input type="file" id="logo" name="logo" class="form-control" accept="image/jpeg,image/png,image/webp"
+                    required>
+            </div>
+
+
+            <!-- Start Date -->
+            <div class="mb-3">
+                <label for="startDate" class="form-label">
+                    Start Date
+                </label>
+
+                <input type="date" id="startDate" name="startDate" class="form-control" required>
+            </div>
+
+
+            <!-- End Date -->
+            <div class="mb-3">
+                <label for="endDate" class="form-label">
+                    End Date
+                </label>
+
+                <input type="date" id="endDate" name="endDate" class="form-control" required>
+            </div>
+
+
+            <!-- Prize -->
+            <div class="mb-3">
+                <label for="prizeAmount" class="form-label">
+                    Prize Amount
+                </label>
+
+                <input type="number" id="prizeAmount" name="prizeAmount" class="form-control" min="0" value="0"
+                    required>
+            </div>
+
+
+            <!-- Mode -->
+            <div class="mb-3">
+                <label for="mode" class="form-label">
+                    Mode
+                </label>
+
+                <select id="mode" name="mode" class="form-select" required>
+                    <option value="">Select Mode</option>
+                    <option value="online">Online</option>
+                    <option value="offline">Offline</option>
+                </select>
+            </div>
+
+
+            <!-- Status -->
+            <div class="mb-3">
+                <label for="status" class="form-label">
+                    Status
+                </label>
+
+                <select id="status" name="status" class="form-select">
+                    <option value="upcoming">Upcoming</option>
+                    <option value="ongoing">Ongoing</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">
+                Create Event
+            </button>
+
+        </form>
+
+    </div>

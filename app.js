@@ -24,6 +24,8 @@ import Promotion from "./model/promotion.js";
 import sliderUpload from "./middleware/sliderUpload.js";
 import promotionUpload from "./middleware/promotionUpload.js";
 import Match from "./model/match.js";
+import Event from "./model/event.js";
+import eventUpload from "./middleware/eventUpload.js";
 
 
 async function main() {
@@ -1364,7 +1366,148 @@ app.delete(
     res.redirect("/");
   })
 );
+// ===============================
+// ADD TOURNAMENT EVENT PAGE
+// ===============================
 
+app.get(
+  "/admin/tournament-events/new",
+  requireLogin,
+  requireAdmin,
+  (req, res) => {
+    res.render("admin/events/newEvent");
+  }
+);
+
+
+// ===============================
+// CREATE TOURNAMENT EVENT
+// ===============================
+
+app.post(
+  "/admin/tournament-events",
+  requireLogin,
+  requireAdmin,
+  eventUpload.single("logo"),
+  wrapAsync(async (req, res) => {
+
+    // Check image
+    if (!req.file) {
+      req.flash("error", "Event logo is required.");
+      return res.redirect("/admin/tournament-events/new");
+    }
+
+    // Validate dates
+    const startDate = new Date(req.body.startDate);
+    const endDate = new Date(req.body.endDate);
+
+    if (
+      isNaN(startDate.getTime()) ||
+      isNaN(endDate.getTime())
+    ) {
+      req.flash("error", "Please enter valid event dates.");
+      return res.redirect("/admin/tournament-events/new");
+    }
+
+    // End date cannot be before start date
+    if (endDate < startDate) {
+      req.flash(
+        "error",
+        "Event end date cannot be before the start date."
+      );
+
+      return res.redirect("/admin/tournament-events/new");
+    }
+
+    // Create event
+    const event = new Event({
+      name: req.body.name,
+
+      logo: "/uploads/events/" + req.file.filename,
+
+      startDate,
+
+      endDate,
+
+      prizeAmount: Number(req.body.prizeAmount || 0),
+
+      mode: req.body.mode,
+
+      status: req.body.status || "upcoming"
+    });
+
+    await event.save();
+
+    console.log("TOURNAMENT EVENT SAVED:", event);
+
+    req.flash(
+      "success",
+      "Event created successfully."
+    );
+
+    // Go to public tournament page
+    res.redirect("/tournament-events");
+  })
+);
+
+
+// ===============================
+// ADMIN TOURNAMENT EVENTS
+// ===============================
+
+app.get(
+  "/admin/tournament-events",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const events = await Event.find({})
+      .sort({ startDate: 1 });
+
+    res.render("admin/events/index", {
+      events
+    });
+  })
+);
+
+
+// ===============================
+// PUBLIC TOURNAMENT EVENTS
+// ===============================
+
+app.get(
+  "/tournament-events",
+  wrapAsync(async (req, res) => {
+
+    const events = await Event.find({})
+      .sort({ startDate: 1 });
+
+    res.render("tournament-events/index", {
+      events
+    });
+  })
+);
+
+
+// ===============================
+// PUBLIC SINGLE TOURNAMENT
+// ===============================
+
+app.get(
+  "/tournament-events/:id",
+  wrapAsync(async (req, res) => {
+
+    const event = await Event.findById(req.params.id);
+
+    if (!event) {
+      return res.status(404).send("Event not found.");
+    }
+
+    res.render("tournament-events/showEvent", {
+      event
+    });
+  })
+);
 app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
 });
