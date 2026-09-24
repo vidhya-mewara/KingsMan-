@@ -1,0 +1,359 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="tm-admin-page">
+
+        <!-- HEADER -->
+        <section class="tm-admin-hero">
+
+            <div class="tm-admin-hero-content">
+
+                <a href="/admin/tournament-events" class="tm-back-link">
+                    ← Tournament Events
+                </a>
+
+                <div class="tm-admin-eyebrow">
+                    TOURNAMENT CONTROL CENTER
+                </div>
+
+                <h1>
+                    <%= event.name %>
+                </h1>
+
+                <p>
+                    Manage teams, stages, groups, matches,
+                    standings and playoffs from one place.
+                </p>
+
+            </div>
+
+            <div class="tm-admin-status">
+
+                <span class="tm-status-dot"></span>
+
+                <span>
+                    <%= event.status ? event.status.toUpperCase() : "UPCOMING" %>
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUICK STATS -->
+        <section class="tm-admin-stats">
+
+            <div class="tm-admin-stat">
+
+                <span class="tm-stat-label">
+                    TEAMS
+                </span>
+
+                <strong>
+                    <%= teamCount %>
+                </strong>
+
+            </div>
+
+            <div class="tm-admin-stat">
+
+                <span class="tm-stat-label">
+                    STAGES
+                </span>
+
+                <strong>
+                    <%= stageCount %>
+                </strong>
+
+            </div>
+
+            <div class="tm-admin-stat">
+
+                <span class="tm-stat-label">
+                    GROUPS
+                </span>
+
+                <strong>
+                    <%= groupCount %>
+                </strong>
+
+            </div>
+
+            <div class="tm-admin-stat">
+
+                <span class="tm-stat-label">
+                    MATCHES
+                </span>
+
+                <strong>
+                    <%= matchCount %>
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- MANAGEMENT -->
+        <section class="tm-admin-section">
+
+            <div class="tm-section-heading">
+
+                <div>
+                    <span class="tm-admin-eyebrow">
+                        MANAGEMENT
+                    </span>
+
+                    <h2>
+                        Tournament Operations
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="tm-management-grid">
+
+
+                <!-- TEAMS -->
+                <a href="/admin/tournament-events/<%= event._id %>/manage/teams" class="tm-management-card">
+
+                    <div class="tm-management-number">
+                        01
+                    </div>
+
+                    <div class="tm-management-icon">
+                        ⚔
+                    </div>
+
+                    <div class="tm-management-content">
+
+                        <h3>
+                            Teams
+                        </h3>
+
+                        <p>
+                            Create teams, assign players,
+                            captains and coaches.
+                        </p>
+
+                    </div>
+
+                    <span class="tm-management-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+                <!-- STAGES -->
+                <a href="/admin/tournament-events/<%= event._id %>/manage/stages" class="tm-management-card">
+
+                    <div class="tm-management-number">
+                        02
+                    </div>
+
+                    <div class="tm-management-icon">
+                        ◈
+                    </div>
+
+                    <div class="tm-management-content">
+
+                        <h3>
+                            Stages
+                        </h3>
+
+                        <p>
+                            Configure qualifiers,
+                            group stages and playoffs.
+                        </p>
+
+                    </div>
+
+                    <span class="tm-management-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+                <!-- GROUPS -->
+                <a href="/admin/tournament-events/<%= event._id %>/manage/groups" class="tm-management-card">
+
+                    <div class="tm-management-number">
+                        03
+                    </div>
+
+                    <div class="tm-management-icon">
+                        ▦
+                    </div>
+
+                    <div class="tm-management-content">
+
+                        <h3>
+                            Groups
+                        </h3>
+
+                        <p>
+                            Create groups and assign
+                            tournament teams.
+                        </p>
+
+                    </div>
+
+                    <span class="tm-management-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+                <!-- MATCHES -->
+                <a href="/admin/tournament-events/<%= event._id %>/manage/matches" class="tm-management-card">
+
+                    <div class="tm-management-number">
+                        04
+                    </div>
+
+                    <div class="tm-management-icon">
+                        ⚡
+                    </div>
+
+                    <div class="tm-management-content">
+
+                        <h3>
+                            Matches
+                        </h3>
+
+                        <p>
+                            Schedule matches and enter
+                            official results.
+                        </p>
+
+                    </div>
+
+                    <span class="tm-management-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+                <!-- STANDINGS -->
+                <a href="/admin/tournament-events/<%= event._id %>/manage/standings" class="tm-management-card">
+
+                    <div class="tm-management-number">
+                        05
+                    </div>
+
+                    <div class="tm-management-icon">
+                        #
+                    </div>
+
+                    <div class="tm-management-content">
+
+                        <h3>
+                            Standings
+                        </h3>
+
+                        <p>
+                            View automatically calculated
+                            tournament standings.
+                        </p>
+
+                    </div>
+
+                    <span class="tm-management-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+                <!-- PLAYOFFS -->
+                <a href="/admin/tournament-events/<%= event._id %>/manage/playoffs" class="tm-management-card">
+
+                    <div class="tm-management-number">
+                        06
+                    </div>
+
+                    <div class="tm-management-icon">
+                        ◫
+                    </div>
+
+                    <div class="tm-management-content">
+
+                        <h3>
+                            Playoffs
+                        </h3>
+
+                        <p>
+                            Manage brackets and automatic
+                            winner progression.
+                        </p>
+
+                    </div>
+
+                    <span class="tm-management-arrow">
+                        →
+                    </span>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- EVENT INFORMATION -->
+        <section class="tm-event-admin-info">
+
+            <div>
+
+                <span class="tm-admin-eyebrow">
+                    EVENT
+                </span>
+
+                <h2>
+                    <%= event.name %>
+                </h2>
+
+            </div>
+
+            <div class="tm-event-meta">
+
+                <div>
+                    <span>
+                        START
+                    </span>
+
+                    <strong>
+                        <%= new Date(event.startDate).toLocaleDateString() %>
+                    </strong>
+                </div>
+
+                <div>
+                    <span>
+                        END
+                    </span>
+
+                    <strong>
+                        <%= new Date(event.endDate).toLocaleDateString() %>
+                    </strong>
+                </div>
+
+                <div>
+                    <span>
+                        MODE
+                    </span>
+
+                    <strong>
+                        <%= event.mode || "—" %>
+                    </strong>
+                </div>
+
+            </div>
+
+        </section>
+        
+
+    </div>

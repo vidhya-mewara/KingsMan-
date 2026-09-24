@@ -2,7 +2,7 @@
 
     <div class="roster-page">
         <div class="container py-5">
-
+            
             <!-- Header -->
             <div class="text-center mb-5">
                 <h1 class="roster-title">
@@ -14,12 +14,28 @@
                 </p>
 
                 <div class="roster-divider"></div>
+
+                Search
+                <div class="player-search-container">
+                
+                    <form action="/players" method="GET" class="player-search-form">
+                
+                        <input type="search" name="search" placeholder="Search by IGN or UID..." value="<%= filters?.search || '' %>">
+                
+                        <button type="submit">
+                            Search
+                        </button>
+                
+                    </form>
+                
+                </div>
+
+
                 <!-- Add Player Button -->
                 <a href="/players/new" class="add-player-btn">
                     + Register
                 </a>
             </div>
-
            
 
 

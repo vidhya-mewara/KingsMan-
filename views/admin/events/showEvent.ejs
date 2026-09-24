@@ -1,0 +1,54 @@
+<% layout("layouts/boilerplate") -%>
+<div class="container py-4">
+
+    <a href="/admin/tournament-events" class="btn btn-secondary mb-4">
+        ← Back to Tournament Events
+    </a>
+
+    <div class="card shadow">
+
+        <% if (event.logo) { %>
+            <img src="<%= event.logo %>" class="card-img-top" alt="<%= event.name %>"
+                style="max-height: 400px; object-fit: cover;">
+            <% } %>
+
+                <div class="card-body">
+
+                    <h1 class="card-title">
+                        <%= event.name %>
+                    </h1>
+
+                    <hr>
+
+                    <p>
+                        <strong>Start Date:</strong>
+                        <%= new Date(event.startDate).toLocaleDateString() %>
+                    </p>
+
+                    <p>
+                        <strong>End Date:</strong>
+                        <%= new Date(event.endDate).toLocaleDateString() %>
+                    </p>
+
+                    <p>
+                        <strong>Prize Amount:</strong>
+                        ₹<%= event.prizeAmount || 0 %>
+                    </p>
+
+                    <p>
+                        <strong>Mode:</strong>
+                        <%= event.mode || "Not specified" %>
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="badge bg-secondary">
+                            <%= event.status %>
+                        </span>
+                    </p>
+
+                </div>
+
+    </div>
+
+</div>

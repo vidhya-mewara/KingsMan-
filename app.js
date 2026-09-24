@@ -26,6 +26,7 @@ import promotionUpload from "./middleware/promotionUpload.js";
 import Match from "./model/match.js";
 import Event from "./model/event.js";
 import eventUpload from "./middleware/eventUpload.js";
+import Team from "./model/teams.js";
 
 
 async function main() {
@@ -101,14 +102,142 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get(
-  "/players",
-  wrapAsync(async (req, res) => {
-    const players = await Player.find({});
+app.get("/players", async (req, res, next) => {
 
-    res.render("players", { players });
-  })
-);
+  try {
+
+    const {
+      search,
+      country,
+      region,
+      role,
+      verificationStatus,
+      inTeam
+    } = req.query;
+
+
+    // ==========================================
+    // BUILD FILTER
+    // ==========================================
+
+    const filter = {};
+
+
+    // ==========================================
+    // SEARCH IGN / UID
+    // ==========================================
+
+    if (search && search.trim() !== "") {
+
+      const searchText = search.trim();
+
+      filter.$or = [
+        {
+          ign: {
+            $regex: searchText,
+            $options: "i"
+          }
+        },
+        {
+          uid: {
+            $regex: searchText,
+            $options: "i"
+          }
+        }
+      ];
+    }
+
+
+    // ==========================================
+    // COUNTRY
+    // ==========================================
+
+    if (country) {
+      filter.country = country;
+    }
+
+
+    // ==========================================
+    // REGION
+    // ==========================================
+
+    if (region) {
+      filter.region = region;
+    }
+
+
+    // ==========================================
+    // ROLE
+    // ==========================================
+
+    if (role) {
+      filter.role = role;
+    }
+
+
+    // ==========================================
+    // VERIFICATION
+    // ==========================================
+
+    if (verificationStatus) {
+      filter.verificationStatus =
+        verificationStatus;
+    }
+
+
+    // ==========================================
+    // TEAM STATUS
+    // ==========================================
+
+    if (inTeam === "true") {
+
+      filter.inTeam = true;
+
+    } else if (inTeam === "false") {
+
+      filter.inTeam = false;
+
+    }
+
+
+    // ==========================================
+    // GET PLAYERS
+    // ==========================================
+
+    const players = await Player
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .limit(20)
+      .lean();
+
+
+    // ==========================================
+    // SEND TO EJS
+    // ==========================================
+
+    res.render("players", {
+
+      players,
+
+      filters: {
+        search: search || "",
+        country: country || "",
+        region: region || "",
+        role: role || "",
+        verificationStatus:
+          verificationStatus || "",
+        inTeam: inTeam || ""
+      }
+
+    });
+
+  } catch (error) {
+
+    next(error);
+
+  }
+
+});
 
 app.get(
   "/players/new",
@@ -1508,6 +1637,8 @@ app.get(
     });
   })
 );
+
+
 app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
 });

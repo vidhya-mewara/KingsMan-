@@ -1,0 +1,270 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="tm-admin-page">
+
+        
+        <!-- HEADER -->
+
+        <section class="tm-admin-hero">
+
+            <div class="tm-admin-hero-content">
+
+                <a href="/admin/tournament-events/<%= event._id %>/manage" class="tm-back-link">
+                    ← Tournament Dashboard
+                </a>
+
+                <div class="tm-admin-eyebrow">
+                    TEAM MANAGEMENT
+                </div>
+
+                <h1>
+                    <%= event.name %>
+                </h1>
+
+                <p>
+                    Manage the teams participating in this tournament.
+                    Players can be assigned manually by the administrator.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ADD TEAM -->
+
+        <section class="tm-admin-section">
+
+            <div class="tm-section-heading">
+
+                <div>
+
+                    <span class="tm-admin-eyebrow">
+                        NEW TEAM
+                    </span>
+
+                    <h2>
+                        Create Team
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <form action="/admin/tournament-events/<%= event._id %>/manage/teams" method="POST" class="tm-team-form">
+
+                <div class="tm-form-grid">
+
+                    <div class="tm-form-field">
+
+                        <label>
+                            Team Name
+                        </label>
+
+                        <input type="text" name="name" maxlength="50" required placeholder="Example Esports">
+
+                    </div>
+
+
+                    <div class="tm-form-field">
+
+                        <label>
+                            Team Tag
+                        </label>
+
+                        <input type="text" name="tag" maxlength="10" required placeholder="EXM">
+
+                    </div>
+
+
+                    <div class="tm-form-field">
+
+                        <label>
+                            Country
+                        </label>
+
+                        <input type="text" name="country" maxlength="50" placeholder="India">
+
+                    </div>
+
+
+                    <div class="tm-form-field">
+
+                        <label>
+                            Region
+                        </label>
+
+                        <input type="text" name="region" maxlength="50" placeholder="South Asia">
+
+                    </div>
+
+
+                    <div class="tm-form-field tm-form-full">
+
+                        <label>
+                            Logo URL
+                        </label>
+
+                        <input type="text" name="logo" placeholder="/uploads/teams/example.png">
+
+                    </div>
+
+
+                    <div class="tm-form-field tm-form-full">
+
+                        <label>
+                            Description
+                        </label>
+
+                        <textarea name="description" maxlength="500" rows="4"
+                            placeholder="Team information..."></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <button type="submit" class="tm-admin-button">
+                    CREATE TEAM
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- EXISTING TEAMS -->
+
+        <section class="tm-admin-section">
+
+            <div class="tm-section-heading">
+
+                <div>
+
+                    <span class="tm-admin-eyebrow">
+                        PARTICIPATING TEAMS
+                    </span>
+
+                    <h2>
+                        Teams
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <% if (!teams.length) { %>
+
+                <div class="tm-empty-admin">
+
+                    <div>
+                        NO TEAMS CREATED
+                    </div>
+
+                    <p>
+                        Create the first tournament team above.
+                    </p>
+
+                </div>
+
+                <% } else { %>
+
+
+                    <div class="tm-team-list">
+
+                        <% teams.forEach(team=> { %>
+
+                            <article class="tm-team-card">
+
+                                <div class="tm-team-logo">
+
+                                    <% if (team.logo) { %>
+
+                                        <img src="<%= team.logo %>" alt="<%= team.name %>">
+
+                                        <% } else { %>
+
+                                            <span>
+                                                <%= team.tag.substring(0, 2) %>
+                                            </span>
+
+                                            <% } %>
+
+                                </div>
+
+
+                                <div class="tm-team-main">
+
+                                    <div class="tm-team-title">
+
+                                        <h3>
+                                            <%= team.name %>
+                                        </h3>
+
+                                        <span>
+                                            <%= team.tag %>
+                                        </span>
+
+                                    </div>
+
+
+                                    <div class="tm-team-meta">
+
+                                        <% if (team.country) { %>
+
+                                            <span>
+                                                <%= team.country %>
+                                            </span>
+
+                                            <% } %>
+
+                                                <% if (team.region) { %>
+
+                                                    <span>
+                                                        <%= team.region %>
+                                                    </span>
+
+                                                    <% } %>
+
+                                                        <span>
+                                                            <%= team.players ? team.players.length : 0 %>
+                                                                players
+                                                        </span>
+
+                                    </div>
+
+
+                                    <div class="tm-team-status">
+
+                                        <span class="tm-team-status-dot"></span>
+
+                                        <%= team.status.toUpperCase() %>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="tm-team-actions">
+
+                                    <a href="/admin/tournament-events/<%= event._id %>/manage/teams/<%= team._id %>"
+                                        class="tm-team-action">
+                                        MANAGE
+                                    </a>
+
+                                </div>
+
+                            </article>
+
+                            <% }) %>
+
+                    </div>
+
+                    <% } %>
+
+        </section>
+        
+
+    </div>

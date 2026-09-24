@@ -137,6 +137,38 @@ import mongoose from 'mongoose';
         }
     );
 
+// ================================
+// INDEXES
+// ================================
+
+// UID exact lookup
+playerSchema.index({ uid: 1 });
+
+// Common filters
+playerSchema.index({
+    verificationStatus: 1,
+    country: 1,
+    region: 1,
+});
+
+// Role filtering
+playerSchema.index({
+    role: 1,
+    verificationStatus: 1,
+});
+
+// Team filtering
+playerSchema.index({
+    inTeam: 1,
+    verificationStatus: 1,
+});
+
+// Cursor pagination
+playerSchema.index({
+    createdAt: -1,
+    _id: -1,
+});
+
     const Player = mongoose.model("Player", playerSchema);
 
     export default Player;
