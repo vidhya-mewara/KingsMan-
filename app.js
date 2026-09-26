@@ -27,6 +27,10 @@ import Match from "./model/match.js";
 import Event from "./model/event.js";
 import eventUpload from "./middleware/eventUpload.js";
 import Team from "./model/teams.js";
+import Qualifier from "./model/qualifier.js";
+import TournamentGroup from "./model/tournamentGroup.js";
+import Standing from "./model/standing.js";
+import Playoff from "./model/playoff.js";
 
 
 async function main() {
@@ -1495,9 +1499,14 @@ app.delete(
     res.redirect("/");
   })
 );
-// ===============================
-// ADD TOURNAMENT EVENT PAGE
-// ===============================
+// ============================================================
+// TOURNAMENT EVENT CMS
+// ============================================================
+
+
+// ============================================================
+// CREATE TOURNAMENT EVENT PAGE
+// ============================================================
 
 app.get(
   "/admin/tournament-events/new",
@@ -1509,9 +1518,9 @@ app.get(
 );
 
 
-// ===============================
+// ============================================================
 // CREATE TOURNAMENT EVENT
-// ===============================
+// ============================================================
 
 app.post(
   "/admin/tournament-events",
@@ -1520,13 +1529,11 @@ app.post(
   eventUpload.single("logo"),
   wrapAsync(async (req, res) => {
 
-    // Check image
     if (!req.file) {
       req.flash("error", "Event logo is required.");
       return res.redirect("/admin/tournament-events/new");
     }
 
-    // Validate dates
     const startDate = new Date(req.body.startDate);
     const endDate = new Date(req.body.endDate);
 
@@ -1538,7 +1545,6 @@ app.post(
       return res.redirect("/admin/tournament-events/new");
     }
 
-    // End date cannot be before start date
     if (endDate < startDate) {
       req.flash(
         "error",
@@ -1548,9 +1554,8 @@ app.post(
       return res.redirect("/admin/tournament-events/new");
     }
 
-    // Create event
     const event = new Event({
-      name: req.body.name,
+      name: String(req.body.name || "").trim(),
 
       logo: "/uploads/events/" + req.file.filename,
 
@@ -1560,29 +1565,28 @@ app.post(
 
       prizeAmount: Number(req.body.prizeAmount || 0),
 
-      mode: req.body.mode,
+      mode: String(req.body.mode || "").trim(),
 
       status: req.body.status || "upcoming"
     });
 
     await event.save();
 
-    console.log("TOURNAMENT EVENT SAVED:", event);
-
     req.flash(
       "success",
-      "Event created successfully."
+      "Tournament event created successfully."
     );
 
-    // Go to public tournament page
-    res.redirect("/tournament-events");
+    res.redirect(
+      `/admin/tournament-events/${event._id}/manage`
+    );
   })
 );
 
 
-// ===============================
-// ADMIN TOURNAMENT EVENTS
-// ===============================
+// ============================================================
+// ADMIN TOURNAMENT LIST
+// ============================================================
 
 app.get(
   "/admin/tournament-events",
@@ -1600,44 +1604,991 @@ app.get(
 );
 
 
-// ===============================
-// PUBLIC TOURNAMENT EVENTS
-// ===============================
+// ============================================================
+// EDIT TOURNAMENT EVENT PAGE
+// ============================================================
+
+app.get(
+  "/admin/tournament-events/:id/edit",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const event = await Event.findById(req.params.id);
+
+    if (!event) {
+      throw new ExpressError(
+        404,
+        "Tournament event not found."
+      );
+    }
+
+    res.render("admin/events/editEvent", {
+      event
+    });
+  })
+);
+
+
+// ============================================================
+// UPDATE TOURNAMENT EVENT
+// ============================================================
+
+app.put(
+  "/admin/tournament-events/:id",
+  requireLogin,
+  requireAdmin,
+  eventUpload.single("logo"),
+  wrapAsync(async (req, res) => {
+
+    const event = await Event.findById(req.params.id);
+
+    if (!event) {
+      throw new ExpressError(
+        404,
+        "Tournament event not found."
+      );
+    }
+
+    const startDate = new Date(req.body.startDate);
+    const endDate = new Date(req.body.endDate);
+
+    if (
+      isNaN(startDate.getTime()) ||
+      isNaN(endDate.getTime())
+    ) {
+      req.flash(
+        "error",
+        "Please enter valid event dates."
+      );
+
+      return res.redirect(
+        `/admin/tournament-events/${event._id}/edit`
+      );
+    }
+
+    if (endDate < startDate) {
+      req.flash(
+        "error",
+        "Event end date cannot be before the start date."
+      );
+
+      return res.redirect(
+        `/admin/tournament-events/${event._id}/edit`
+      );
+    }
+
+    const oldLogo = event.logo;
+
+    event.name = String(req.body.name || "").trim();
+
+    event.startDate = startDate;
+
+    event.endDate = endDate;
+
+    event.prizeAmount =
+      Number(req.body.prizeAmount || 0);
+
+    event.mode =
+      String(req.body.mode || "").trim();
+
+    event.status =
+      req.body.status || "upcoming";
+
+
+    // ----------------------------------------
+    // Replace logo only if a new one was uploaded
+    // ----------------------------------------
+
+    if (req.file) {
+
+      event.logo =
+        "/uploads/events/" + req.file.filename;
+
+
+      // Delete old logo
+      if (oldLogo) {
+
+        const oldLogoPath = path.join(
+          import.meta.dirname,
+          "public",
+          oldLogo.replace(/^\/+/, "")
+        );
+
+        if (fs.existsSync(oldLogoPath)) {
+          fs.unlinkSync(oldLogoPath);
+        }
+      }
+    }
+
+
+    await event.save();
+
+    req.flash(
+      "success",
+      "Tournament event updated successfully."
+    );
+
+    res.redirect(
+      `/admin/tournament-events/${event._id}/manage`
+    );
+  })
+);
+
+
+// ============================================================
+// DELETE TOURNAMENT EVENT
+// ============================================================
+
+app.delete(
+  "/admin/tournament-events/:id",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const event = await Event.findById(req.params.id);
+
+    if (!event) {
+      throw new ExpressError(
+        404,
+        "Tournament event not found."
+      );
+    }
+
+
+    // ----------------------------------------
+    // Delete all tournament data
+    // ----------------------------------------
+
+    await Promise.all([
+      Qualifier.deleteMany({
+        event: event._id
+      }),
+
+      TournamentGroup.deleteMany({
+        event: event._id
+      }),
+
+      Standing.deleteMany({
+        event: event._id
+      }),
+
+      Playoff.deleteMany({
+        event: event._id
+      })
+    ]);
+
+
+    // ----------------------------------------
+    // Delete event logo
+    // ----------------------------------------
+
+    if (event.logo) {
+
+      const logoPath = path.join(
+        import.meta.dirname,
+        "public",
+        event.logo.replace(/^\/+/, "")
+      );
+
+      if (fs.existsSync(logoPath)) {
+        fs.unlinkSync(logoPath);
+      }
+    }
+
+
+    await Event.findByIdAndDelete(event._id);
+
+
+    req.flash(
+      "success",
+      "Tournament event and all tournament data were deleted."
+    );
+
+    res.redirect("/admin/tournament-events");
+  })
+);
+
+
+// ============================================================
+// TOURNAMENT MANAGEMENT DASHBOARD
+// ============================================================
+
+app.get(
+  "/admin/tournament-events/:eventId/manage",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const { eventId } = req.params;
+
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      throw new ExpressError(
+        404,
+        "Tournament event not found."
+      );
+    }
+
+
+    const [
+      qualifiers,
+      groups,
+      standings,
+      playoffs
+    ] = await Promise.all([
+
+      Qualifier.find({
+        event: event._id
+      }).sort({
+        position: 1
+      }),
+
+      TournamentGroup.find({
+        event: event._id
+      }).sort({
+        name: 1
+      }),
+
+      Standing.find({
+        event: event._id
+      })
+        .populate("group")
+        .sort({
+          position: 1
+        }),
+
+      Playoff.find({
+        event: event._id
+      }).sort({
+        round: 1,
+        matchNumber: 1
+      })
+
+    ]);
+
+
+    res.render(
+      "admin/tournaments/show",
+      {
+        event,
+        qualifiers,
+        groups,
+        standings,
+        playoffs
+      }
+    );
+  })
+);
+
+
+// ============================================================
+// ADD QUALIFIER
+// ============================================================
+
+app.post(
+  "/admin/tournament-events/:eventId/manage/qualifiers",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const { eventId } = req.params;
+
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      throw new ExpressError(
+        404,
+        "Tournament event not found."
+      );
+    }
+
+
+    const qualifier = new Qualifier({
+
+      event: event._id,
+
+      teamName:
+        String(req.body.teamName || "").trim(),
+
+      position:
+        Number(req.body.position || 0),
+
+      status:
+        req.body.status || "pending"
+    });
+
+
+    await qualifier.save();
+
+
+    req.flash(
+      "success",
+      "Qualifier added successfully."
+    );
+
+    res.redirect(
+      `/admin/tournament-events/${eventId}/manage`
+    );
+  })
+);
+
+
+// ============================================================
+// UPDATE QUALIFIER
+// ============================================================
+
+app.put(
+  "/admin/tournament-events/:eventId/manage/qualifiers/:id",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const qualifier = await Qualifier.findOne({
+      _id: req.params.id,
+      event: req.params.eventId
+    });
+
+    if (!qualifier) {
+      throw new ExpressError(
+        404,
+        "Qualifier not found."
+      );
+    }
+
+
+    qualifier.teamName =
+      String(req.body.teamName || "").trim();
+
+    qualifier.position =
+      Number(req.body.position || 0);
+
+    qualifier.status =
+      req.body.status || "pending";
+
+
+    await qualifier.save();
+
+
+    req.flash(
+      "success",
+      "Qualifier updated successfully."
+    );
+
+    res.redirect(
+      `/admin/tournament-events/${req.params.eventId}/manage`
+    );
+  })
+);
+
+
+// ============================================================
+// DELETE QUALIFIER
+// ============================================================
+
+app.delete(
+  "/admin/tournament-events/:eventId/manage/qualifiers/:id",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    await Qualifier.findOneAndDelete({
+      _id: req.params.id,
+      event: req.params.eventId
+    });
+
+
+    req.flash(
+      "success",
+      "Qualifier deleted successfully."
+    );
+
+    res.redirect(
+      `/admin/tournament-events/${req.params.eventId}/manage`
+    );
+  })
+);
+
+
+// ============================================================
+// ADD GROUP
+// ============================================================
+
+app.post(
+  "/admin/tournament-events/:eventId/manage/groups",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const { eventId } = req.params;
+
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      throw new ExpressError(
+        404,
+        "Tournament event not found."
+      );
+    }
+
+
+    const group = new TournamentGroup({
+
+      event: event._id,
+
+      name:
+        String(req.body.name || "").trim()
+
+    });
+
+
+    await group.save();
+
+
+    req.flash(
+      "success",
+      "Group created successfully."
+    );
+
+    res.redirect(
+      `/admin/tournament-events/${eventId}/manage`
+    );
+  })
+);
+
+
+// ============================================================
+// UPDATE GROUP
+// ============================================================
+
+app.put(
+  "/admin/tournament-events/:eventId/manage/groups/:id",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const group = await TournamentGroup.findOne({
+      _id: req.params.id,
+      event: req.params.eventId
+    });
+
+    if (!group) {
+      throw new ExpressError(
+        404,
+        "Group not found."
+      );
+    }
+
+
+    group.name =
+      String(req.body.name || "").trim();
+
+
+    await group.save();
+
+
+    req.flash(
+      "success",
+      "Group updated successfully."
+    );
+
+    res.redirect(
+      `/admin/tournament-events/${req.params.eventId}/manage`
+    );
+  })
+);
+
+
+// ============================================================
+// DELETE GROUP
+// ============================================================
+
+app.delete(
+  "/admin/tournament-events/:eventId/manage/groups/:id",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const groupId = req.params.id;
+
+    const group = await TournamentGroup.findOne({
+      _id: groupId,
+      event: req.params.eventId
+    });
+
+    if (!group) {
+      throw new ExpressError(
+        404,
+        "Group not found."
+      );
+    }
+
+
+    // Delete standings belonging to this group
+    await Standing.deleteMany({
+      group: group._id,
+      event: req.params.eventId
+    });
+
+
+    await group.deleteOne();
+
+
+    req.flash(
+      "success",
+      "Group and its standings were deleted."
+    );
+
+    res.redirect(
+      `/admin/tournament-events/${req.params.eventId}/manage`
+    );
+  })
+);
+
+
+// ============================================================
+// ADD STANDING
+// ============================================================
+
+app.post(
+  "/admin/tournament-events/:eventId/manage/standings",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const { eventId } = req.params;
+
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      throw new ExpressError(
+        404,
+        "Tournament event not found."
+      );
+    }
+
+
+    let group = null;
+
+
+    if (req.body.group) {
+
+      group = await TournamentGroup.findOne({
+        _id: req.body.group,
+        event: event._id
+      });
+
+      if (!group) {
+        throw new ExpressError(
+          400,
+          "Invalid tournament group."
+        );
+      }
+    }
+
+
+    const standing = new Standing({
+
+      event: event._id,
+
+      group: group
+        ? group._id
+        : null,
+
+      teamName:
+        String(req.body.teamName || "").trim(),
+
+      position:
+        Number(req.body.position || 1),
+
+      played:
+        Number(req.body.played || 0),
+
+      wins:
+        Number(req.body.wins || 0),
+
+      losses:
+        Number(req.body.losses || 0),
+
+      draws:
+        Number(req.body.draws || 0),
+
+      points:
+        Number(req.body.points || 0)
+
+    });
+
+
+    await standing.save();
+
+
+    req.flash(
+      "success",
+      "Standing added successfully."
+    );
+
+    res.redirect(
+      `/admin/tournament-events/${eventId}/manage`
+    );
+  })
+);
+
+
+// ============================================================
+// UPDATE STANDING
+// ============================================================
+
+app.put(
+  "/admin/tournament-events/:eventId/manage/standings/:id",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const standing = await Standing.findOne({
+      _id: req.params.id,
+      event: req.params.eventId
+    });
+
+    if (!standing) {
+      throw new ExpressError(
+        404,
+        "Standing not found."
+      );
+    }
+
+
+    let group = null;
+
+
+    if (req.body.group) {
+
+      group = await TournamentGroup.findOne({
+        _id: req.body.group,
+        event: req.params.eventId
+      });
+
+      if (!group) {
+        throw new ExpressError(
+          400,
+          "Invalid tournament group."
+        );
+      }
+    }
+
+
+    standing.group =
+      group ? group._id : null;
+
+    standing.teamName =
+      String(req.body.teamName || "").trim();
+
+    standing.position =
+      Number(req.body.position || 1);
+
+    standing.played =
+      Number(req.body.played || 0);
+
+    standing.wins =
+      Number(req.body.wins || 0);
+
+    standing.losses =
+      Number(req.body.losses || 0);
+
+    standing.draws =
+      Number(req.body.draws || 0);
+
+    standing.points =
+      Number(req.body.points || 0);
+
+
+    await standing.save();
+
+
+    req.flash(
+      "success",
+      "Standing updated successfully."
+    );
+
+    res.redirect(
+      `/admin/tournament-events/${req.params.eventId}/manage`
+    );
+  })
+);
+
+
+// ============================================================
+// DELETE STANDING
+// ============================================================
+
+app.delete(
+  "/admin/tournament-events/:eventId/manage/standings/:id",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    await Standing.findOneAndDelete({
+      _id: req.params.id,
+      event: req.params.eventId
+    });
+
+
+    req.flash(
+      "success",
+      "Standing deleted successfully."
+    );
+
+    res.redirect(
+      `/admin/tournament-events/${req.params.eventId}/manage`
+    );
+  })
+);
+
+
+// ============================================================
+// ADD PLAYOFF MATCH
+// ============================================================
+
+app.post(
+  "/admin/tournament-events/:eventId/manage/playoffs",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const { eventId } = req.params;
+
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      throw new ExpressError(
+        404,
+        "Tournament event not found."
+      );
+    }
+
+
+    const playoff = new Playoff({
+
+      event: event._id,
+
+      round:
+        String(req.body.round || "").trim(),
+
+      matchNumber:
+        Number(req.body.matchNumber || 1),
+
+      teamA:
+        String(req.body.teamA || "").trim(),
+
+      teamB:
+        String(req.body.teamB || "").trim(),
+
+      scoreA:
+        Number(req.body.scoreA || 0),
+
+      scoreB:
+        Number(req.body.scoreB || 0),
+
+      winner:
+        String(req.body.winner || "").trim()
+
+    });
+
+
+    await playoff.save();
+
+
+    req.flash(
+      "success",
+      "Playoff match added successfully."
+    );
+
+    res.redirect(
+      `/admin/tournament-events/${eventId}/manage`
+    );
+  })
+);
+
+
+// ============================================================
+// UPDATE PLAYOFF
+// ============================================================
+
+app.put(
+  "/admin/tournament-events/:eventId/manage/playoffs/:id",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const playoff = await Playoff.findOne({
+      _id: req.params.id,
+      event: req.params.eventId
+    });
+
+    if (!playoff) {
+      throw new ExpressError(
+        404,
+        "Playoff match not found."
+      );
+    }
+
+
+    playoff.round =
+      String(req.body.round || "").trim();
+
+    playoff.matchNumber =
+      Number(req.body.matchNumber || 1);
+
+    playoff.teamA =
+      String(req.body.teamA || "").trim();
+
+    playoff.teamB =
+      String(req.body.teamB || "").trim();
+
+    playoff.scoreA =
+      Number(req.body.scoreA || 0);
+
+    playoff.scoreB =
+      Number(req.body.scoreB || 0);
+
+    playoff.winner =
+      String(req.body.winner || "").trim();
+
+
+    await playoff.save();
+
+
+    req.flash(
+      "success",
+      "Playoff match updated successfully."
+    );
+
+    res.redirect(
+      `/admin/tournament-events/${req.params.eventId}/manage`
+    );
+  })
+);
+
+
+// ============================================================
+// DELETE PLAYOFF
+// ============================================================
+
+app.delete(
+  "/admin/tournament-events/:eventId/manage/playoffs/:id",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    await Playoff.findOneAndDelete({
+      _id: req.params.id,
+      event: req.params.eventId
+    });
+
+
+    req.flash(
+      "success",
+      "Playoff match deleted successfully."
+    );
+
+    res.redirect(
+      `/admin/tournament-events/${req.params.eventId}/manage`
+    );
+  })
+);
+
+
+// ============================================================
+// PUBLIC TOURNAMENT LIST
+// ============================================================
 
 app.get(
   "/tournament-events",
   wrapAsync(async (req, res) => {
 
     const events = await Event.find({})
-      .sort({ startDate: 1 });
+      .sort({
+        startDate: 1
+      });
 
-    res.render("tournament-events/index", {
-      events
-    });
+    res.render(
+      "tournament-events/index",
+      {
+        events
+      }
+    );
   })
 );
 
 
-// ===============================
+// ============================================================
 // PUBLIC SINGLE TOURNAMENT
-// ===============================
+// ============================================================
 
 app.get(
   "/tournament-events/:id",
   wrapAsync(async (req, res) => {
 
-    const event = await Event.findById(req.params.id);
+    const event = await Event.findById(
+      req.params.id
+    );
 
     if (!event) {
-      return res.status(404).send("Event not found.");
+      return res
+        .status(404)
+        .send("Event not found.");
     }
 
-    res.render("tournament-events/showEvent", {
-      event
-    });
+
+    const [
+      qualifiers,
+      groups,
+      standings,
+      playoffs
+    ] = await Promise.all([
+
+      Qualifier.find({
+        event: event._id
+      }).sort({
+        position: 1
+      }),
+
+      TournamentGroup.find({
+        event: event._id
+      }).sort({
+        name: 1
+      }),
+
+      Standing.find({
+        event: event._id
+      })
+        .populate("group")
+        .sort({
+          position: 1
+        }),
+
+      Playoff.find({
+        event: event._id
+      }).sort({
+        round: 1,
+        matchNumber: 1
+      })
+
+    ]);
+
+
+    res.render(
+      "tournament-events/showEvent",
+      {
+        event,
+        qualifiers,
+        groups,
+        standings,
+        playoffs
+      }
+    );
   })
 );
-
 
 app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));

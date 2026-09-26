@@ -1,0 +1,625 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="tm-page">
+
+        <!-- ============================= -->
+        <!-- EVENT HERO -->
+        <!-- ============================= -->
+
+        <section class="tm-event-hero">
+
+            <div class="tm-event-logo-wrap">
+                <% if (event.logo) { %>
+                    <img src="<%= event.logo %>" alt="<%= event.name %> logo" class="tm-event-logo">
+                    <% } else { %>
+                        <div class="tm-event-logo-placeholder">
+                            KM
+                        </div>
+                        <% } %>
+            </div>
+
+            <div class="tm-event-info">
+
+                <div class="tm-event-status">
+                    <span class="tm-status-dot"></span>
+                    <%= event.status || "TOURNAMENT" %>
+                </div>
+
+                <h1 class="tm-event-title">
+                    <%= event.name %>
+                </h1>
+
+                <div class="tm-event-meta">
+
+                    <div class="tm-meta-item">
+                        <span class="tm-meta-label">DATE</span>
+
+                        <span class="tm-meta-value">
+                            <% if (event.startDate) { %>
+                                <%= new Date(event.startDate).toLocaleDateString("en-IN", { day: "2-digit" ,
+                                    month: "short" , year: "numeric" }) %>
+                                    <% } %>
+
+                                        <% if (event.endDate) { %>
+                                            -
+                                            <%= new Date(event.endDate).toLocaleDateString("en-IN", { day: "2-digit" ,
+                                                month: "short" , year: "numeric" }) %>
+                                                <% } %>
+                        </span>
+                    </div>
+
+                    <div class="tm-meta-item">
+                        <span class="tm-meta-label">MODE</span>
+                        <span class="tm-meta-value">
+                            <%= event.mode || "N/A" %>
+                        </span>
+                    </div>
+
+                    <div class="tm-meta-item">
+                        <span class="tm-meta-label">PRIZE POOL</span>
+
+                        <span class="tm-meta-value tm-prize">
+                            ₹<%= Number(event.prizeAmount || 0).toLocaleString("en-IN") %>
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- TOURNAMENT NAVIGATION -->
+        <!-- ============================= -->
+
+        <section class="tm-sections">
+
+            <!-- ========================= -->
+            <!-- QUALIFIERS -->
+            <!-- ========================= -->
+
+            <div class="tm-section">
+
+                <button type="button" class="tm-section-button is-active" data-target="tm-qualifiers">
+                    <div class="tm-section-title-wrap">
+                        <span class="tm-section-number">01</span>
+
+                        <span class="tm-section-title">
+                            QUALIFIERS
+                        </span>
+                    </div>
+
+                    <span class="tm-section-icon">−</span>
+                </button>
+
+                <div id="tm-qualifiers" class="tm-section-content is-open">
+
+                    <% if (qualifiers && qualifiers.length> 0) { %>
+
+                        <div class="tm-qualifier-list">
+
+                            <% qualifiers.forEach((qualifier, index)=> { %>
+
+                                <div class="tm-qualifier-card">
+
+                                    <div class="tm-position">
+                                        <%= qualifier.position || index + 1 %>
+                                    </div>
+
+                                    <div class="tm-team-info">
+                                        <div class="tm-team-name">
+                                            <%= qualifier.teamName %>
+                                        </div>
+
+                                        <div class="tm-team-label">
+                                            QUALIFIER
+                                        </div>
+                                    </div>
+
+                                    <div class="tm-qualifier-status
+                                    <%= qualifier.status === 'qualified'
+                                        ? 'status-qualified'
+                                        : qualifier.status === 'eliminated'
+                                            ? 'status-eliminated'
+                                            : 'status-pending'
+                                    %>">
+                                        <%= (qualifier.status || "pending" ).toUpperCase() %>
+                                    </div>
+
+                                </div>
+
+                                <% }) %>
+
+                        </div>
+
+                        <% } else { %>
+
+                            <div class="tm-empty">
+                                <div class="tm-empty-icon">Q</div>
+
+                                <h3>QUALIFIERS NOT UPDATED</h3>
+
+                                <p>
+                                    Qualifier information will appear here.
+                                </p>
+                            </div>
+
+                            <% } %>
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- GROUP STAGE -->
+            <!-- ========================= -->
+
+            <div class="tm-section">
+
+                <button type="button" class="tm-section-button" data-target="tm-groups">
+                    <div class="tm-section-title-wrap">
+                        <span class="tm-section-number">02</span>
+
+                        <span class="tm-section-title">
+                            GROUP STAGE
+                        </span>
+                    </div>
+
+                    <span class="tm-section-icon">+</span>
+                </button>
+
+                <div id="tm-groups" class="tm-section-content">
+
+                    <% if (groups && groups.length> 0) { %>
+
+                        <div class="tm-groups-list">
+
+                            <% groups.forEach((group)=> { %>
+
+                                <div class="tm-group-card">
+
+                                    <div class="tm-group-header">
+                                        <div>
+                                            <span class="tm-group-label">
+                                                GROUP
+                                            </span>
+
+                                            <h3>
+                                                <%= group.name %>
+                                            </h3>
+                                        </div>
+                                    </div>
+
+                                    <% const groupStandings=standings ? standings.filter( standing=>
+                                        standing.group &&
+                                        String(
+                                        standing.group._id
+                                        ) === String(group._id)
+                                        )
+                                        : [];
+                                        %>
+
+                                        <% if (groupStandings.length> 0) { %>
+
+                                            <div class="tm-group-table-wrap">
+
+                                                <table class="tm-group-table">
+
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>TEAM</th>
+                                                            <th>P</th>
+                                                            <th>W</th>
+                                                            <th>L</th>
+                                                            <th>PTS</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+
+                                                        <% groupStandings.forEach((standing)=> { %>
+
+                                                            <tr>
+
+                                                                <td>
+                                                                    <span class="tm-rank">
+                                                                        <%= standing.position %>
+                                                                    </span>
+                                                                </td>
+
+                                                                <td class="tm-table-team">
+                                                                    <%= standing.teamName %>
+                                                                </td>
+
+                                                                <td>
+                                                                    <%= standing.played %>
+                                                                </td>
+
+                                                                <td>
+                                                                    <%= standing.wins %>
+                                                                </td>
+
+                                                                <td>
+                                                                    <%= standing.losses %>
+                                                                </td>
+
+                                                                <td class="tm-points">
+                                                                    <%= standing.points %>
+                                                                </td>
+
+                                                            </tr>
+
+                                                            <% }) %>
+
+                                                    </tbody>
+
+                                                </table>
+
+                                            </div>
+
+                                            <% } else { %>
+
+                                                <div class="tm-group-empty">
+                                                    Group standings will appear here.
+                                                </div>
+
+                                                <% } %>
+
+                                </div>
+
+                                <% }) %>
+
+                        </div>
+
+                        <% } else { %>
+
+                            <div class="tm-empty">
+                                <div class="tm-empty-icon">G</div>
+
+                                <h3>GROUP STAGE NOT UPDATED</h3>
+
+                                <p>
+                                    Group stage information will appear here.
+                                </p>
+                            </div>
+
+                            <% } %>
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- STANDINGS -->
+            <!-- ========================= -->
+
+            <div class="tm-section">
+
+                <button type="button" class="tm-section-button" data-target="tm-standings">
+                    <div class="tm-section-title-wrap">
+                        <span class="tm-section-number">03</span>
+
+                        <span class="tm-section-title">
+                            STANDINGS
+                        </span>
+                    </div>
+
+                    <span class="tm-section-icon">+</span>
+                </button>
+
+                <div id="tm-standings" class="tm-section-content">
+
+                    <% if (standings && standings.length> 0) { %>
+
+                        <div class="tm-standings-table-wrap">
+
+                            <table class="tm-standings-table">
+
+                                <thead>
+
+                                    <tr>
+                                        <th>#</th>
+                                        <th>TEAM</th>
+                                        <th>P</th>
+                                        <th>W</th>
+                                        <th>L</th>
+                                        <th>D</th>
+                                        <th>PTS</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    <% const globalStandings=standings .filter(standing=> !standing.group)
+                                        .sort(
+                                        (a, b) =>
+                                        a.position - b.position
+                                        );
+                                        %>
+
+                                        <% if (globalStandings.length> 0) { %>
+
+                                            <% globalStandings.forEach((standing)=> { %>
+
+                                                <tr>
+
+                                                    <td>
+                                                        <span class="tm-rank">
+                                                            <%= standing.position %>
+                                                        </span>
+                                                    </td>
+
+                                                    <td class="tm-table-team">
+                                                        <%= standing.teamName %>
+                                                    </td>
+
+                                                    <td>
+                                                        <%= standing.played %>
+                                                    </td>
+
+                                                    <td>
+                                                        <%= standing.wins %>
+                                                    </td>
+
+                                                    <td>
+                                                        <%= standing.losses %>
+                                                    </td>
+
+                                                    <td>
+                                                        <%= standing.draws %>
+                                                    </td>
+
+                                                    <td class="tm-points">
+                                                        <%= standing.points %>
+                                                    </td>
+
+                                                </tr>
+
+                                                <% }) %>
+
+                                                    <% } else { %>
+
+                                                        <% standings.forEach((standing)=> { %>
+
+                                                            <tr>
+
+                                                                <td>
+                                                                    <span class="tm-rank">
+                                                                        <%= standing.position %>
+                                                                    </span>
+                                                                </td>
+
+                                                                <td class="tm-table-team">
+                                                                    <%= standing.teamName %>
+                                                                </td>
+
+                                                                <td>
+                                                                    <%= standing.played %>
+                                                                </td>
+
+                                                                <td>
+                                                                    <%= standing.wins %>
+                                                                </td>
+
+                                                                <td>
+                                                                    <%= standing.losses %>
+                                                                </td>
+
+                                                                <td>
+                                                                    <%= standing.draws %>
+                                                                </td>
+
+                                                                <td class="tm-points">
+                                                                    <%= standing.points %>
+                                                                </td>
+
+                                                            </tr>
+
+                                                            <% }) %>
+
+                                                                <% } %>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                        <% } else { %>
+
+                            <div class="tm-empty">
+                                <div class="tm-empty-icon">S</div>
+
+                                <h3>STANDINGS NOT UPDATED</h3>
+
+                                <p>
+                                    Tournament standings will appear here.
+                                </p>
+                            </div>
+
+                            <% } %>
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- PLAYOFFS -->
+            <!-- ========================= -->
+
+            <div class="tm-section">
+
+                <button type="button" class="tm-section-button" data-target="tm-playoffs">
+                    <div class="tm-section-title-wrap">
+                        <span class="tm-section-number">04</span>
+
+                        <span class="tm-section-title">
+                            PLAYOFFS
+                        </span>
+                    </div>
+
+                    <span class="tm-section-icon">+</span>
+                </button>
+
+                <div id="tm-playoffs" class="tm-section-content">
+
+                    <% if (playoffs && playoffs.length> 0) { %>
+
+                        <div class="tm-playoffs-list">
+
+                            <% playoffs.forEach((match)=> { %>
+
+                                <article class="tm-playoff-card">
+
+                                    <div class="tm-playoff-header">
+
+                                        <span class="tm-playoff-round">
+                                            <%= match.round %>
+                                        </span>
+
+                                        <span class="tm-playoff-number">
+                                            MATCH <%= match.matchNumber %>
+                                        </span>
+
+                                    </div>
+
+                                    <div class="tm-playoff-teams">
+
+                                        <div class="tm-playoff-team">
+
+                                            <span class="tm-playoff-team-name">
+                                                <%= match.teamA || "TBD" %>
+                                            </span>
+
+                                            <span class="tm-playoff-score">
+                                                <%= match.scoreA %>
+                                            </span>
+
+                                        </div>
+
+                                        <div class="tm-playoff-divider">
+                                            VS
+                                        </div>
+
+                                        <div class="tm-playoff-team">
+
+                                            <span class="tm-playoff-team-name">
+                                                <%= match.teamB || "TBD" %>
+                                            </span>
+
+                                            <span class="tm-playoff-score">
+                                                <%= match.scoreB %>
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                    <% if (match.winner) { %>
+
+                                        <div class="tm-playoff-winner">
+
+                                            <span>
+                                                WINNER
+                                            </span>
+
+                                            <strong>
+                                                <%= match.winner %>
+                                            </strong>
+
+                                        </div>
+
+                                        <% } %>
+
+                                </article>
+
+                                <% }) %>
+
+                        </div>
+
+                        <% } else { %>
+
+                            <div class="tm-empty">
+                                <div class="tm-empty-icon">P</div>
+
+                                <h3>PLAYOFFS NOT UPDATED</h3>
+
+                                <p>
+                                    Playoff matches will appear here.
+                                </p>
+                            </div>
+
+                            <% } %>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const buttons = document.querySelectorAll(
+                ".tm-section-button"
+            );
+
+            const contents = document.querySelectorAll(
+                ".tm-section-content"
+            );
+
+            buttons.forEach((button) => {
+
+                button.addEventListener("click", () => {
+
+                    const targetId = button.dataset.target;
+                    const target = document.getElementById(targetId);
+
+                    const isAlreadyOpen =
+                        target.classList.contains("is-open");
+
+                    contents.forEach((content) => {
+                        content.classList.remove("is-open");
+                    });
+
+                    buttons.forEach((btn) => {
+                        btn.classList.remove("is-active");
+
+                        const icon =
+                            btn.querySelector(".tm-section-icon");
+
+                        if (icon) {
+                            icon.textContent = "+";
+                        }
+                    });
+
+                    if (!isAlreadyOpen) {
+
+                        target.classList.add("is-open");
+                        button.classList.add("is-active");
+
+                        const icon =
+                            button.querySelector(".tm-section-icon");
+
+                        if (icon) {
+                            icon.textContent = "−";
+                        }
+
+                    }
+
+                });
+
+            });
+
+        });
+    </script>
