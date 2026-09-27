@@ -143,6 +143,7 @@ import mongoose from 'mongoose';
 
 // UID exact lookup
 playerSchema.index({ uid: 1 });
+playerSchema.index({ ign: 1 });
 
 // Common filters
 playerSchema.index({

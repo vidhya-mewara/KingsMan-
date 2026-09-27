@@ -1105,3 +1105,169 @@ section,
         padding: 28px;
     }
 }
+.admin-delete-button {
+    background: transparent;
+    border: 1px solid #ff4655;
+    color: #ff4655;
+    cursor: pointer;
+}
+
+.admin-delete-button:hover {
+    background: #ff4655;
+    color: #fff;
+}
+.slider-admin-actions form {
+    margin: 0;
+}
+
+.slider-admin-actions .admin-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.km-admin-nav-command {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    border: 1px solid rgba(255, 70, 85, 0.25);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255, 70, 85, 0.08),
+            transparent
+        );
+
+    color: #fff;
+    text-decoration: none;
+
+    transition: .2s ease;
+}
+
+.km-admin-nav-command:hover {
+    border-color: #ff4655;
+    background: rgba(255, 70, 85, 0.12);
+}
+
+.km-admin-nav-command-icon {
+    color: #ff4655;
+    font-size: 13px;
+}
+
+.km-admin-nav-command span:last-child {
+    display: flex;
+    flex-direction: column;
+
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.km-admin-nav-command small {
+    margin-bottom: 2px;
+
+    color: #ff4655;
+
+    font-size: 7px;
+    letter-spacing: 1.5px;
+}
+.km-admin-nav-command {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    border: 1px solid rgba(255, 70, 85, 0.25);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255, 70, 85, 0.08),
+            transparent
+        );
+
+    color: #fff;
+    text-decoration: none;
+
+    transition: .2s ease;
+}
+
+.km-admin-nav-command:hover {
+    border-color: #ff4655;
+    background: rgba(255, 70, 85, 0.12);
+}
+
+.km-admin-nav-command-icon {
+    color: #ff4655;
+    font-size: 13px;
+}
+
+.km-admin-nav-command span:last-child {
+    display: flex;
+    flex-direction: column;
+
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.km-admin-nav-command small {
+    margin-bottom: 2px;
+
+    color: #ff4655;
+
+    font-size: 7px;
+    letter-spacing: 1.5px;
+}.km-admin-nav-command {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    border: 1px solid rgba(255, 70, 85, 0.25);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(255, 70, 85, 0.08),
+            transparent
+        );
+
+    color: #fff;
+    text-decoration: none;
+
+    transition: .2s ease;
+}
+
+.km-admin-nav-command:hover {
+    border-color: #ff4655;
+    background: rgba(255, 70, 85, 0.12);
+}
+
+.km-admin-nav-command-icon {
+    color: #ff4655;
+    font-size: 13px;
+}
+
+.km-admin-nav-command span:last-child {
+    display: flex;
+    flex-direction: column;
+
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.km-admin-nav-command small {
+    margin-bottom: 2px;
+
+    color: #ff4655;
+
+    font-size: 7px;
+    letter-spacing: 1.5px;
+}

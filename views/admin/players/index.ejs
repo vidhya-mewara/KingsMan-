@@ -1,0 +1,182 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="km-player-admin">
+
+        <div class="km-player-admin-hero">
+
+            <div>
+                <div class="km-player-eyebrow">
+                    KINGSMAN ADMIN
+                </div>
+
+                <h1>
+                    PLAYER
+                    <span>VERIFICATION</span>
+                </h1>
+
+                <p>
+                    Review player information and verification evidence.
+                </p>
+            </div>
+
+            <a href="/admin" class="km-player-back">
+                ← Command Center
+            </a>
+
+        </div>
+
+
+        <!-- STATUS COUNTERS -->
+
+        <div class="km-player-counts">
+
+            <a href="/admin/players?verificationStatus=pending" class="km-player-count pending">
+                <strong>
+                    <%= counts.pending %>
+                </strong>
+                <span>PENDING</span>
+            </a>
+
+            <a href="/admin/players?verificationStatus=verified" class="km-player-count verified">
+                <strong>
+                    <%= counts.verified %>
+                </strong>
+                <span>VERIFIED</span>
+            </a>
+
+            <a href="/admin/players?verificationStatus=unverified" class="km-player-count unverified">
+                <strong>
+                    <%= counts.unverified %>
+                </strong>
+                <span>UNVERIFIED</span>
+            </a>
+
+        </div>
+
+
+        <!-- FILTER -->
+
+        <form action="/admin/players" method="GET" class="km-player-filter">
+
+            <input type="text" name="search" value="<%= filters.search %>"
+                placeholder="Search IGN, UID or player name...">
+
+            <select name="verificationStatus">
+
+                <option value="">
+                    All Verification Status
+                </option>
+
+                <option value="pending" <%=filters.verificationStatus==="pending" ? "selected" : "" %>
+                    >
+                    Pending
+                </option>
+
+                <option value="verified" <%=filters.verificationStatus==="verified" ? "selected" : "" %>
+                    >
+                    Verified
+                </option>
+
+                <option value="unverified" <%=filters.verificationStatus==="unverified" ? "selected" : "" %>
+                    >
+                    Unverified
+                </option>
+
+            </select>
+
+            <button type="submit">
+                SEARCH
+            </button>
+
+        </form>
+
+
+        <!-- PLAYER LIST -->
+
+        <div class="km-player-list">
+
+            <% if (players.length===0) { %>
+
+                <div class="km-player-empty">
+
+                    <div>NO PLAYERS FOUND</div>
+
+                    <span>
+                        No player matches the selected filters.
+                    </span>
+
+                </div>
+
+                <% } %>
+
+
+                    <% players.forEach(player=> { %>
+
+                        <article class="km-player-card">
+
+                            <div class="km-player-card-main">
+
+                                <div class="km-player-avatar">
+                                    <span>
+                                        <%= player.ign ? player.ign.charAt(0).toUpperCase() : "?" %>
+                                    </span>
+                                </div>
+
+
+                                <div class="km-player-info">
+
+                                    <div class="km-player-card-top">
+
+                                        <h2>
+                                            <%= player.ign %>
+                                        </h2>
+
+                                        <span class="km-player-status
+                                <%= player.verificationStatus %>">
+                                            <%= player.verificationStatus.toUpperCase() %>
+                                        </span>
+
+                                    </div>
+
+                                    <p>
+                                        <%= player.name %>
+                                    </p>
+
+                                    <div class="km-player-meta">
+
+                                        <span>
+                                            UID: <strong>
+                                                <%= player.uid %>
+                                            </strong>
+                                        </span>
+
+                                        <span>
+                                            <%= player.country %>
+                                        </span>
+
+                                        <span>
+                                            <%= player.region %>
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="km-player-card-actions">
+
+                                <a href="/admin/players/<%= player._id %>" class="km-player-review">
+                                    REVIEW PLAYER
+                                </a>
+
+                            </div>
+
+                        </article>
+
+                        <% }) %>
+
+        </div>
+
+    </div>

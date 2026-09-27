@@ -7,6 +7,16 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
+            <% if (currUser && currUser.role==="admin" ) { %>
+            
+                <li class="nav-item">
+                    <a class="nav-link kingsman-admin-link" href="/admin">
+                        <span class="kingsman-admin-icon">◆</span>
+                        Admin Command Center
+                    </a>
+                </li>
+            
+                <% } %>
                 <li class="nav-item">
                     <a class="nav-link  <%= currentPage === 'players' ? 'active' : '' %> "  href="/players">Players Den</a>
                 </li>
@@ -23,17 +33,6 @@
                     <a class="nav-link  <%= currentPage === 'contact' ? 'active' : '' %>" href="/contact">Contact & Support</a>
                 </li>
         
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false" >
-                        Filter
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Verified</a></li>
-                        <li><a class="dropdown-item" href="#">Unverified</a></li>
-                        <li><a class="dropdown-item" href="#"></a></li>
-                    </ul>
-                </li>
             </ul>
         </div>
     </div>

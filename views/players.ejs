@@ -1,10 +1,15 @@
 <% layout("/layouts/boilerplate") %>
 
     <div class="roster-page">
+
         <div class="container py-5">
-            
-            <!-- Header -->
+
+            <!-- =========================
+             HEADER
+        ========================== -->
+
             <div class="text-center mb-5">
+
                 <h1 class="roster-title">
                     Players <span class="text-accent">Den</span>
                 </h1>
@@ -15,103 +20,575 @@
 
                 <div class="roster-divider"></div>
 
-                Search
-                <div class="player-search-container">
-                
-                    <form action="/players" method="GET" class="player-search-form">
-                
-                        <input type="search" name="search" placeholder="Search by IGN or UID..." value="<%= filters?.search || '' %>">
-                
-                        <button type="submit">
-                            Search
-                        </button>
-                
-                    </form>
-                
-                </div>
-
-
-                <!-- Add Player Button -->
-                <a href="/players/new" class="add-player-btn">
-                    + Register
-                </a>
             </div>
-           
 
 
-            <!-- Players -->
-            <div class="row g-4">
+            <!-- =========================
+             SEARCH + FILTER BAR
+        ========================== -->
 
-                <% players.forEach(player=> { %>
+            <div class="players-toolbar">
 
-                    <div class="col-12 col-md-6 col-lg-4">
+                <!-- SEARCH -->
 
-                        <!-- Entire Card Clickable -->
-                        <a href="/players/<%= player._id %>" class="player-card-link">
+                <form action="/players" method="GET" class="player-search-form">
 
-                            <div class="player-card">
+                    <div class="search-box">
 
-                                <div class="player-card-body">
+                        <span class="search-icon">
+                            ⌕
+                        </span>
 
-                                    <!-- ROLES FIRST -->
-                                    <div class="role-list">
+                        <input type="search" name="search" value="<%= filters?.search || '' %>"
+                            placeholder="Search IGN or UID..." autocomplete="off">
 
-                                        <% const roles=Array.isArray(player.role) ? player.role : (player.role ?
-                                            [player.role] : []); %>
+                        <% if (filters?.search) { %>
 
-                                            <% if (roles.length> 0) { %>
+                            <a href="/players" class="clear-search">
+                                ×
+                            </a>
 
-                                                <% roles.forEach(role=> { %>
-
-                                                    <span class="role-badge role-<%= role.toLowerCase() %>">
-                                                        <%= role %>
-                                                    </span>
-
-                                                    <% }) %>
-
-                                                        <% } else { %>
-
-                                                            <span class="role-badge">
-                                                                No Role
-                                                            </span>
-
-                                                            <% } %>
-
-                                    </div>
-
-
-                                    <!-- BIG WHITE IGN -->
-                                    <h2 class="player-ign-big">
-                                        <%= player.ign %>
-                                    </h2>
-
-
-                                    <!-- UID -->
-                                    <div class="player-uid">
-                                        <span class="detail-label">UID</span>
-
-                                        <span class="detail-value">
-                                            <%= player.uid %>
-                                        </span>
-                                    </div>
-
-
-                                    <!-- STATUS -->
-                                    <span class="status-pill status-<%= player.verificationStatus %>">
-                                        <%= player.verificationStatus %>
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        </a>
+                            <% } %>
 
                     </div>
 
-                    <% }) %>
+                    <button type="submit" class="search-btn">
+                        Search
+                    </button>
+
+                </form>
+
+
+                <!-- MOBILE FILTER BUTTON -->
+
+                <button type="button" class="mobile-filter-btn" id="openFilters">
+
+                    <span>
+                        ☰ Filters
+                    </span>
+
+                    <% const activeFilterCount=(filters?.country ? 1 : 0) + (filters?.region ? 1 : 0) + (filters?.role ?
+                        1 : 0) + (filters?.verificationStatus ? 1 : 0) + (filters?.inTeam ? 1 : 0); %>
+
+                        <% if (activeFilterCount> 0) { %>
+
+                            <span class="filter-count">
+                                <%= activeFilterCount %>
+                            </span>
+
+                            <% } %>
+
+                </button>
+
+            </div>
+
+
+            <!-- =========================
+             FILTER OVERLAY
+        ========================== -->
+
+            <div class="filter-overlay" id="filterOverlay"></div>
+
+
+            <!-- =========================
+             MAIN CONTENT
+        ========================== -->
+
+            <div class="players-layout">
+
+
+                <!-- =========================
+                 FILTER SIDEBAR
+            ========================== -->
+
+                <aside class="players-filters" id="filtersSidebar">
+
+                    <div class="filters-header">
+
+                        <div>
+
+                            <span class="filters-eyebrow">
+                                PLAYER SEARCH
+                            </span>
+
+                            <h3>
+                                Filters
+                            </h3>
+
+                        </div>
+
+                        <button type="button" class="close-filters" id="closeFilters">
+                            ×
+                        </button>
+
+                    </div>
+
+
+                    <form action="/players" method="GET" class="filters-form">
+
+                        <!-- Preserve Search -->
+
+                        <input type="hidden" name="search" value="<%= filters?.search || '' %>">
+
+
+                        <!-- REGION -->
+
+                        <div class="filter-group">
+
+                            <label for="region">
+                                Region
+                            </label>
+
+                            <select id="region" name="region">
+
+                                <option value="">
+                                    All Regions
+                                </option>
+
+                                <% regions.forEach(item=> { %>
+
+                                    <option value="<%= item %>" <%=filters?.region===item ? "selected" : "" %>
+                                        >
+                                        <%= item %>
+                                    </option>
+
+                                    <% }) %>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- COUNTRY -->
+
+                        <div class="filter-group">
+
+                            <label for="country">
+                                Country
+                            </label>
+
+                            <select id="country" name="country">
+
+                                <option value="">
+                                    All Countries
+                                </option>
+
+                                <% countries.forEach(item=> { %>
+
+                                    <option value="<%= item %>" <%=filters?.country===item ? "selected" : "" %>
+                                        >
+                                        <%= item %>
+                                    </option>
+
+                                    <% }) %>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- ROLE -->
+
+                        <div class="filter-group">
+
+                            <label for="role">
+                                Role
+                            </label>
+
+                            <select id="role" name="role">
+
+                                <option value="">
+                                    All Roles
+                                </option>
+
+                                <option value="Duelist" <%=filters?.role==="Duelist" ? "selected" : "" %>
+                                    >
+                                    Duelist
+                                </option>
+
+                                <option value="Initiator" <%=filters?.role==="Initiator" ? "selected" : "" %>
+                                    >
+                                    Initiator
+                                </option>
+
+                                <option value="Controller" <%=filters?.role==="Controller" ? "selected" : "" %>
+                                    >
+                                    Controller
+                                </option>
+
+                                <option value="Sentinel" <%=filters?.role==="Sentinel" ? "selected" : "" %>
+                                    >
+                                    Sentinel
+                                </option>
+
+                                <option value="Flex" <%=filters?.role==="Flex" ? "selected" : "" %>
+                                    >
+                                    Flex
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- VERIFICATION -->
+
+                        <div class="filter-group">
+
+                            <label for="verificationStatus">
+                                Verification
+                            </label>
+
+                            <select id="verificationStatus" name="verificationStatus">
+
+                                <option value="">
+                                    All Players
+                                </option>
+
+                                <option value="verified" <%=filters?.verificationStatus==="verified" ? "selected" : ""
+                                    %>
+                                    >
+                                    Verified
+                                </option>
+
+                                <option value="pending" <%=filters?.verificationStatus==="pending" ? "selected" : "" %>
+                                    >
+                                    Pending
+                                </option>
+
+                                <option value="unverified" <%=filters?.verificationStatus==="unverified" ? "selected"
+                                    : "" %>
+                                    >
+                                    Unverified
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- TEAM STATUS -->
+
+                        <div class="filter-group">
+
+                            <label>
+                                Team Status
+                            </label>
+
+                            <div class="team-filter-options">
+
+                                <label class="radio-option">
+
+                                    <input type="radio" name="inTeam" value="" <%=!filters?.inTeam ? "checked" : "" %>
+                                    >
+
+                                    <span>
+                                        All Players
+                                    </span>
+
+                                </label>
+
+
+                                <label class="radio-option">
+
+                                    <input type="radio" name="inTeam" value="true" <%=filters?.inTeam==="true"
+                                        ? "checked" : "" %>
+                                    >
+
+                                    <span>
+                                        In Team
+                                    </span>
+
+                                </label>
+
+
+                                <label class="radio-option">
+
+                                    <input type="radio" name="inTeam" value="false" <%=filters?.inTeam==="false"
+                                        ? "checked" : "" %>
+                                    >
+
+                                    <span>
+                                        Free Agent
+                                    </span>
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ACTIONS -->
+
+                        <div class="filter-actions">
+
+                            <button type="submit" class="apply-filter-btn">
+                                Apply Filters
+                            </button>
+
+                            <a href="/players" class="clear-filter-btn">
+                                Clear All
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </aside>
+
+
+                <!-- =========================
+                 PLAYER RESULTS
+            ========================== -->
+
+                <main class="players-results">
+
+                    <div class="results-header">
+
+                        <div>
+
+                            <span class="results-label">
+                                PLAYER DIRECTORY
+                            </span>
+
+                            <h2>
+                                <%= pagination?.totalPlayers || players.length %>
+                                    Players
+                            </h2>
+
+                        </div>
+
+                        <% if (activeFilterCount> 0) { %>
+
+                            <span class="active-filter-label">
+                                <%= activeFilterCount %> filter<%= activeFilterCount> 1 ? "s" : "" %> active
+                            </span>
+
+                            <% } %>
+
+                    </div>
+
+
+                    <!-- =========================
+                     PLAYERS
+                ========================== -->
+
+                    <% if (players.length> 0) { %>
+
+                        <div class="row g-4">
+
+                            <% players.forEach(player=> { %>
+
+                                <div class="col-12 col-md-6 col-lg-4">
+
+                                    <a href="/players/<%= player._id %>" class="player-card-link">
+
+                                        <div class="player-card">
+
+                                            <div class="player-card-body">
+
+
+                                                <!-- ROLES -->
+
+                                                <div class="role-list">
+
+                                                    <% const roles=Array.isArray(player.role) ? player.role :
+                                                        player.role ? [player.role] : []; %>
+
+                                                        <% if (roles.length> 0) { %>
+
+                                                            <% roles.forEach(role=> { %>
+
+                                                                <span class="role-badge role-<%= role.toLowerCase() %>">
+                                                                    <%= role %>
+                                                                </span>
+
+                                                                <% }) %>
+
+                                                                    <% } else { %>
+
+                                                                        <span class="role-badge">
+                                                                            No Role
+                                                                        </span>
+
+                                                                        <% } %>
+
+                                                </div>
+
+
+                                                <!-- IGN -->
+
+                                                <h2 class="player-ign-big">
+                                                    <%= player.ign %>
+                                                </h2>
+
+
+                                                <!-- PLAYER INFO -->
+
+                                                <div class="player-meta">
+
+                                                    <span>
+                                                        <%= player.country %>
+                                                    </span>
+
+                                                    <span class="meta-dot">
+                                                        •
+                                                    </span>
+
+                                                    <span>
+                                                        <%= player.region %>
+                                                    </span>
+
+                                                </div>
+
+
+                                                <!-- UID -->
+
+                                                <div class="player-uid">
+
+                                                    <span class="detail-label">
+                                                        UID
+                                                    </span>
+
+                                                    <span class="detail-value">
+                                                        <%= player.uid %>
+                                                    </span>
+
+                                                </div>
+
+
+                                                <!-- TEAM -->
+
+                                                <% if (player.inTeam && player.teamName) { %>
+
+                                                    <div class="team-status in-team">
+                                                        <span class="status-dot"></span>
+                                                        <%= player.teamName %>
+                                                    </div>
+
+                                                    <% } else { %>
+
+                                                        <div class="team-status free-agent">
+                                                            <span class="status-dot"></span>
+                                                            Free Agent
+                                                        </div>
+
+                                                        <% } %>
+
+
+                                                            <!-- VERIFICATION -->
+
+                                                            <span
+                                                                class="status-pill status-<%= player.verificationStatus %>">
+                                                                <%= player.verificationStatus %>
+                                                            </span>
+
+                                            </div>
+
+                                        </div>
+
+                                    </a>
+
+                                </div>
+
+                                <% }) %>
+
+                        </div>
+
+
+                        <!-- =========================
+                         PAGINATION
+                    ========================== -->
+
+                        <% if (pagination && pagination.totalPages> 1) { %>
+
+                            <nav class="players-pagination">
+
+                                <% for ( let i=1; i <=pagination.totalPages; i++ ) { %>
+
+                                    <% const params=new URLSearchParams({ search: filters?.search || "" , country:
+                                        filters?.country || "" , region: filters?.region || "" , role: filters?.role
+                                        || "" , verificationStatus: filters?.verificationStatus || "" , inTeam:
+                                        filters?.inTeam || "" , page: i }); const
+                                        queryString=Array.from(params.entries()) .filter(([key, value])=> value)
+                                        .map(([key, value]) =>
+                                        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+                                        )
+                                        .join("&");
+                                        %>
+
+                                        <a href="/players?<%= queryString %>"
+                                            class="<%= pagination.currentPage === i ? 'active' : '' %>">
+                                            <%= i %>
+                                        </a>
+
+                                        <% } %>
+
+                            </nav>
+
+                            <% } %>
+
+
+                                <% } else { %>
+
+
+                                    <!-- =========================
+                         EMPTY STATE
+                    ========================== -->
+
+                                    <div class="players-empty">
+
+                                        <div class="empty-icon">
+                                            ◌
+                                        </div>
+
+                                        <h3>
+                                            No players found
+                                        </h3>
+
+                                        <p>
+                                            Try changing your search or filters.
+                                        </p>
+
+                                        <a href="/players">
+                                            Clear Filters
+                                        </a>
+
+                                    </div>
+
+                                    <% } %>
+
+                </main>
 
             </div>
 
         </div>
+
     </div>
+
+
+    <script>
+
+        const openFilters = document.getElementById("openFilters");
+        const closeFilters = document.getElementById("closeFilters");
+        const filtersSidebar = document.getElementById("filtersSidebar");
+        const filterOverlay = document.getElementById("filterOverlay");
+
+        function showFilters() {
+            filtersSidebar.classList.add("is-open");
+            filterOverlay.classList.add("is-visible");
+            document.body.classList.add("filters-open");
+        }
+
+        function hideFilters() {
+            filtersSidebar.classList.remove("is-open");
+            filterOverlay.classList.remove("is-visible");
+            document.body.classList.remove("filters-open");
+        }
+
+        openFilters?.addEventListener("click", showFilters);
+        closeFilters?.addEventListener("click", hideFilters);
+        filterOverlay?.addEventListener("click", hideFilters);
+
+    </script>

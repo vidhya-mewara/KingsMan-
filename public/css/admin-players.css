@@ -1,0 +1,484 @@
+/* =========================================================
+   KINGSMAN ADMIN PLAYER VERIFICATION
+   ========================================================= */
+
+.km-player-admin,
+.km-player-review-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 25px 0 60px;
+    color: #f5f5f5;
+}
+
+
+/* HERO */
+
+.km-player-admin-hero,
+.km-review-header {
+    margin-bottom: 25px;
+}
+
+.km-player-eyebrow,
+.km-review-eyebrow {
+    color: #ff4655;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.km-player-admin h1,
+.km-review-header h1 {
+    margin: 0;
+    font-size: clamp(30px, 7vw, 58px);
+    font-weight: 1000;
+    letter-spacing: -1px;
+    line-height: .95;
+}
+
+.km-player-admin h1 span {
+    color: #ff4655;
+}
+
+.km-player-admin-hero p,
+.km-review-header p {
+    color: #777e8d;
+    margin-top: 12px;
+}
+
+.km-player-back,
+.km-review-back {
+    display: inline-flex;
+    margin-top: 18px;
+    color: #ff4655;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+
+/* COUNTERS */
+
+.km-player-counts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.km-player-count {
+    padding: 18px 12px;
+    background: #101218;
+    border: 1px solid #242833;
+    text-decoration: none;
+    color: #fff;
+}
+
+.km-player-count strong {
+    display: block;
+    font-size: 28px;
+}
+
+.km-player-count span {
+    display: block;
+    margin-top: 4px;
+    color: #777e8d;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.km-player-count.pending {
+    border-top: 2px solid #f0b429;
+}
+
+.km-player-count.verified {
+    border-top: 2px solid #46d369;
+}
+
+.km-player-count.unverified {
+    border-top: 2px solid #ff4655;
+}
+
+
+/* FILTER */
+
+.km-player-filter {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.km-player-filter input,
+.km-player-filter select {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 14px;
+    background: #101218;
+    border: 1px solid #242833;
+    color: #fff;
+    outline: none;
+}
+
+.km-player-filter input:focus,
+.km-player-filter select:focus {
+    border-color: #ff4655;
+}
+
+.km-player-filter button {
+    min-height: 46px;
+    border: 0;
+    background: #ff4655;
+    color: #fff;
+    font-weight: 900;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+
+/* PLAYER CARDS */
+
+.km-player-list {
+    display: grid;
+    gap: 10px;
+}
+
+.km-player-card {
+    padding: 15px;
+    background: #101218;
+    border: 1px solid #242833;
+}
+
+.km-player-card-main {
+    display: flex;
+    gap: 13px;
+}
+
+.km-player-avatar {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    display: grid;
+    place-items: center;
+    background: #171a22;
+    border: 1px solid #303540;
+    color: #ff4655;
+    font-size: 20px;
+    font-weight: 1000;
+}
+
+.km-player-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.km-player-card-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.km-player-card h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.km-player-card p {
+    margin: 4px 0;
+    color: #777e8d;
+    font-size: 13px;
+}
+
+.km-player-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    color: #777e8d;
+    font-size: 10px;
+}
+
+.km-player-meta strong {
+    color: #ddd;
+}
+
+.km-player-card-actions {
+    margin-top: 14px;
+}
+
+.km-player-review {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 42px;
+    background: #171a22;
+    border: 1px solid #303540;
+    color: #fff;
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.km-player-review:hover {
+    border-color: #ff4655;
+    color: #ff4655;
+}
+
+
+/* STATUS */
+
+.km-player-status {
+    display: inline-flex;
+    padding: 5px 8px;
+    font-size: 8px;
+    font-weight: 1000;
+    letter-spacing: 1px;
+}
+
+.km-player-status.pending {
+    color: #f0b429;
+    background: rgba(240, 180, 41, .1);
+}
+
+.km-player-status.verified {
+    color: #46d369;
+    background: rgba(70, 211, 105, .1);
+}
+
+.km-player-status.unverified {
+    color: #ff4655;
+    background: rgba(255, 70, 85, .1);
+}
+
+
+/* REVIEW */
+
+.km-review-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.km-review-panel {
+    margin-top: 15px;
+    padding: 20px;
+    background: #101218;
+    border: 1px solid #242833;
+}
+
+.km-panel-label {
+    color: #ff4655;
+    font-size: 9px;
+    font-weight: 1000;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+}
+
+.km-review-panel h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.km-review-panel p {
+    color: #777e8d;
+    font-size: 13px;
+}
+
+
+/* DECISION */
+
+.km-review-decision {
+    border-top: 2px solid #ff4655;
+}
+
+.km-review-actions {
+    display: grid;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.km-review-actions form {
+    margin: 0;
+}
+
+.km-review-actions button {
+    width: 100%;
+    min-height: 45px;
+    border: 1px solid;
+    background: transparent;
+    font-size: 10px;
+    font-weight: 1000;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.km-verify-button {
+    border-color: #46d369 !important;
+    color: #46d369;
+}
+
+.km-verify-button:hover {
+    background: #46d369;
+    color: #08090d;
+}
+
+.km-unverify-button {
+    border-color: #ff4655 !important;
+    color: #ff4655;
+}
+
+.km-unverify-button:hover {
+    background: #ff4655;
+    color: #fff;
+}
+
+.km-pending-button {
+    border-color: #777e8d !important;
+    color: #aaa;
+}
+
+.km-pending-button:hover {
+    border-color: #fff !important;
+    color: #fff;
+}
+
+
+/* DETAILS */
+
+.km-player-details-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    margin-top: 15px;
+    background: #242833;
+}
+
+.km-detail {
+    padding: 14px;
+    background: #101218;
+}
+
+.km-detail span,
+.km-social-item span {
+    display: block;
+    color: #777e8d;
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.km-detail strong,
+.km-social-item strong {
+    font-size: 13px;
+    color: #eee;
+    word-break: break-word;
+}
+
+
+/* SCREENSHOT */
+
+.km-verification-image-wrap {
+    margin-top: 18px;
+    background: #08090d;
+    border: 1px solid #242833;
+    padding: 8px;
+}
+
+.km-verification-image {
+    display: block;
+    width: 100%;
+    max-height: 700px;
+    object-fit: contain;
+    cursor: zoom-in;
+}
+
+.km-no-screenshot {
+    min-height: 200px;
+    display: grid;
+    place-items: center;
+    color: #777e8d;
+    font-size: 10px;
+    font-weight: 900;
+}
+
+
+/* SOCIAL */
+
+.km-social-grid {
+    display: grid;
+    gap: 1px;
+    margin-top: 15px;
+    background: #242833;
+}
+
+.km-social-item {
+    padding: 14px;
+    background: #101218;
+}
+
+
+/* EMPTY */
+
+.km-player-empty {
+    padding: 60px 20px;
+    text-align: center;
+    background: #101218;
+    border: 1px solid #242833;
+}
+
+.km-player-empty div {
+    color: #ff4655;
+    font-weight: 1000;
+    letter-spacing: 1px;
+}
+
+.km-player-empty span {
+    display: block;
+    margin-top: 7px;
+    color: #777e8d;
+    font-size: 12px;
+}
+
+
+/* DESKTOP */
+
+@media (min-width: 600px) {
+
+    .km-player-admin,
+    .km-player-review-page {
+        padding: 40px 15px 70px;
+    }
+
+    .km-player-filter {
+        grid-template-columns: 1fr 220px 130px;
+    }
+
+    .km-player-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .km-player-card-actions {
+        margin: 0;
+        min-width: 160px;
+    }
+
+    .km-player-details-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .km-review-actions {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .km-social-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}

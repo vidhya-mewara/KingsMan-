@@ -1,0 +1,98 @@
+<% layout("layouts/boilerplate") -%>
+
+    <div class="container py-4">
+
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Edit Tournament Event</h2>
+
+            <a href="/admin/tournament-events/<%= event._id %>/manage" class="btn btn-secondary">
+                Back
+            </a>
+        </div>
+
+        <form action="/admin/tournament-events/<%= event._id %>?_method=PUT" method="POST"
+            enctype="multipart/form-data">
+
+            <div class="mb-3">
+                <label class="form-label">Event Name</label>
+                <input type="text" name="name" class="form-control" value="<%= event.name %>" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Current Logo</label>
+
+                <% if (event.logo) { %>
+                    <div class="mb-2">
+                        <img src="<%= event.logo %>" alt="<%= event.name %>"
+                            style="width: 200px; height: 120px; object-fit: cover;" class="rounded">
+                    </div>
+                    <% } %>
+
+                        <label class="form-label">Change Logo</label>
+                        <input type="file" name="logo" class="form-control" accept="image/*">
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Start Date</label>
+
+                    <input type="date" name="startDate" class="form-control"
+                        value="<%= new Date(event.startDate).toISOString().split('T')[0] %>" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">End Date</label>
+
+                    <input type="date" name="endDate" class="form-control"
+                        value="<%= new Date(event.endDate).toISOString().split('T')[0] %>" required>
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Prize Amount</label>
+
+                <input type="number" name="prizeAmount" class="form-control" value="<%= event.prizeAmount || 0 %>"
+                    min="0">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Mode</label>
+
+                <input type="text" name="mode" class="form-control" value="<%= event.mode || '' %>">
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Status</label>
+
+                <select name="status" class="form-select">
+
+                    <option value="upcoming" <%=event.status==="upcoming" ? "selected" : "" %>>
+                        Upcoming
+                    </option>
+
+                    <option value="ongoing" <%=event.status==="ongoing" ? "selected" : "" %>>
+                        Ongoing
+                    </option>
+
+                    <option value="completed" <%=event.status==="completed" ? "selected" : "" %>>
+                        Completed
+                    </option>
+
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Update Event
+            </button>
+
+            <a href="/admin/tournament-events/<%= event._id %>/manage" class="btn btn-secondary">
+                Cancel
+            </a>
+
+        </form>
+        
+
+    </div>

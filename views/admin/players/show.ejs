@@ -1,0 +1,294 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="km-player-review-page">
+
+        <!-- HEADER -->
+
+        <div class="km-review-header">
+
+            <a href="/admin/players" class="km-review-back">
+                ← PLAYER VERIFICATION
+            </a>
+
+            <div class="km-review-title-row">
+
+                <div>
+                    <div class="km-review-eyebrow">
+                        VERIFICATION REVIEW
+                    </div>
+
+                    <h1>
+                        <%= player.ign %>
+                    </h1>
+
+                    <p>
+                        Review submitted player information and evidence.
+                    </p>
+                </div>
+
+                <span class="km-player-status
+                <%= player.verificationStatus %>">
+                    <%= player.verificationStatus.toUpperCase() %>
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- VERIFICATION ACTION -->
+
+        <section class="km-review-panel km-review-decision">
+
+            <div>
+
+                <div class="km-panel-label">
+                    VERIFICATION DECISION
+                </div>
+
+                <h2>
+                    Set player status
+                </h2>
+
+                <p>
+                    Review the player's submitted information and screenshot
+                    before making a decision.
+                </p>
+
+            </div>
+
+
+            <div class="km-review-actions">
+
+                <form action="/admin/players/<%= player._id %>/verification?_method=PUT" method="POST">
+
+                    <input type="hidden" name="verificationStatus" value="verified">
+
+                    <button type="submit" class="km-verify-button"
+                        onclick="return confirm('Mark this player as VERIFIED?')">
+                        ✓ VERIFY PLAYER
+                    </button>
+
+                </form>
+
+
+                <form action="/admin/players/<%= player._id %>/verification?_method=PUT" method="POST">
+
+                    <input type="hidden" name="verificationStatus" value="unverified">
+
+                    <button type="submit" class="km-unverify-button"
+                        onclick="return confirm('Mark this player as UNVERIFIED?')">
+                        × UNVERIFY
+                    </button>
+
+                </form>
+
+
+                <form action="/admin/players/<%= player._id %>/verification?_method=PUT" method="POST">
+
+                    <input type="hidden" name="verificationStatus" value="pending">
+
+                    <button type="submit" class="km-pending-button">
+                        ↻ SET PENDING
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- PLAYER INFORMATION -->
+
+        <section class="km-review-panel">
+
+            <div class="km-panel-label">
+                PLAYER INFORMATION
+            </div>
+
+            <div class="km-player-details-grid">
+
+                <div class="km-detail">
+                    <span>FULL NAME</span>
+                    <strong>
+                        <%= player.name %>
+                    </strong>
+                </div>
+
+                <div class="km-detail">
+                    <span>IGN</span>
+                    <strong>
+                        <%= player.ign %>
+                    </strong>
+                </div>
+
+                <div class="km-detail">
+                    <span>VALORANT UID</span>
+                    <strong>
+                        <%= player.uid %>
+                    </strong>
+                </div>
+
+                <div class="km-detail">
+                    <span>COUNTRY</span>
+                    <strong>
+                        <%= player.country %>
+                    </strong>
+                </div>
+
+                <div class="km-detail">
+                    <span>REGION</span>
+                    <strong>
+                        <%= player.region %>
+                    </strong>
+                </div>
+
+                <div class="km-detail">
+                    <span>TEAM</span>
+                    <strong>
+                        <%= player.inTeam ? player.teamName : "No Team" %>
+                    </strong>
+                </div>
+
+                <div class="km-detail">
+
+                    <span>ROLE</span>
+
+                    <strong>
+                        <%= player.role && player.role.length ? player.role.join(", ")
+                        : " Not specified" %>
+                    </strong>
+
+                </div>
+
+                <div class="km-detail">
+
+                    <span>AGENTS</span>
+
+                    <strong>
+                        <%= player.agents && player.agents.length ? player.agents.join(", ")
+                        : " Not specified" %>
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- VERIFICATION SCREENSHOT -->
+
+        <section class="km-review-panel">
+
+            <div class="km-panel-heading">
+
+                <div>
+                    <div class="km-panel-label">
+                        VERIFICATION EVIDENCE
+                    </div>
+
+                    <h2>
+                        Submitted Screenshot
+                    </h2>
+
+                    <p>
+                        Review the uploaded screenshot against the submitted
+                        player information.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="km-verification-image-wrap">
+
+                <% if (player.verificationScreenshot) { %>
+                
+                    <% let screenshotUrl=player.verificationScreenshot; if (screenshotUrl.startsWith("public/")) { screenshotUrl="/" +
+                        screenshotUrl.replace(/^public\//, "" ); } else if (!screenshotUrl.startsWith("/")) { screenshotUrl="/" +
+                        screenshotUrl; } %>
+                
+                        <a href="<%= screenshotUrl %>" target="_blank" rel="noopener noreferrer"
+                            class="km-verification-screenshot-link">
+                            <img src="<%= screenshotUrl %>" alt="Verification Screenshot" class="km-verification-screenshot">
+                
+                            <span class="km-screenshot-overlay">
+                                VIEW FULL SCREEN ↗
+                            </span>
+                        </a>
+                
+                        <% } else { %>
+                
+                            <div class="km-player-no-screenshot">
+                                No verification screenshot uploaded.
+                            </div>
+                
+                            <% } %>
+
+            </div>
+
+        </section>
+
+
+        <!-- SOCIAL MEDIA -->
+
+        <section class="km-review-panel">
+
+            <div class="km-panel-label">
+                SOCIAL MEDIA
+            </div>
+
+            <div class="km-social-grid">
+
+                <% if (player.socialMedia?.instagram) { %>
+                    <div class="km-social-item">
+                        <span>INSTAGRAM</span>
+                        <strong>
+                            <%= player.socialMedia.instagram %>
+                        </strong>
+                    </div>
+                    <% } %>
+
+                        <% if (player.socialMedia?.facebook) { %>
+                            <div class="km-social-item">
+                                <span>FACEBOOK</span>
+                                <strong>
+                                    <%= player.socialMedia.facebook %>
+                                </strong>
+                            </div>
+                            <% } %>
+
+                                <% if (player.socialMedia?.youtube) { %>
+                                    <div class="km-social-item">
+                                        <span>YOUTUBE</span>
+                                        <strong>
+                                            <%= player.socialMedia.youtube %>
+                                        </strong>
+                                    </div>
+                                    <% } %>
+
+                                        <% if (player.socialMedia?.twitch) { %>
+                                            <div class="km-social-item">
+                                                <span>TWITCH</span>
+                                                <strong>
+                                                    <%= player.socialMedia.twitch %>
+                                                </strong>
+                                            </div>
+                                            <% } %>
+
+                                                <% if (player.socialMedia?.kick) { %>
+                                                    <div class="km-social-item">
+                                                        <span>KICK</span>
+                                                        <strong>
+                                                            <%= player.socialMedia.kick %>
+                                                        </strong>
+                                                    </div>
+                                                    <% } %>
+
+            </div>
+
+        </section>
+
+    </div>

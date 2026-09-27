@@ -1,18 +1,21 @@
 <% layout("layouts/boilerplate") %>
 
-    <div class="tm-admin-page">
+    <div class="tm-cms-page">
 
-        <!-- HEADER -->
-        <section class="tm-admin-hero">
+        <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
-            <div class="tm-admin-hero-content">
+        <section class="tm-cms-hero">
 
-                <a href="/admin/tournament-events" class="tm-back-link">
+            <div class="tm-cms-hero-main">
+
+                <a href="/admin/tournament-events" class="tm-cms-back">
                     ← Tournament Events
                 </a>
 
-                <div class="tm-admin-eyebrow">
-                    TOURNAMENT CONTROL CENTER
+                <div class="tm-cms-eyebrow">
+                    TOURNAMENT CONTROL PANEL
                 </div>
 
                 <h1>
@@ -20,15 +23,28 @@
                 </h1>
 
                 <p>
-                    Manage teams, stages, groups, matches,
-                    standings and playoffs from one place.
+                    Manually manage qualifiers, group stage standings
+                    and playoff results for this tournament.
                 </p>
+
+                <div class="tm-cms-hero-actions">
+
+                    <a href="/tournament-events/<%= event._id %>" target="_blank"
+                        class="tm-cms-btn tm-cms-btn-secondary">
+                        View Public Event
+                    </a>
+
+                    <a href="/admin/tournament-events/<%= event._id %>/edit" class="tm-cms-btn tm-cms-btn-primary">
+                        Edit Event
+                    </a>
+
+                </div>
 
             </div>
 
-            <div class="tm-admin-status">
+            <div class="tm-cms-status">
 
-                <span class="tm-status-dot"></span>
+                <span class="tm-cms-status-dot"></span>
 
                 <span>
                     <%= event.status ? event.status.toUpperCase() : "UPCOMING" %>
@@ -39,53 +55,48 @@
         </section>
 
 
-        <!-- QUICK STATS -->
-        <section class="tm-admin-stats">
+        <!-- =====================================================
+         EVENT SUMMARY
+    ====================================================== -->
 
-            <div class="tm-admin-stat">
+        <section class="tm-cms-summary">
 
-                <span class="tm-stat-label">
-                    TEAMS
-                </span>
+            <div class="tm-cms-summary-item">
+
+                <span>START</span>
 
                 <strong>
-                    <%= teamCount %>
+                    <%= new Date(event.startDate).toLocaleDateString() %>
                 </strong>
 
             </div>
 
-            <div class="tm-admin-stat">
+            <div class="tm-cms-summary-item">
 
-                <span class="tm-stat-label">
-                    STAGES
-                </span>
+                <span>END</span>
 
                 <strong>
-                    <%= stageCount %>
+                    <%= new Date(event.endDate).toLocaleDateString() %>
                 </strong>
 
             </div>
 
-            <div class="tm-admin-stat">
+            <div class="tm-cms-summary-item">
 
-                <span class="tm-stat-label">
-                    GROUPS
-                </span>
+                <span>MODE</span>
 
                 <strong>
-                    <%= groupCount %>
+                    <%= event.mode ? event.mode.toUpperCase() : "—" %>
                 </strong>
 
             </div>
 
-            <div class="tm-admin-stat">
+            <div class="tm-cms-summary-item">
 
-                <span class="tm-stat-label">
-                    MATCHES
-                </span>
+                <span>PRIZE</span>
 
                 <strong>
-                    <%= matchCount %>
+                    ₹<%= Number(event.prizeAmount || 0).toLocaleString() %>
                 </strong>
 
             </div>
@@ -93,267 +104,1057 @@
         </section>
 
 
-        <!-- MANAGEMENT -->
-        <section class="tm-admin-section">
+        <!-- =====================================================
+         QUALIFIERS
+    ====================================================== -->
 
-            <div class="tm-section-heading">
+        <section class="tm-cms-section">
+
+            <div class="tm-cms-section-head">
 
                 <div>
-                    <span class="tm-admin-eyebrow">
-                        MANAGEMENT
+
+                    <span class="tm-cms-eyebrow">
+                        01 / QUALIFIERS
                     </span>
 
                     <h2>
-                        Tournament Operations
+                        Qualifiers
                     </h2>
+
+                    <p>
+                        Manually add teams and mark their qualifier status.
+                    </p>
+
                 </div>
+
+                <span class="tm-cms-count">
+                    <%= qualifiers.length %>
+                </span>
 
             </div>
 
 
-            <div class="tm-management-grid">
+            <!-- ADD QUALIFIER -->
 
+            <div class="tm-cms-form-card">
 
-                <!-- TEAMS -->
-                <a href="/admin/tournament-events/<%= event._id %>/manage/teams" class="tm-management-card">
+                <div class="tm-cms-form-title">
+                    Add Qualifier
+                </div>
 
-                    <div class="tm-management-number">
-                        01
-                    </div>
+                <form action="/admin/tournament-events/<%= event._id %>/manage/qualifiers" method="POST">
 
-                    <div class="tm-management-icon">
-                        ⚔
-                    </div>
+                    <div class="tm-cms-form-grid">
 
-                    <div class="tm-management-content">
+                        <div class="tm-cms-field">
 
-                        <h3>
-                            Teams
-                        </h3>
+                            <label for="qualifier-team">
+                                Team Name
+                            </label>
 
-                        <p>
-                            Create teams, assign players,
-                            captains and coaches.
-                        </p>
+                            <input id="qualifier-team" type="text" name="teamName" maxlength="50"
+                                placeholder="e.g. Team Phoenix" required>
 
-                    </div>
+                        </div>
 
-                    <span class="tm-management-arrow">
-                        →
-                    </span>
+                        <div class="tm-cms-field">
 
-                </a>
+                            <label for="qualifier-position">
+                                Position
+                            </label>
 
+                            <input id="qualifier-position" type="number" name="position" min="0" value="1" required>
 
-                <!-- STAGES -->
-                <a href="/admin/tournament-events/<%= event._id %>/manage/stages" class="tm-management-card">
+                        </div>
 
-                    <div class="tm-management-number">
-                        02
-                    </div>
+                        <div class="tm-cms-field">
 
-                    <div class="tm-management-icon">
-                        ◈
-                    </div>
+                            <label for="qualifier-status">
+                                Status
+                            </label>
 
-                    <div class="tm-management-content">
+                            <select id="qualifier-status" name="status">
+                                <option value="pending">
+                                    Pending
+                                </option>
 
-                        <h3>
-                            Stages
-                        </h3>
+                                <option value="qualified">
+                                    Qualified
+                                </option>
 
-                        <p>
-                            Configure qualifiers,
-                            group stages and playoffs.
-                        </p>
+                                <option value="eliminated">
+                                    Eliminated
+                                </option>
+                            </select>
 
-                    </div>
-
-                    <span class="tm-management-arrow">
-                        →
-                    </span>
-
-                </a>
-
-
-                <!-- GROUPS -->
-                <a href="/admin/tournament-events/<%= event._id %>/manage/groups" class="tm-management-card">
-
-                    <div class="tm-management-number">
-                        03
-                    </div>
-
-                    <div class="tm-management-icon">
-                        ▦
-                    </div>
-
-                    <div class="tm-management-content">
-
-                        <h3>
-                            Groups
-                        </h3>
-
-                        <p>
-                            Create groups and assign
-                            tournament teams.
-                        </p>
+                        </div>
 
                     </div>
 
-                    <span class="tm-management-arrow">
-                        →
-                    </span>
+                    <button type="submit" class="tm-cms-btn tm-cms-btn-primary">
+                        + Add Qualifier
+                    </button>
 
-                </a>
+                </form>
+
+            </div>
 
 
-                <!-- MATCHES -->
-                <a href="/admin/tournament-events/<%= event._id %>/manage/matches" class="tm-management-card">
+            <!-- QUALIFIER LIST -->
 
-                    <div class="tm-management-number">
-                        04
+            <div class="tm-cms-list">
+
+                <% if (qualifiers.length===0) { %>
+
+                    <div class="tm-cms-empty">
+                        <strong>No qualifiers added</strong>
+                        <span>Add the first qualifier above.</span>
                     </div>
 
-                    <div class="tm-management-icon">
-                        ⚡
-                    </div>
-
-                    <div class="tm-management-content">
-
-                        <h3>
-                            Matches
-                        </h3>
-
-                        <p>
-                            Schedule matches and enter
-                            official results.
-                        </p>
-
-                    </div>
-
-                    <span class="tm-management-arrow">
-                        →
-                    </span>
-
-                </a>
+                    <% } %>
 
 
-                <!-- STANDINGS -->
-                <a href="/admin/tournament-events/<%= event._id %>/manage/standings" class="tm-management-card">
+                        <% qualifiers.forEach((qualifier)=> { %>
 
-                    <div class="tm-management-number">
-                        05
-                    </div>
+                            <details class="tm-cms-item">
 
-                    <div class="tm-management-icon">
-                        #
-                    </div>
+                                <summary>
 
-                    <div class="tm-management-content">
+                                    <div class="tm-cms-item-main">
 
-                        <h3>
-                            Standings
-                        </h3>
+                                        <span class="tm-cms-position">
+                                            #<%= qualifier.position %>
+                                        </span>
 
-                        <p>
-                            View automatically calculated
-                            tournament standings.
-                        </p>
+                                        <strong>
+                                            <%= qualifier.teamName %>
+                                        </strong>
 
-                    </div>
+                                    </div>
 
-                    <span class="tm-management-arrow">
-                        →
-                    </span>
+                                    <span class="tm-cms-badge tm-status-<%= qualifier.status %>">
+                                        <%= qualifier.status %>
+                                    </span>
 
-                </a>
+                                </summary>
 
 
-                <!-- PLAYOFFS -->
-                <a href="/admin/tournament-events/<%= event._id %>/manage/playoffs" class="tm-management-card">
+                                <div class="tm-cms-edit">
 
-                    <div class="tm-management-number">
-                        06
-                    </div>
+                                    <form
+                                        action="/admin/tournament-events/<%= event._id %>/manage/qualifiers/<%= qualifier._id %>?_method=PUT"
+                                        method="POST">
 
-                    <div class="tm-management-icon">
-                        ◫
-                    </div>
+                                        <div class="tm-cms-form-grid">
 
-                    <div class="tm-management-content">
+                                            <div class="tm-cms-field">
 
-                        <h3>
-                            Playoffs
-                        </h3>
+                                                <label>
+                                                    Team Name
+                                                </label>
 
-                        <p>
-                            Manage brackets and automatic
-                            winner progression.
-                        </p>
+                                                <input type="text" name="teamName" value="<%= qualifier.teamName %>"
+                                                    maxlength="50" required>
 
-                    </div>
+                                            </div>
 
-                    <span class="tm-management-arrow">
-                        →
-                    </span>
+                                            <div class="tm-cms-field">
 
-                </a>
+                                                <label>
+                                                    Position
+                                                </label>
+
+                                                <input type="number" name="position" min="0"
+                                                    value="<%= qualifier.position %>" required>
+
+                                            </div>
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Status
+                                                </label>
+
+                                                <select name="status">
+
+                                                    <option value="pending" <%=qualifier.status==="pending" ? "selected"
+                                                        : "" %>
+                                                        >
+                                                        Pending
+                                                    </option>
+
+                                                    <option value="qualified" <%=qualifier.status==="qualified"
+                                                        ? "selected" : "" %>
+                                                        >
+                                                        Qualified
+                                                    </option>
+
+                                                    <option value="eliminated" <%=qualifier.status==="eliminated"
+                                                        ? "selected" : "" %>
+                                                        >
+                                                        Eliminated
+                                                    </option>
+
+                                                </select>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="tm-cms-edit-actions">
+
+                                            <button type="submit" class="tm-cms-btn tm-cms-btn-primary">
+                                                Save Changes
+                                            </button>
+
+                                        </div>
+
+                                    </form>
+
+
+                                    <form
+                                        action="/admin/tournament-events/<%= event._id %>/manage/qualifiers/<%= qualifier._id %>?_method=DELETE"
+                                        method="POST" onsubmit="return confirm('Delete this qualifier?');">
+
+                                        <button type="submit" class="tm-cms-delete-btn">
+                                            Delete Qualifier
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </details>
+
+                            <% }) %>
 
             </div>
 
         </section>
 
 
-        <!-- EVENT INFORMATION -->
-        <section class="tm-event-admin-info">
+        <!-- =====================================================
+         GROUP STAGE
+    ====================================================== -->
+
+        <section class="tm-cms-section">
+
+            <div class="tm-cms-section-head">
+
+                <div>
+
+                    <span class="tm-cms-eyebrow">
+                        02 / GROUP STAGE
+                    </span>
+
+                    <h2>
+                        Groups
+                    </h2>
+
+                    <p>
+                        Create and manage the groups used by your standings.
+                    </p>
+
+                </div>
+
+                <span class="tm-cms-count">
+                    <%= groups.length %>
+                </span>
+
+            </div>
+
+
+            <!-- ADD GROUP -->
+
+            <div class="tm-cms-form-card">
+
+                <div class="tm-cms-form-title">
+                    Add Group
+                </div>
+
+                <form action="/admin/tournament-events/<%= event._id %>/manage/groups" method="POST">
+
+                    <div class="tm-cms-form-grid">
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Group Name
+                            </label>
+
+                            <input type="text" name="name" maxlength="30" placeholder="e.g. Group A" required>
+
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="tm-cms-btn tm-cms-btn-primary">
+                        + Add Group
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- GROUP LIST -->
+
+            <div class="tm-cms-list">
+
+                <% if (groups.length===0) { %>
+
+                    <div class="tm-cms-empty">
+                        <strong>No groups created</strong>
+                        <span>Create a group above.</span>
+                    </div>
+
+                    <% } %>
+
+
+                        <% groups.forEach((group)=> { %>
+
+                            <details class="tm-cms-item">
+
+                                <summary>
+
+                                    <div class="tm-cms-item-main">
+
+                                        <span class="tm-cms-icon">
+                                            G
+                                        </span>
+
+                                        <strong>
+                                            <%= group.name %>
+                                        </strong>
+
+                                    </div>
+
+                                    <span class="tm-cms-small-label">
+                                        GROUP
+                                    </span>
+
+                                </summary>
+
+
+                                <div class="tm-cms-edit">
+
+                                    <form
+                                        action="/admin/tournament-events/<%= event._id %>/manage/groups/<%= group._id %>?_method=PUT"
+                                        method="POST">
+
+                                        <div class="tm-cms-form-grid">
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Group Name
+                                                </label>
+
+                                                <input type="text" name="name" value="<%= group.name %>" maxlength="30"
+                                                    required>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="tm-cms-edit-actions">
+
+                                            <button type="submit" class="tm-cms-btn tm-cms-btn-primary">
+                                                Save Changes
+                                            </button>
+
+                                        </div>
+
+                                    </form>
+
+
+                                    <form
+                                        action="/admin/tournament-events/<%= event._id %>/manage/groups/<%= group._id %>?_method=DELETE"
+                                        method="POST"
+                                        onsubmit="return confirm('Delete this group? All standings assigned to this group will also be deleted.');">
+
+                                        <button type="submit" class="tm-cms-delete-btn">
+                                            Delete Group
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </details>
+
+                            <% }) %>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         STANDINGS
+    ====================================================== -->
+
+        <section class="tm-cms-section">
+
+            <div class="tm-cms-section-head">
+
+                <div>
+
+                    <span class="tm-cms-eyebrow">
+                        03 / STANDINGS
+                    </span>
+
+                    <h2>
+                        Standings
+                    </h2>
+
+                    <p>
+                        Enter standings manually. Nothing is calculated automatically.
+                    </p>
+
+                </div>
+
+                <span class="tm-cms-count">
+                    <%= standings.length %>
+                </span>
+
+            </div>
+
+
+            <!-- ADD STANDING -->
+
+            <div class="tm-cms-form-card">
+
+                <div class="tm-cms-form-title">
+                    Add Standing
+                </div>
+
+                <form action="/admin/tournament-events/<%= event._id %>/manage/standings" method="POST">
+
+                    <div class="tm-cms-form-grid">
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Group
+                            </label>
+
+                            <select name="group">
+
+                                <option value="">
+                                    Overall / No Group
+                                </option>
+
+                                <% groups.forEach((group)=> { %>
+
+                                    <option value="<%= group._id %>">
+                                        <%= group.name %>
+                                    </option>
+
+                                    <% }) %>
+
+                            </select>
+
+                        </div>
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Team Name
+                            </label>
+
+                            <input type="text" name="teamName" maxlength="50" placeholder="e.g. Team Phoenix" required>
+
+                        </div>
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Position
+                            </label>
+
+                            <input type="number" name="position" min="1" value="1" required>
+
+                        </div>
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Played
+                            </label>
+
+                            <input type="number" name="played" min="0" value="0">
+
+                        </div>
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Wins
+                            </label>
+
+                            <input type="number" name="wins" min="0" value="0">
+
+                        </div>
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Losses
+                            </label>
+
+                            <input type="number" name="losses" min="0" value="0">
+
+                        </div>
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Draws
+                            </label>
+
+                            <input type="number" name="draws" min="0" value="0">
+
+                        </div>
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Points
+                            </label>
+
+                            <input type="number" name="points" min="0" value="0">
+
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="tm-cms-btn tm-cms-btn-primary">
+                        + Add Standing
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- STANDINGS LIST -->
+
+            <div class="tm-cms-list">
+
+                <% if (standings.length===0) { %>
+
+                    <div class="tm-cms-empty">
+                        <strong>No standings added</strong>
+                        <span>Add standings manually above.</span>
+                    </div>
+
+                    <% } %>
+
+
+                        <% standings.forEach((standing)=> { %>
+
+                            <details class="tm-cms-item">
+
+                                <summary>
+
+                                    <div class="tm-cms-item-main">
+
+                                        <span class="tm-cms-position">
+                                            #<%= standing.position %>
+                                        </span>
+
+                                        <div>
+
+                                            <strong>
+                                                <%= standing.teamName %>
+                                            </strong>
+
+                                            <small>
+                                                <%= standing.group ? standing.group.name : "Overall" %>
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                    <span class="tm-cms-points">
+                                        <%= standing.points %> PTS
+                                    </span>
+
+                                </summary>
+
+
+                                <div class="tm-cms-edit">
+
+                                    <form
+                                        action="/admin/tournament-events/<%= event._id %>/manage/standings/<%= standing._id %>?_method=PUT"
+                                        method="POST">
+
+                                        <div class="tm-cms-form-grid">
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Group
+                                                </label>
+
+                                                <select name="group">
+
+                                                    <option value="" <%=!standing.group ? "selected" : "" %>
+                                                        >
+                                                        Overall / No Group
+                                                    </option>
+
+                                                    <% groups.forEach((group)=> { %>
+
+                                                        <option value="<%= group._id %>" <%=standing.group &&
+                                                            String(standing.group._id)===String(group._id) ? "selected"
+                                                            : "" %>
+                                                            >
+                                                            <%= group.name %>
+                                                        </option>
+
+                                                        <% }) %>
+
+                                                </select>
+
+                                            </div>
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Team Name
+                                                </label>
+
+                                                <input type="text" name="teamName" value="<%= standing.teamName %>"
+                                                    maxlength="50" required>
+
+                                            </div>
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Position
+                                                </label>
+
+                                                <input type="number" name="position" min="1"
+                                                    value="<%= standing.position %>" required>
+
+                                            </div>
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Played
+                                                </label>
+
+                                                <input type="number" name="played" min="0"
+                                                    value="<%= standing.played %>">
+
+                                            </div>
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Wins
+                                                </label>
+
+                                                <input type="number" name="wins" min="0" value="<%= standing.wins %>">
+
+                                            </div>
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Losses
+                                                </label>
+
+                                                <input type="number" name="losses" min="0"
+                                                    value="<%= standing.losses %>">
+
+                                            </div>
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Draws
+                                                </label>
+
+                                                <input type="number" name="draws" min="0" value="<%= standing.draws %>">
+
+                                            </div>
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Points
+                                                </label>
+
+                                                <input type="number" name="points" min="0"
+                                                    value="<%= standing.points %>">
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="tm-cms-edit-actions">
+
+                                            <button type="submit" class="tm-cms-btn tm-cms-btn-primary">
+                                                Save Changes
+                                            </button>
+
+                                        </div>
+
+                                    </form>
+
+
+                                    <form
+                                        action="/admin/tournament-events/<%= event._id %>/manage/standings/<%= standing._id %>?_method=DELETE"
+                                        method="POST" onsubmit="return confirm('Delete this standing?');">
+
+                                        <button type="submit" class="tm-cms-delete-btn">
+                                            Delete Standing
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </details>
+
+                            <% }) %>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         PLAYOFFS
+    ====================================================== -->
+
+        <section class="tm-cms-section">
+
+            <div class="tm-cms-section-head">
+
+                <div>
+
+                    <span class="tm-cms-eyebrow">
+                        04 / PLAYOFFS
+                    </span>
+
+                    <h2>
+                        Playoff Matches
+                    </h2>
+
+                    <p>
+                        Enter playoff rounds, teams, scores and winners manually.
+                    </p>
+
+                </div>
+
+                <span class="tm-cms-count">
+                    <%= playoffs.length %>
+                </span>
+
+            </div>
+
+
+            <!-- ADD PLAYOFF -->
+
+            <div class="tm-cms-form-card">
+
+                <div class="tm-cms-form-title">
+                    Add Playoff Match
+                </div>
+
+                <form action="/admin/tournament-events/<%= event._id %>/manage/playoffs" method="POST">
+
+                    <div class="tm-cms-form-grid">
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Round
+                            </label>
+
+                            <input type="text" name="round" maxlength="30" placeholder="e.g. Quarterfinal" required>
+
+                        </div>
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Match Number
+                            </label>
+
+                            <input type="number" name="matchNumber" min="1" value="1" required>
+
+                        </div>
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Team A
+                            </label>
+
+                            <input type="text" name="teamA" maxlength="50" placeholder="Team A">
+
+                        </div>
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Team B
+                            </label>
+
+                            <input type="text" name="teamB" maxlength="50" placeholder="Team B">
+
+                        </div>
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Score A
+                            </label>
+
+                            <input type="number" name="scoreA" min="0" value="0">
+
+                        </div>
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Score B
+                            </label>
+
+                            <input type="number" name="scoreB" min="0" value="0">
+
+                        </div>
+
+                        <div class="tm-cms-field">
+
+                            <label>
+                                Winner
+                            </label>
+
+                            <input type="text" name="winner" maxlength="50" placeholder="Winning team">
+
+                        </div>
+
+                    </div>
+
+                    <button type="submit" class="tm-cms-btn tm-cms-btn-primary">
+                        + Add Playoff Match
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- PLAYOFF LIST -->
+
+            <div class="tm-cms-list">
+
+                <% if (playoffs.length===0) { %>
+
+                    <div class="tm-cms-empty">
+                        <strong>No playoff matches added</strong>
+                        <span>Add the first playoff match above.</span>
+                    </div>
+
+                    <% } %>
+
+
+                        <% playoffs.forEach((playoff)=> { %>
+
+                            <details class="tm-cms-item">
+
+                                <summary>
+
+                                    <div class="tm-cms-item-main">
+
+                                        <span class="tm-cms-icon">
+                                            <%= playoff.matchNumber %>
+                                        </span>
+
+                                        <div>
+
+                                            <strong>
+                                                <%= playoff.round %>
+                                            </strong>
+
+                                            <small>
+                                                Match <%= playoff.matchNumber %>
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                    <span class="tm-cms-score">
+                                        <%= playoff.scoreA %>
+                                            :
+                                            <%= playoff.scoreB %>
+                                    </span>
+
+                                </summary>
+
+
+                                <div class="tm-cms-edit">
+
+                                    <form
+                                        action="/admin/tournament-events/<%= event._id %>/manage/playoffs/<%= playoff._id %>?_method=PUT"
+                                        method="POST">
+
+                                        <div class="tm-cms-form-grid">
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Round
+                                                </label>
+
+                                                <input type="text" name="round" value="<%= playoff.round %>"
+                                                    maxlength="30" required>
+
+                                            </div>
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Match Number
+                                                </label>
+
+                                                <input type="number" name="matchNumber" min="1"
+                                                    value="<%= playoff.matchNumber %>" required>
+
+                                            </div>
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Team A
+                                                </label>
+
+                                                <input type="text" name="teamA" value="<%= playoff.teamA %>"
+                                                    maxlength="50">
+
+                                            </div>
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Team B
+                                                </label>
+
+                                                <input type="text" name="teamB" value="<%= playoff.teamB %>"
+                                                    maxlength="50">
+
+                                            </div>
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Score A
+                                                </label>
+
+                                                <input type="number" name="scoreA" min="0"
+                                                    value="<%= playoff.scoreA %>">
+
+                                            </div>
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Score B
+                                                </label>
+
+                                                <input type="number" name="scoreB" min="0"
+                                                    value="<%= playoff.scoreB %>">
+
+                                            </div>
+
+                                            <div class="tm-cms-field">
+
+                                                <label>
+                                                    Winner
+                                                </label>
+
+                                                <input type="text" name="winner" value="<%= playoff.winner %>"
+                                                    maxlength="50">
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="tm-cms-edit-actions">
+
+                                            <button type="submit" class="tm-cms-btn tm-cms-btn-primary">
+                                                Save Changes
+                                            </button>
+
+                                        </div>
+
+                                    </form>
+
+
+                                    <form
+                                        action="/admin/tournament-events/<%= event._id %>/manage/playoffs/<%= playoff._id %>?_method=DELETE"
+                                        method="POST" onsubmit="return confirm('Delete this playoff match?');">
+
+                                        <button type="submit" class="tm-cms-delete-btn">
+                                            Delete Playoff Match
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </details>
+
+                            <% }) %>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         DANGER ZONE
+    ====================================================== -->
+
+        <section class="tm-cms-danger">
 
             <div>
 
-                <span class="tm-admin-eyebrow">
-                    EVENT
+                <span class="tm-cms-eyebrow">
+                    DANGER ZONE
                 </span>
 
                 <h2>
-                    <%= event.name %>
+                    Delete Tournament
                 </h2>
 
-            </div>
-
-            <div class="tm-event-meta">
-
-                <div>
-                    <span>
-                        START
-                    </span>
-
-                    <strong>
-                        <%= new Date(event.startDate).toLocaleDateString() %>
-                    </strong>
-                </div>
-
-                <div>
-                    <span>
-                        END
-                    </span>
-
-                    <strong>
-                        <%= new Date(event.endDate).toLocaleDateString() %>
-                    </strong>
-                </div>
-
-                <div>
-                    <span>
-                        MODE
-                    </span>
-
-                    <strong>
-                        <%= event.mode || "—" %>
-                    </strong>
-                </div>
+                <p>
+                    This permanently deletes the event and all of its
+                    qualifiers, groups, standings and playoff records.
+                </p>
 
             </div>
+
+            <form action="/admin/tournament-events/<%= event._id %>?_method=DELETE" method="POST"
+                onsubmit="return confirm('DELETE THIS TOURNAMENT? This will also delete all qualifiers, groups, standings and playoffs. This cannot be undone.');">
+
+                <button type="submit" class="tm-cms-danger-btn">
+                    Delete Tournament
+                </button>
+
+            </form>
 
         </section>
-        
 
     </div>

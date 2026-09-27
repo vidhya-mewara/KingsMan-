@@ -1,0 +1,762 @@
+<% layout("layouts/boilerplate") %>
+
+    <div class="km-admin">
+
+        <!-- =========================================
+         TOP HEADER
+    ========================================== -->
+
+        <section class="km-admin-hero">
+
+            <div class="km-admin-hero-grid">
+
+                <div>
+
+                    <div class="km-admin-kicker">
+                        KINGSMAN // ADMINISTRATION
+                    </div>
+
+                    <h1>
+                        COMMAND
+                        <span>CENTER</span>
+                    </h1>
+
+                    <p>
+                        Control the KingsMan esports platform from one place.
+                        Manage tournaments, matches, sliders and competitive content.
+                    </p>
+
+                    <div class="km-admin-hero-actions">
+
+                        <a href="/" class="km-admin-btn km-admin-btn-light">
+                            VIEW WEBSITE
+                        </a>
+
+                        <a href="/players" class="km-admin-btn km-admin-btn-dark">
+                            PLAYERS DEN
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <div class="km-admin-hero-mark">
+
+                    <div class="km-admin-crosshair">
+                        +
+                    </div>
+
+                    <div class="km-admin-mark-text">
+                        KM
+                    </div>
+
+                    <div class="km-admin-mark-sub">
+                        CONTROL // 01
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+         SYSTEM STATUS
+    ========================================== -->
+
+        <section class="km-admin-status">
+
+            <div class="km-admin-status-left">
+
+                <span class="km-admin-online-dot"></span>
+
+                <strong>
+                    SYSTEM ONLINE
+                </strong>
+
+            </div>
+
+            <span>
+                KINGSMAN ESPORTS PLATFORM
+            </span>
+
+        </section>
+
+
+        <!-- =========================================
+         OVERVIEW
+    ========================================== -->
+
+        <section class="km-admin-block">
+                    <!-- =========================================
+                             PLAYER VERIFICATION ALERT
+                        ========================================== -->
+                    
+                    <% if (stats.pendingPlayers> 0) { %>
+                    
+                        <a href="/admin/players?verificationStatus=pending" class="km-admin-verification-alert">
+                    
+                            <div class="km-admin-verification-alert-icon">
+                                !
+                            </div>
+                    
+                            <div class="km-admin-verification-alert-content">
+                    
+                                <span>
+                                    PLAYER VERIFICATION REQUIRED
+                                </span>
+                    
+                                <strong>
+                                    <%= stats.pendingPlayers %>
+                                        player<%= stats.pendingPlayers===1 ? "" : "s" %>
+                                            waiting for review
+                                </strong>
+                    
+                                <small>
+                                    Review player information and verification screenshots.
+                                </small>
+                    
+                            </div>
+                    
+                            <div class="km-admin-verification-alert-arrow">
+                                →
+                            </div>
+                    
+                        </a>
+                    
+                        <% } else { %>
+                    
+                            <div class="km-admin-verification-clear">
+                    
+                                <span>
+                                    ✓
+                                </span>
+                    
+                                <div>
+                    
+                                    <strong>
+                                        PLAYER VERIFICATION CLEAR
+                                    </strong>
+                    
+                                    <small>
+                                        No players are currently waiting for verification.
+                                    </small>
+                    
+                                </div>
+                    
+                            </div>
+                    
+                            <% } %>
+                    
+                    
+                                <!-- ========================================= 
+                             OVERVIEW 
+                        ========================================== -->
+                    
+                                <section class="km-admin-block">
+
+            <div class="km-admin-section-heading">
+
+                <div>
+                    <span>
+                        01 / OVERVIEW
+                    </span>
+
+                    <h2>
+                        Platform Status
+                    </h2>
+                </div>
+
+                <div class="km-admin-section-line"></div>
+
+            </div>
+
+
+            <div class="km-admin-stats">
+
+                <!-- PLAYERS -->
+
+                <div class="km-admin-stat">
+
+                    <span class="km-admin-stat-number">
+                        <%= stats.players %>
+                    </span>
+
+                    <span class="km-admin-stat-label">
+                        PLAYERS
+                    </span>
+
+                    <span class="km-admin-stat-code">
+                        PLAYER_DATABASE
+                    </span>
+
+                </div>
+
+
+                <!-- MATCHES -->
+
+                <div class="km-admin-stat">
+
+                    <span class="km-admin-stat-number">
+                        <%= stats.matches %>
+                    </span>
+
+                    <span class="km-admin-stat-label">
+                        MATCHES
+                    </span>
+
+                    <span class="km-admin-stat-code">
+                        MATCH_DATABASE
+                    </span>
+
+                </div>
+
+                
+                <!-- TOURNAMENTS -->
+
+                <div class="km-admin-stat">
+
+                    <span class="km-admin-stat-number">
+                        <%= stats.events %>
+                    </span>
+
+                    <span class="km-admin-stat-label">
+                        EVENTS
+                    </span>
+
+                    <span class="km-admin-stat-code">
+                        TOURNAMENT_EVENTS
+                    </span>
+
+                </div>
+
+
+                <!-- SLIDERS -->
+
+                <div class="km-admin-stat">
+
+                    <span class="km-admin-stat-number">
+                        <%= stats.sliders %>
+                    </span>
+
+                    <span class="km-admin-stat-label">
+                        SLIDERS
+                    </span>
+
+                    <span class="km-admin-stat-code">
+                        HOMEPAGE_MEDIA
+                    </span>
+
+                </div>
+
+
+                <!-- TEAMS -->
+
+                <div class="km-admin-stat">
+
+                    <span class="km-admin-stat-number">
+                        <%= stats.teams %>
+                    </span>
+
+                    <span class="km-admin-stat-label">
+                        TEAMS
+                    </span>
+
+                    <span class="km-admin-stat-code">
+                        TEAM_DATABASE
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+         QUICK ACTIONS
+    ========================================== -->
+
+
+
+        <section class="km-admin-block">
+
+            <div class="km-admin-section-heading">
+
+                
+
+                <div>
+                    <span>
+                        02 / OPERATIONS
+                    </span>
+
+                    <h2>
+                        Quick Actions
+                    </h2>
+                </div>
+
+                <div class="km-admin-section-line"></div>
+
+            </div>
+
+
+            <div class="km-admin-actions-grid">
+
+
+                <!-- verification -->
+                
+                <a href="/admin/players" class="km-admin-action km-action-red">
+                
+                    <div class="km-admin-action-number">
+                        01
+                    </div>
+                
+                    <div class="km-admin-action-icon">
+                        ◆
+                    </div>
+                
+                    <div class="km-admin-action-content">
+                
+                        <span>
+                        VERIFICATION
+                        </span>
+                
+                        <h3>
+                            PLAYER VERIFICATION
+                        </h3>
+                
+                        <p>
+                            Review player information, screenshots
+                            and verification status.
+                        </p>
+                
+                    </div>
+                
+                    <div class="km-admin-arrow">
+                        →
+                    </div>
+                
+                </a>
+                <!-- TOURNAMENT -->
+
+                <a href="/admin/tournament-events" class="km-admin-action km-action-red">
+
+                    <div class="km-admin-action-number">
+                        02
+                    </div>
+
+                    <div class="km-admin-action-icon">
+                        ◆
+                    </div>
+
+                    <div class="km-admin-action-content">
+
+                        <span>
+                            TOURNAMENTS
+                        </span>
+
+                        <h3>
+                            Tournament Events
+                        </h3>
+
+                        <p>
+                            Create and manage tournaments,
+                            qualifiers, groups, standings and playoffs.
+                        </p>
+
+                    </div>
+
+                    <div class="km-admin-arrow">
+                        →
+                    </div>
+
+                </a>
+
+
+                <!-- SLIDERS -->
+
+                <a href="/admin/sliders" class="km-admin-action">
+
+                    <div class="km-admin-action-number">
+                        03
+                    </div>
+
+                    <div class="km-admin-action-icon">
+                        ▣
+                    </div>
+
+                    <div class="km-admin-action-content">
+
+                        <span>
+                            HOMEPAGE
+                        </span>
+
+                        <h3>
+                            Slider Manager
+                        </h3>
+
+                        <p>
+                            Add, update, reorder, activate
+                            or delete homepage sliders.
+                        </p>
+
+                    </div>
+
+                    <div class="km-admin-arrow">
+                        →
+                    </div>
+
+                </a>
+
+
+                <!-- MATCHES -->
+
+                <a href="/admin/matches/new" class="km-admin-action">
+
+                    <div class="km-admin-action-number">
+                        04
+                    </div>
+
+                    <div class="km-admin-action-icon">
+                        ⚔
+                    </div>
+
+                    <div class="km-admin-action-content">
+
+                        <span>
+                            COMPETITION
+                        </span>
+
+                        <h3>
+                            Match Center
+                        </h3>
+
+                        <p>
+                            Create matches and maintain player
+                            statistics, scores and results.
+                        </p>
+
+                    </div>
+
+                    <div class="km-admin-arrow">
+                        →
+                    </div>
+
+                </a>
+
+
+                <!-- NEW TOURNAMENT -->
+
+                <a href="/admin/tournament-events/new" class="km-admin-action">
+
+                    <div class="km-admin-action-number">
+                        05
+                    </div>
+
+                    <div class="km-admin-action-icon">
+                        +
+                    </div>
+
+                    <div class="km-admin-action-content">
+
+                        <span>
+                            CREATE
+                        </span>
+
+                        <h3>
+                            New Tournament
+                        </h3>
+
+                        <p>
+                            Create a new KingsMan tournament event
+                            and configure its details.
+                        </p>
+
+                    </div>
+
+                    <div class="km-admin-arrow">
+                        →
+                    </div>
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+         TOURNAMENT CONTROL
+    ========================================== -->
+
+        <section class="km-admin-block">
+
+            <div class="km-admin-section-heading">
+
+                <div>
+                    <span>
+                        03 / TOURNAMENT CONTROL
+                    </span>
+
+                    <h2>
+                        Competition Management
+                    </h2>
+                </div>
+
+                <div class="km-admin-section-line"></div>
+
+            </div>
+
+
+            <div class="km-admin-control-grid">
+
+
+                <a href="/admin/tournament-events" class="km-admin-control-card">
+
+                    <div class="km-control-top">
+                        <span>01</span>
+                        <strong>EVENTS</strong>
+                    </div>
+
+                    <div class="km-control-icon">
+                        ◈
+                    </div>
+
+                    <h3>
+                        Tournament Events
+                    </h3>
+
+                    <p>
+                        Manage your tournament event records.
+                    </p>
+
+                    <div class="km-control-link">
+                        OPEN MANAGER →
+                    </div>
+
+                </a>
+
+
+                <a href="/admin/tournament-events/new" class="km-admin-control-card">
+
+                    <div class="km-control-top">
+                        <span>02</span>
+                        <strong>CREATE</strong>
+                    </div>
+
+                    <div class="km-control-icon">
+                        +
+                    </div>
+
+                    <h3>
+                        Create Event
+                    </h3>
+
+                    <p>
+                        Start a new tournament event.
+                    </p>
+
+                    <div class="km-control-link">
+                        CREATE EVENT →
+                    </div>
+
+                </a>
+
+
+                <a href="/tournament-events" target="_blank" class="km-admin-control-card">
+
+                    <div class="km-control-top">
+                        <span>03</span>
+                        <strong>PUBLIC</strong>
+                    </div>
+
+                    <div class="km-control-icon">
+                        ↗
+                    </div>
+
+                    <h3>
+                        Public Events
+                    </h3>
+
+                    <p>
+                        Preview how tournament events appear to visitors.
+                    </p>
+
+                    <div class="km-control-link">
+                        VIEW PUBLIC →
+                    </div>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+         LIVE SYSTEM
+    ========================================== -->
+
+        <section class="km-admin-block">
+
+            <div class="km-admin-section-heading">
+
+                <div>
+                    <span>
+                        04 / LIVE SYSTEM
+                    </span>
+
+                    <h2>
+                        Current Activity
+                    </h2>
+                </div>
+
+                <div class="km-admin-section-line"></div>
+
+            </div>
+
+
+            <div class="km-admin-live-grid">
+
+                <div class="km-admin-live-card">
+
+                    <div class="km-live-indicator">
+                        <span></span>
+                        LIVE
+                    </div>
+
+                    <strong>
+                        <%= stats.ongoingMatches %>
+                    </strong>
+
+                    <span>
+                        ONGOING MATCHES
+                    </span>
+
+                </div>
+
+
+                <div class="km-admin-live-card">
+
+                    <div class="km-live-indicator km-live-upcoming">
+                        <span></span>
+                        QUEUED
+                    </div>
+
+                    <strong>
+                        <%= stats.upcomingMatches %>
+                    </strong>
+
+                    <span>
+                        UPCOMING MATCHES
+                    </span>
+
+                </div>
+
+
+                <div class="km-admin-live-card">
+
+                    <div class="km-live-indicator km-live-active">
+                        <span></span>
+                        ACTIVE
+                    </div>
+
+                    <strong>
+                        <%= stats.activeSliders %>
+                    </strong>
+
+                    <span>
+                        ACTIVE SLIDERS
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+         NAVIGATION
+    ========================================== -->
+
+        <section class="km-admin-block">
+
+            <div class="km-admin-section-heading">
+
+                <div>
+                    <span>
+                        05 / NAVIGATION
+                    </span>
+
+                    <h2>
+                        KingsMan Areas
+                    </h2>
+                </div>
+
+                <div class="km-admin-section-line"></div>
+
+            </div>
+
+
+            <div class="km-admin-nav-grid">
+
+                <a href="/players">
+                    <span>01</span>
+                    <strong>PLAYERS DEN</strong>
+                    <em>→</em>
+                </a>
+
+                <a href="/matches">
+                    <span>02</span>
+                    <strong>MATCHES</strong>
+                    <em>→</em>
+                </a>
+
+                <a href="/tournament-events">
+                    <span>03</span>
+                    <strong>TOURNAMENTS</strong>
+                    <em>→</em>
+                </a>
+
+                <a href="/">
+                    <span>04</span>
+                    <strong>HOME PAGE</strong>
+                    <em>→</em>
+                </a>
+
+                <a href="/contact">
+                    <span>05</span>
+                    <strong>CONTACT</strong>
+                    <em>→</em>
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+        <footer class="km-admin-footer">
+
+            <div>
+                KINGSMAN
+            </div>
+
+            <span>
+                ADMIN CONTROL // SECURE AREA
+            </span>
+
+            <div>
+                KM-01
+            </div>
+
+        </footer>
+
+    </div>

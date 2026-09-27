@@ -105,143 +105,157 @@ app.use((req, res, next) => {
   res.locals.currentPage = req.path;
   next();
 });
+app.get("/players", wrapAsync(async (req, res) => {
+  const {
+    search = "",
+    country = "",
+    region = "",
+    role = "",
+    verificationStatus = "",
+    inTeam = "",
+    page = "1"
+  } = req.query;
 
-app.get("/players", async (req, res, next) => {
+  const limit = 20;
+  const currentPage = Math.max(parseInt(page, 10) || 1, 1);
 
-  try {
+  const filter = {};
 
-    const {
-      search,
+  // ==========================================
+  // SEARCH IGN OR UID
+  // ==========================================
+  if (search.trim()) {
+    const searchText = search.trim();
+
+    // Escape regex characters so user input is safe
+    const escapedSearch = searchText.replace(
+      /[.*+?^${}()|[\]\\]/g,
+      "\\$&"
+    );
+
+    filter.$or = [
+      {
+        ign: {
+          $regex: escapedSearch,
+          $options: "i"
+        }
+      },
+      {
+        uid: {
+          $regex: escapedSearch,
+          $options: "i"
+        }
+      }
+    ];
+  }
+
+  // ==========================================
+  // COUNTRY
+  // ==========================================
+  if (country.trim()) {
+    filter.country = country.trim();
+  }
+
+  // ==========================================
+  // REGION
+  // ==========================================
+  if (region.trim()) {
+    filter.region = region.trim();
+  }
+
+  // ==========================================
+  // ROLE
+  // ==========================================
+  if (role.trim()) {
+    filter.role = role.trim();
+  }
+
+  // ==========================================
+  // VERIFICATION
+  // ==========================================
+  if (verificationStatus.trim()) {
+    filter.verificationStatus = verificationStatus.trim();
+  }
+
+  // ==========================================
+  // TEAM STATUS
+  // ==========================================
+  if (inTeam === "true") {
+    filter.inTeam = true;
+  }
+
+  if (inTeam === "false") {
+    filter.inTeam = false;
+  }
+
+  // ==========================================
+  // TOTAL COUNT
+  // ==========================================
+  const totalPlayers = await Player.countDocuments(filter);
+
+  const totalPages = Math.ceil(totalPlayers / limit);
+
+  const safePage =
+    totalPages > 0
+      ? Math.min(currentPage, totalPages)
+      : 1;
+
+  const skip = (safePage - 1) * limit;
+
+  // ==========================================
+  // GET PLAYERS
+  // ==========================================
+  const players = await Player.find(filter)
+    .sort({
+      createdAt: -1,
+      _id: -1
+    })
+    .skip(skip)
+    .limit(limit)
+    .lean();
+
+  // ==========================================
+  // FILTER OPTIONS
+  // ==========================================
+  const [
+    countries,
+    regions
+  ] = await Promise.all([
+    Player.distinct("country"),
+    Player.distinct("region")
+  ]);
+
+  countries.sort((a, b) =>
+    a.localeCompare(b)
+  );
+
+  regions.sort((a, b) =>
+    a.localeCompare(b)
+  );
+
+  res.render("players", {
+    players,
+
+    filters: {
+      search: search.trim(),
       country,
       region,
       role,
       verificationStatus,
       inTeam
-    } = req.query;
+    },
 
+    countries,
+    regions,
 
-    // ==========================================
-    // BUILD FILTER
-    // ==========================================
-
-    const filter = {};
-
-
-    // ==========================================
-    // SEARCH IGN / UID
-    // ==========================================
-
-    if (search && search.trim() !== "") {
-
-      const searchText = search.trim();
-
-      filter.$or = [
-        {
-          ign: {
-            $regex: searchText,
-            $options: "i"
-          }
-        },
-        {
-          uid: {
-            $regex: searchText,
-            $options: "i"
-          }
-        }
-      ];
+    pagination: {
+      currentPage: safePage,
+      totalPages,
+      totalPlayers,
+      limit
     }
-
-
-    // ==========================================
-    // COUNTRY
-    // ==========================================
-
-    if (country) {
-      filter.country = country;
-    }
-
-
-    // ==========================================
-    // REGION
-    // ==========================================
-
-    if (region) {
-      filter.region = region;
-    }
-
-
-    // ==========================================
-    // ROLE
-    // ==========================================
-
-    if (role) {
-      filter.role = role;
-    }
-
-
-    // ==========================================
-    // VERIFICATION
-    // ==========================================
-
-    if (verificationStatus) {
-      filter.verificationStatus =
-        verificationStatus;
-    }
-
-
-    // ==========================================
-    // TEAM STATUS
-    // ==========================================
-
-    if (inTeam === "true") {
-
-      filter.inTeam = true;
-
-    } else if (inTeam === "false") {
-
-      filter.inTeam = false;
-
-    }
-
-
-    // ==========================================
-    // GET PLAYERS
-    // ==========================================
-
-    const players = await Player
-      .find(filter)
-      .sort({ createdAt: -1 })
-      .limit(20)
-      .lean();
-
-
-    // ==========================================
-    // SEND TO EJS
-    // ==========================================
-
-    res.render("players", {
-
-      players,
-
-      filters: {
-        search: search || "",
-        country: country || "",
-        region: region || "",
-        role: role || "",
-        verificationStatus:
-          verificationStatus || "",
-        inTeam: inTeam || ""
-      }
-
-    });
-
-  } catch (error) {
-
-    next(error);
-
-  }
-
-});
+  });
+}));
 
 app.get(
   "/players/new",
@@ -325,7 +339,8 @@ app.post(
         kick: req.body.socialMedia?.kick || ""
       },
 
-      verificationScreenshot: req.file.path,
+      // verificationScreenshot: req.file.path,
+      verificationScreenshot: "/uploads/players/" + req.file.filename,
 
       //  THIS FIXES YOUR ERROR
       owner: currentUser._id.toString()
@@ -725,7 +740,7 @@ app.post("/verify-otp", wrapAsync(async (req, res) => {
 
   req.flash("success", "Email verified successfully!");
 
-  res.redirect("/players");
+  res.redirect("/");
 }));
 
 
@@ -766,7 +781,7 @@ app.post("/login", wrapAsync(async (req, res) => {
 
   req.flash("success", "Logged in successfully!");
 
-  res.redirect("/players");
+  res.redirect("/");
 }));
 
 app.get("/logout", (req, res) => {
@@ -774,10 +789,10 @@ app.get("/logout", (req, res) => {
   req.session.destroy((err) => {
 
     if (err) {
-      return res.redirect("/players");
+      return res.redirect("/");
     }
 
-    res.redirect("/players");
+    res.redirect("/");
   });
 
 });
@@ -883,181 +898,282 @@ app.get("/", async (req, res) => {
     res.status(500).send("Home Page Error");
   }
 });
-app.get("/admin/sliders", async (req, res) => {
-  try {
+// ============================================================
+// ADMIN SLIDER MANAGEMENT
+// ============================================================
 
-    const sliders = await Slider.find().sort({
-      position: 1
-    });
+// ===============================
+// VIEW ALL SLIDERS
+// ===============================
+
+app.get(
+  "/admin/sliders",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const sliders = await Slider.find({})
+      .sort({ position: 1, createdAt: -1 });
 
     res.render("admin/sliders", {
       sliders
     });
 
-  } catch (error) {
+  })
+);
 
-    console.error("ADMIN SLIDERS ERROR:", error);
 
-    res.status(500).send("Unable to load sliders.");
+// ===============================
+// ADD SLIDER
+// ===============================
 
-  }
-});
 app.post(
   "/admin/sliders",
+  requireLogin,
+  requireAdmin,
   sliderUpload.single("image"),
-  async (req, res) => {
+  wrapAsync(async (req, res) => {
 
-    try {
-      
-      console.log("FORM DATA:", req.body);
-      console.log("UPLOADED FILE:", req.file);
-
-      const slider = new Slider({
-
-        image: "/uploads/sliders/" + req.file.filename,
-
-        title: req.body.title,
-
-        description: req.body.description || "",
-
-        eventDate: req.body.eventDate || "",
-
-        eventLocation: req.body.eventLocation || "",
-
-        eventDescription: req.body.eventDescription || "",
-
-        eventLink: req.body.eventLink || "",
-
-        buttonText: req.body.buttonText || "",
-
-        buttonLink: req.body.buttonLink || "",
-
-        active: req.body.active === "true",
-
-        position: Number(req.body.position) || 0
-
-      });
-
-      await slider.save();
-
-      console.log("SLIDER SAVED:", slider);
-
-      res.redirect("/admin/sliders");
-
-    } catch (error) {
-
-      console.error("SLIDER SAVE ERROR:", error);
-
-      res.status(500).send("Slider upload failed.");
-
+    if (!req.file) {
+      req.flash("error", "Slider image is required.");
+      return res.redirect("/admin/sliders");
     }
 
-  }
+    const slider = new Slider({
+
+      image: "/uploads/sliders/" + req.file.filename,
+
+      title: req.body.title,
+
+      description: req.body.description || "",
+
+      eventDate: req.body.eventDate || "",
+
+      eventLocation: req.body.eventLocation || "",
+
+      eventDescription: req.body.eventDescription || "",
+
+      eventLink: req.body.eventLink || "",
+
+      buttonText: req.body.buttonText || "",
+
+      buttonLink: req.body.buttonLink || "",
+
+      active: req.body.active === "true",
+
+      position: Number(req.body.position) || 0
+
+    });
+
+    await slider.save();
+
+    req.flash("success", "Slider added successfully.");
+
+    res.redirect("/admin/sliders");
+
+  })
 );
+
+
+// ===============================
 // EDIT SLIDER PAGE
+// ===============================
 
-app.get("/admin/sliders/:id/edit", async (req, res) => {
-
-  try {
+app.get(
+  "/admin/sliders/:id/edit",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
 
     const slider = await Slider.findById(req.params.id);
 
     if (!slider) {
-      return res.status(404).send("Slider not found.");
+      req.flash("error", "Slider not found.");
+      return res.redirect("/admin/sliders");
     }
 
     res.render("admin/edit-slider", {
       slider
     });
 
-  } catch (error) {
+  })
+);
 
-    console.error("EDIT SLIDER ERROR:", error);
 
-    res.status(500).send("Unable to load slider.");
-
-  }
-
-});
+// ===============================
 // UPDATE SLIDER
-// UPDATE SLIDER
+// ===============================
 
 app.put(
   "/admin/sliders/:id",
+  requireLogin,
+  requireAdmin,
   sliderUpload.single("image"),
-  async (req, res) => {
+  wrapAsync(async (req, res) => {
 
-    try {
+    const slider = await Slider.findById(req.params.id);
 
-      const slider = await Slider.findById(req.params.id);
+    if (!slider) {
+      req.flash("error", "Slider not found.");
+      return res.redirect("/admin/sliders");
+    }
 
-      if (!slider) {
-        return res.status(404).send("Slider not found.");
-      }
+    const oldImage = slider.image;
 
-      // Keep the old image path before changing it
-      const oldImage = slider.image;
 
-      // Update text/content fields
-      slider.title = req.body.title;
-      slider.description = req.body.description || "";
+    // ===============================
+    // UPDATE CONTENT
+    // ===============================
 
-      slider.eventDate = req.body.eventDate || "";
-      slider.eventLocation = req.body.eventLocation || "";
-      slider.eventDescription = req.body.eventDescription || "";
-      slider.eventLink = req.body.eventLink || "";
+    slider.title = req.body.title;
 
-      slider.buttonText = req.body.buttonText || "";
-      slider.buttonLink = req.body.buttonLink || "";
+    slider.description =
+      req.body.description || "";
 
-      slider.position = Number(req.body.position) || 0;
+    slider.eventDate =
+      req.body.eventDate || "";
 
-      // Checkbox handling
-      slider.active = req.body.active === "true";
+    slider.eventLocation =
+      req.body.eventLocation || "";
 
-      // If a new image was uploaded
-      if (req.file) {
+    slider.eventDescription =
+      req.body.eventDescription || "";
 
-        // Save new image path
-        slider.image =
-          "/uploads/sliders/" + req.file.filename;
+    slider.eventLink =
+      req.body.eventLink || "";
 
-        // Delete old image from disk
-        if (oldImage) {
+    slider.buttonText =
+      req.body.buttonText || "";
 
-          const oldImagePath =
-            "public" + oldImage;
+    slider.buttonLink =
+      req.body.buttonLink || "";
 
-          if (fs.existsSync(oldImagePath)) {
+    slider.position =
+      Number(req.body.position) || 0;
 
-            fs.unlinkSync(oldImagePath);
+    slider.active =
+      req.body.active === "true";
 
-            console.log(
-              "OLD SLIDER IMAGE DELETED:",
-              oldImagePath
-            );
 
-          }
+    // ===============================
+    // REPLACE IMAGE
+    // ===============================
 
-        }
+    if (req.file) {
 
-      }
-
-      await slider.save();
-
-      console.log("SLIDER UPDATED:", slider);
-
-      res.redirect("/admin/sliders");
-
-    } catch (error) {
-
-      console.error("SLIDER UPDATE ERROR:", error);
-
-      res.status(500).send("Unable to update slider.");
+      slider.image =
+        "/uploads/sliders/" + req.file.filename;
 
     }
 
-  }
+
+    await slider.save();
+
+
+    // ===============================
+    // DELETE OLD IMAGE
+    // ONLY AFTER DATABASE UPDATE
+    // ===============================
+
+    if (req.file && oldImage) {
+
+      const oldImagePath = path.join(
+        import.meta.dirname,
+        "public",
+        oldImage.replace(/^\/+/, "")
+      );
+
+      if (fs.existsSync(oldImagePath)) {
+
+        fs.unlinkSync(oldImagePath);
+
+        console.log(
+          "OLD SLIDER IMAGE DELETED:",
+          oldImagePath
+        );
+
+      }
+
+    }
+
+
+    req.flash(
+      "success",
+      "Slider updated successfully."
+    );
+
+    res.redirect("/admin/sliders");
+
+  })
+);
+
+
+// ===============================
+// DELETE SLIDER
+// ===============================
+
+app.delete(
+  "/admin/sliders/:id",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const slider = await Slider.findById(req.params.id);
+
+    if (!slider) {
+      req.flash("error", "Slider not found.");
+      return res.redirect("/admin/sliders");
+    }
+
+
+    // ===============================
+    // SAVE IMAGE PATH
+    // ===============================
+
+    const imagePath = slider.image;
+
+
+    // ===============================
+    // DELETE DATABASE RECORD
+    // ===============================
+
+    await Slider.findByIdAndDelete(req.params.id);
+
+
+    // ===============================
+    // DELETE IMAGE FROM SERVER
+    // ===============================
+
+    if (imagePath) {
+
+      const fullImagePath = path.join(
+        import.meta.dirname,
+        "public",
+        imagePath.replace(/^\/+/, "")
+      );
+
+      if (fs.existsSync(fullImagePath)) {
+
+        fs.unlinkSync(fullImagePath);
+
+        console.log(
+          "SLIDER IMAGE DELETED:",
+          fullImagePath
+        );
+
+      }
+
+    }
+
+
+    req.flash(
+      "success",
+      "Slider deleted successfully."
+    );
+
+    res.redirect("/admin/sliders");
+
+  })
 );
 app.get("/events/:id", async (req, res) => {
 
@@ -1406,21 +1522,29 @@ app.put(
     // -----------------------------
     // Validate selected players
     // -----------------------------
+    // -----------------------------
+    // Validate selected players
+    // -----------------------------
+
     if (playerIds.length > 0) {
+
       const existingPlayers = await Player.find({
-        _id: { $in: playerIds }
+        _id: { $in: playerIds },
+        verificationStatus: "verified"
       });
 
       if (existingPlayers.length !== uniquePlayerIds.size) {
+
         req.flash(
           "error",
-          "One or more selected players are invalid."
+          "One or more selected players are invalid or not verified."
         );
 
-        return res.redirect(`/admin/matches/${match._id}/edit`);
+        return res.redirect(
+          `/admin/matches/${match._id}/edit`
+        );
       }
     }
-
     // -----------------------------
     // Build player statistics
     // -----------------------------
@@ -1602,7 +1726,6 @@ app.get(
     });
   })
 );
-
 
 // ============================================================
 // EDIT TOURNAMENT EVENT PAGE
@@ -2590,6 +2713,251 @@ app.get(
   })
 );
 
+// ============================================================
+// ADMIN COMMAND CENTER
+// ============================================================
+// ============================================================
+// ADMIN COMMAND CENTER
+// ============================================================
+
+app.get(
+  "/admin",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const [
+      playerCount,
+      matchCount,
+      sliderCount,
+      eventCount,
+      teamCount,
+      pendingPlayerCount
+    ] = await Promise.all([
+
+      Player.countDocuments(),
+
+      Match.countDocuments(),
+
+      Slider.countDocuments(),
+
+      Event.countDocuments(),
+
+      Team.countDocuments(),
+
+      Player.countDocuments({
+        verificationStatus: "pending"
+      })
+
+    ]);
+
+
+    const [
+      activeSliderCount,
+      ongoingMatchCount,
+      upcomingMatchCount
+    ] = await Promise.all([
+
+      Slider.countDocuments({
+        active: true
+      }),
+
+      Match.countDocuments({
+        status: "ongoing"
+      }),
+
+      Match.countDocuments({
+        status: "upcoming"
+      })
+
+    ]);
+
+
+    res.render("admin/dashboard", {
+
+      stats: {
+
+        players: playerCount,
+
+        matches: matchCount,
+
+        sliders: sliderCount,
+
+        events: eventCount,
+
+        teams: teamCount,
+
+        activeSliders: activeSliderCount,
+
+        ongoingMatches: ongoingMatchCount,
+
+        upcomingMatches: upcomingMatchCount,
+
+        pendingPlayers: pendingPlayerCount
+
+      }
+
+    });
+
+  })
+);
+// ============================================================
+// ADMIN PLAYER VERIFICATION CENTER
+// ============================================================
+
+// PLAYER VERIFICATION LIST
+app.get(
+  "/admin/players",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const {
+      search = "",
+      verificationStatus = ""
+    } = req.query;
+
+    const filter = {};
+
+    if (search.trim()) {
+      const searchText = search.trim();
+
+      filter.$or = [
+        {
+          ign: {
+            $regex: searchText,
+            $options: "i"
+          }
+        },
+        {
+          uid: {
+            $regex: searchText,
+            $options: "i"
+          }
+        },
+        {
+          name: {
+            $regex: searchText,
+            $options: "i"
+          }
+        }
+      ];
+    }
+
+    if (
+      ["pending", "verified", "unverified"].includes(
+        verificationStatus
+      )
+    ) {
+      filter.verificationStatus = verificationStatus;
+    }
+
+    const players = await Player
+      .find(filter)
+      .sort({
+        verificationStatus: 1,
+        createdAt: -1
+      })
+      .lean();
+
+    const counts = {
+      pending: await Player.countDocuments({
+        verificationStatus: "pending"
+      }),
+
+      verified: await Player.countDocuments({
+        verificationStatus: "verified"
+      }),
+
+      unverified: await Player.countDocuments({
+        verificationStatus: "unverified"
+      })
+    };
+
+    res.render("admin/players/index", {
+      players,
+      counts,
+      filters: {
+        search,
+        verificationStatus
+      }
+    });
+  })
+);
+
+
+// PLAYER VERIFICATION DETAILS
+app.get(
+  "/admin/players/:id",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const player = await Player
+      .findById(req.params.id)
+      .populate("owner", "username email");
+
+    if (!player) {
+      throw new ExpressError(
+        404,
+        "Player Not Found"
+      );
+    }
+
+    res.render("admin/players/show", {
+      player
+    });
+  })
+);
+
+
+// CHANGE VERIFICATION STATUS
+app.put(
+  "/admin/players/:id/verification",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const {
+      verificationStatus
+    } = req.body;
+
+    if (
+      !["pending", "verified", "unverified"]
+        .includes(verificationStatus)
+    ) {
+      throw new ExpressError(
+        400,
+        "Invalid verification status."
+      );
+    }
+
+    const player = await Player.findById(
+      req.params.id
+    );
+
+    if (!player) {
+      throw new ExpressError(
+        404,
+        "Player Not Found"
+      );
+    }
+
+    player.verificationStatus =
+      verificationStatus;
+
+    await player.save();
+
+    req.flash(
+      "success",
+      `Player verification status changed to ${verificationStatus}.`
+    );
+
+    res.redirect(
+      `/admin/players/${player._id}`
+    );
+  })
+);
 app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
 });

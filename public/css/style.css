@@ -2342,3 +2342,36 @@ footer {
     }
 
 }
+/* =========================================================
+   KINGSMAN ADMIN COMMAND CENTER NAV
+   ========================================================= */
+
+.kingsman-admin-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #ff4655 !important;
+    font-weight: 800;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.kingsman-admin-link:hover {
+    color: #ffffff !important;
+    background: rgba(255, 70, 85, 0.08);
+}
+
+.kingsman-admin-icon {
+    color: #ff4655;
+    font-size: 9px;
+    transition: transform 0.2s ease;
+}
+
+.kingsman-admin-link:hover .kingsman-admin-icon {
+    transform: rotate(45deg);
+}
