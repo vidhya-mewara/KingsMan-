@@ -1290,6 +1290,26 @@ app.get("/matches/:id", wrapAsync(async (req, res) => {
     teamBPlayers
   });
 }));
+// =========================================================
+// ADMIN MATCH COMMAND CENTER
+// =========================================================
+
+app.get(
+  "/admin/matches",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const matches = await Match.find({})
+      .sort({ date: -1 })
+      .populate("players.player", "ign name");
+
+    res.render("admin/matches/index", {
+      matches
+    });
+
+  })
+);
 app.get(
   "/admin/matches/new",
   requireLogin,
@@ -1704,7 +1724,7 @@ app.delete(
 
     req.flash("success", "Match deleted successfully.");
 
-    res.redirect("/");
+    res.redirect("/admin/matches");
   })
 );
 // ============================================================

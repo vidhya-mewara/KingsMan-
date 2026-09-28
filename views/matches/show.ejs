@@ -151,15 +151,17 @@
 
                             <div class="player-stat-card">
 
-                                <div class="player-info">
+                                <a href="/players/<%= entry.player._id %>" class="match-player-link player-info">
+                                
                                     <strong>
                                         <%= entry.player.ign %>
                                     </strong>
-
+                                
                                     <span>
                                         <%= entry.player.name %>
                                     </span>
-                                </div>
+                                
+                                </a>
 
                                 <div class="player-stats">
 

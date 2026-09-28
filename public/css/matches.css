@@ -3049,3 +3049,103 @@
 
     font-size: 10px;
 }
+/* =========================================================
+   EDIT MATCH - PLAYER STAT INPUT FIX
+========================================================= */
+
+/* Kills / Deaths / Assists */
+.player-stat-field input[type="number"] {
+    width: 100%;
+
+    min-height: 42px;
+
+    padding: 8px 10px;
+
+    box-sizing: border-box;
+
+    color: #ffffff !important;
+
+    background: #111419 !important;
+
+    border: 1px solid #292d33 !important;
+    border-radius: 3px;
+
+    outline: none;
+
+    text-align: center;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* Hover */
+.player-stat-field input[type="number"]:hover {
+    border-color: #3b4048 !important;
+
+    background: #15181d !important;
+}
+
+
+/* Focus */
+.player-stat-field input[type="number"]:focus {
+    border-color: #ff4655 !important;
+
+    background: #15181d !important;
+
+    box-shadow:
+        0 0 0 2px rgba(255, 70, 85, 0.08);
+}
+
+
+/* Placeholder */
+.player-stat-field input[type="number"]::placeholder {
+    color: #555b63;
+}
+
+
+/* Remove number arrows */
+.player-stat-field input[type="number"]::-webkit-inner-spin-button,
+.player-stat-field input[type="number"]::-webkit-outer-spin-button {
+    opacity: 0.5;
+}
+/* =========================================================
+   MATCH PLAYER PROFILE LINK
+========================================================= */
+
+.match-player-link {
+    display: inline-block;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.match-player-link:hover {
+    color: #ff4655;
+
+    text-decoration: none;
+}
+
+.match-player-link strong {
+    transition:
+        color 0.2s ease,
+        text-shadow 0.2s ease;
+}
+
+.match-player-link:hover strong {
+    color: #ff4655;
+
+    text-shadow:
+        0 0 12px rgba(255, 70, 85, 0.35);
+}

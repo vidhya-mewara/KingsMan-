@@ -1,0 +1,177 @@
+<% layout("/layouts/boilerplate") %>
+
+    <link rel="stylesheet" href="/css/admin.css">
+
+    <div class="km-match-command-center">
+
+        <div class="km-mcc-header">
+
+            <div>
+
+                <p class="km-mcc-kicker">
+                    KINGSMAN ADMIN • COMPETITION
+                </p>
+
+                <h1>
+                    Match Command Center
+                </h1>
+
+                <p class="km-mcc-subtitle">
+                    Create, edit and remove matches from one place.
+                </p>
+
+            </div>
+
+            <a href="/admin/matches/new" class="km-mcc-add-btn">
+
+                <span>+</span>
+                Add Match
+
+            </a>
+
+        </div>
+
+
+        <% if (matches && matches.length> 0) { %>
+
+            <div class="km-mcc-list">
+
+                <% matches.forEach(match=> { %>
+
+                    <article class="km-mcc-card">
+
+                        <div class="km-mcc-card-main">
+
+                            <div class="km-mcc-card-top">
+
+                                <span class="km-mcc-series">
+                                    <%= match.seriesName %>
+                                </span>
+
+                                <span class="km-mcc-status <%= match.status %>">
+                                    <%= match.status %>
+                                </span>
+
+                            </div>
+
+
+                            <div class="km-mcc-matchup">
+
+                                <strong>
+                                    <%= match.teamA %>
+                                </strong>
+
+                                <span class="km-mcc-score">
+
+                                    <%= match.teamAScore %>
+
+                                        <b>:</b>
+
+                                        <%= match.teamBScore %>
+
+                                </span>
+
+                                <strong>
+                                    <%= match.teamB %>
+                                </strong>
+
+                            </div>
+
+
+                            <div class="km-mcc-meta">
+
+                                <span>
+                                    <%= new Date(match.date).toLocaleDateString( "en-IN" , { day: "2-digit" ,
+                                        month: "short" , year: "numeric" } ) %>
+                                </span>
+
+                                <span>•</span>
+
+                                <span>
+                                    <%= new Date(match.date).toLocaleTimeString( "en-IN" , { hour: "2-digit" ,
+                                        minute: "2-digit" } ) %>
+                                </span>
+
+                                <span>•</span>
+
+                                <span>
+                                    <%= match.players ? match.players.length : 0 %>
+                                        Players
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="km-mcc-actions">
+
+                            <!-- VIEW -->
+
+                            <a href="/matches/<%= match._id %>" class="km-mcc-action view">
+
+                                View
+
+                            </a>
+
+
+                            <!-- EDIT -->
+
+                            <a href="/admin/matches/<%= match._id %>/edit" class="km-mcc-action edit">
+
+                                Edit
+
+                            </a>
+
+
+                            <!-- DELETE -->
+
+                            <form action="/admin/matches/<%= match._id %>?_method=DELETE" method="POST"
+                                onsubmit="return confirm('Delete this match permanently?');">
+
+                                <button type="submit" class="km-mcc-action delete">
+
+                                    Delete
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </article>
+
+                    <% }) %>
+
+            </div>
+
+
+            <% } else { %>
+
+                <div class="km-mcc-empty">
+
+                    <div class="km-mcc-empty-icon">
+                        ⚔
+                    </div>
+
+                    <h2>
+                        No Matches Yet
+                    </h2>
+
+                    <p>
+                        Create your first KingsMan match to start
+                        managing competition data.
+                    </p>
+
+                    <a href="/admin/matches/new" class="km-mcc-add-btn">
+
+                        <span>+</span>
+                        Add First Match
+
+                    </a>
+
+                </div>
+
+                <% } %>
+
+    </div>
