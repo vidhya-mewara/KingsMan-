@@ -1,0 +1,238 @@
+<% layout("/layouts/boilerplate") %>
+
+    <div class="matches-page">
+
+        <div class="matches-page-header">
+
+            <span>KINGSMAN // COMPETITION</span>
+
+            <h1>MATCHES</h1>
+
+            <p>
+                Follow ongoing battles, upcoming matches and completed results.
+            </p>
+
+        </div>
+
+
+        <!-- ONGOING -->
+
+        <section class="matches-page-section">
+
+            <div class="matches-page-title">
+                <span>01 // LIVE</span>
+                <h2>ONGOING MATCHES</h2>
+            </div>
+
+            <% if (ongoingMatches.length> 0) { %>
+
+                <div class="matches-page-grid">
+
+                    <% ongoingMatches.forEach(match=> { %>
+
+                        <a href="/matches/<%= match._id %>" class="matches-page-card">
+
+                            <div class="matches-page-series">
+                                <%= match.seriesName %>
+                            </div>
+
+                            <div class="matches-page-teams">
+
+                                <span>
+                                    <%= match.teamA %>
+                                </span>
+
+                                <strong>VS</strong>
+
+                                <span>
+                                    <%= match.teamB %>
+                                </span>
+
+                            </div>
+
+                            <div class="matches-page-score">
+
+                                <strong>
+                                    <%= match.teamAScore %>
+                                </strong>
+
+                                <span>-</span>
+
+                                <strong>
+                                    <%= match.teamBScore %>
+                                </strong>
+
+                            </div>
+
+                            <div class="matches-page-status live">
+                                LIVE
+                            </div>
+
+                        </a>
+
+                        <% }) %>
+
+                </div>
+
+                <% } else { %>
+
+                    <div class="matches-page-empty">
+                        No ongoing matches.
+                    </div>
+
+                    <% } %>
+
+        </section>
+
+
+        <!-- UPCOMING -->
+
+        <section class="matches-page-section">
+
+            <div class="matches-page-title">
+
+                <span>02 // NEXT</span>
+
+                <h2>UPCOMING MATCHES</h2>
+
+            </div>
+
+            <% if (upcomingMatches.length> 0) { %>
+
+                <div class="matches-page-grid">
+
+                    <% upcomingMatches.forEach(match=> { %>
+
+                        <a href="/matches/<%= match._id %>" class="matches-page-card">
+
+                            <div class="matches-page-series">
+                                <%= match.seriesName %>
+                            </div>
+
+                            <div class="matches-page-teams">
+
+                                <span>
+                                    <%= match.teamA %>
+                                </span>
+
+                                <strong>VS</strong>
+
+                                <span>
+                                    <%= match.teamB %>
+                                </span>
+
+                            </div>
+
+                            <div class="matches-page-date">
+
+                                <%= new Date(match.date).toLocaleDateString("en-IN", { day: "2-digit" , month: "short" ,
+                                    year: "numeric" }) %>
+
+                                    <span>•</span>
+
+                                    <%= new Date(match.date).toLocaleTimeString([], { hour: "2-digit" ,
+                                        minute: "2-digit" }) %>
+
+                            </div>
+
+                            <div class="matches-page-status upcoming">
+                                UPCOMING
+                            </div>
+
+                        </a>
+
+                        <% }) %>
+
+                </div>
+
+                <% } else { %>
+
+                    <div class="matches-page-empty">
+                        No upcoming matches.
+                    </div>
+
+                    <% } %>
+
+        </section>
+
+
+        <!-- COMPLETED -->
+
+        <section class="matches-page-section">
+
+            <div class="matches-page-title">
+
+                <span>03 // ARCHIVE</span>
+
+                <h2>COMPLETED MATCHES</h2>
+
+            </div>
+
+            <% if (pastMatches.length> 0) { %>
+
+                <div class="matches-page-grid">
+
+                    <% pastMatches.forEach(match=> { %>
+
+                        <a href="/matches/<%= match._id %>" class="matches-page-card">
+
+                            <div class="matches-page-series">
+                                <%= match.seriesName %>
+                            </div>
+
+                            <div class="matches-page-teams">
+
+                                <span>
+                                    <%= match.teamA %>
+                                </span>
+
+                                <strong>VS</strong>
+
+                                <span>
+                                    <%= match.teamB %>
+                                </span>
+
+                            </div>
+
+                            <div class="matches-page-score">
+
+                                <strong>
+                                    <%= match.teamAScore %>
+                                </strong>
+
+                                <span>-</span>
+
+                                <strong>
+                                    <%= match.teamBScore %>
+                                </strong>
+
+                            </div>
+
+                            <div class="matches-page-date">
+
+                                <%= new Date(match.date).toLocaleDateString("en-IN", { day: "2-digit" , month: "short" ,
+                                    year: "numeric" }) %>
+
+                            </div>
+
+                            <div class="matches-page-status completed">
+                                COMPLETED
+                            </div>
+
+                        </a>
+
+                        <% }) %>
+
+                </div>
+
+                <% } else { %>
+
+                    <div class="matches-page-empty">
+                        No completed matches.
+                    </div>
+
+                    <% } %>
+
+        </section>
+
+    </div>

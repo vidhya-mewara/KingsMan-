@@ -87,10 +87,17 @@ app.use((req, res, next) => {
 
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
+  },
+
+  tls: {
+    rejectUnauthorized: false
   }
 });
 const validateUser = (req, res, next) => { 
@@ -102,7 +109,25 @@ const validateUser = (req, res, next) => {
 };
 
 app.use((req, res, next) => {
-  res.locals.currentPage = req.path;
+
+  const path = req.path;
+
+  if (path.startsWith("/players")) {
+    res.locals.currentPage = "players";
+  }
+  else if (path.startsWith("/matches")) {
+    res.locals.currentPage = "matches";
+  }
+  else if (path.startsWith("/tournament-events")) {
+    res.locals.currentPage = "tournament-events";
+  }
+  else if (path.startsWith("/contact")) {
+    res.locals.currentPage = "contact";
+  }
+  else {
+    res.locals.currentPage = "";
+  }
+
   next();
 });
 app.get("/players", wrapAsync(async (req, res) => {
@@ -879,18 +904,29 @@ app.get("/", async (req, res) => {
       status: "past"
     }).sort({ date: -1 }).limit(3);
 
-    console.log("SLIDERS:", sliders);
-    console.log("PROMOTION:", promotion);
-    console.log("ONGOING MATCHES:", ongoingMatches);
-    console.log("UPCOMING MATCHES:", upcomingMatches);
-    console.log("PAST MATCHES:", pastMatches);
+    const ongoingEvents = await Event.find({
+      status: "ongoing"
+    }).sort({ startDate: 1 }).limit(3);
+
+    const upcomingEvents = await Event.find({
+      status: "upcoming"
+    }).sort({ startDate: 1 }).limit(3);
+
+    const completedEvents = await Event.find({
+      status: "completed"
+    }).sort({ endDate: -1 }).limit(3);
 
     res.render("home", {
       sliders,
       promotion,
+
       ongoingMatches,
       upcomingMatches,
-      pastMatches
+      pastMatches,
+
+      ongoingEvents,
+      upcomingEvents,
+      completedEvents
     });
 
   } catch (error) {
@@ -1210,6 +1246,27 @@ app.get("/test-promotion", async (req, res) => {
     res.status(500).send("Promotion Error");
   }
 });
+app.get("/matches", wrapAsync(async (req, res) => {
+
+  const ongoingMatches = await Match.find({
+    status: "ongoing"
+  }).sort({ date: 1 });
+
+  const upcomingMatches = await Match.find({
+    status: "upcoming"
+  }).sort({ date: 1 });
+
+  const pastMatches = await Match.find({
+    status: "past"
+  }).sort({ date: -1 });
+
+  res.render("matches/index", {
+    ongoingMatches,
+    upcomingMatches,
+    pastMatches
+  });
+
+}));
 app.get("/matches/:id", wrapAsync(async (req, res) => {
 
   const match = await Match.findById(req.params.id)
@@ -1290,11 +1347,38 @@ app.post(
     let players = [];
 
     if (req.body.players) {
-
       players = Array.isArray(req.body.players)
         ? req.body.players
         : Object.values(req.body.players);
+    }
 
+    // Remove empty player rows
+    players = players.filter(player => {
+      return player &&
+        player.playerName &&
+        player.playerName.trim() !== "";
+    }); 
+
+    for (const player of players) {
+
+      // If hidden MongoDB ID is already present, keep it
+      if (player.player && player.player.trim() !== "") {
+        continue;
+      }
+
+      // Otherwise find the verified player using their IGN
+      const verifiedPlayer = await Player.findOne({
+        ign: player.playerName.trim(),
+        verificationStatus: "verified"
+      });
+
+      if (!verifiedPlayer) {
+        return res.status(400).send(
+          `Player "${player.playerName}" is not a verified player.`
+        );
+      }
+
+      player.player = verifiedPlayer._id.toString();
     }
 
 
@@ -2958,15 +3042,50 @@ app.put(
     );
   })
 );
+// verification screenshot review route admin
+app.get("/admin/players/:id/screenshot", requireAdmin, wrapAsync(async (req, res) => {
+  const player = await Player.findById(req.params.id);
+
+  if (!player) {
+    throw new ExpressError(404, "Player Not Found");
+  }
+
+  if (!player.verificationScreenshot) {
+    throw new ExpressError(404, "Verification Screenshot Not Found");
+  }
+
+  const filename = path.basename(
+    player.verificationScreenshot.replace(/\\/g, "/")
+  );
+
+  const screenshotPath = path.join(
+    import.meta.dirname,
+    "public",
+    "uploads",
+    "players",
+    filename
+  );
+
+  if (!fs.existsSync(screenshotPath)) {
+    throw new ExpressError(404, "Verification Screenshot File Not Found");
+  }
+
+  res.sendFile(screenshotPath);
+}));
+
 app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
 });
 
 app.use((err, req, res, next) => {
-  let { statusCode = 500, message = "Something went wrong" } = err;
-  // res.status(statusCode).send(message);
-  res.status(statusCode).render("error", { message });
-})
+  const backUrl = req.get("Referrer") || "/";
+
+  res.status(err.statusCode || 500).render("error", {
+    err,
+    message: err.message || "Something went wrong",
+    backUrl
+  });
+});
 app.listen(8080, () => {
   console.log("Server is running on http://localhost:8080");
 });

@@ -17,8 +17,15 @@
                 </li>
             
                 <% } %>
+                
                 <li class="nav-item">
                     <a class="nav-link  <%= currentPage === 'players' ? 'active' : '' %> "  href="/players">Players Den</a>
+                </li>
+                <!-- Tornament matches -->
+                <li class="nav-item">
+                    <a class="nav-link <%= currentPage === 'matches' ? 'active' : '' %>" href="/matches">
+                        Matches
+                    </a>
                 </li>
             <!-- TOURNAMENT EVENTS -->
 

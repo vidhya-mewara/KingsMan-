@@ -111,23 +111,41 @@ export const isPlayerOwner = async (req, res, next) => {
 |--------------------------------------------------------------------------
 */
 export const hasNoPlayer = async (req, res, next) => {
-    const user = await User.findById(req.session.userId);
+    try {
+        const user = await User.findById(req.session.userId);
 
-    if (!user) {
-        req.flash("error", "User account not found.");
-        return res.redirect("/login");
-    }
+        if (!user) {
+            req.flash("error", "User account not found.");
+            return res.redirect("/login");
+        }
 
-    if (user.player) {
+        // If user has no player reference, allow creation
+        if (!user.player) {
+            return next();
+        }
+
+        // Check whether the referenced player actually exists
+        const player = await Player.findById(user.player);
+
+        if (!player) {
+            // Old/deleted player reference — repair it
+            user.player = null;
+            await user.save();
+
+            return next();
+        }
+
+        // Player actually exists
         req.flash(
             "error",
             "You already have a player profile."
         );
 
-        return res.redirect(`/players/${user.player}`);
-    }
+        return res.redirect(`/players/${player._id}`);
 
-    next();
+    } catch (error) {
+        next(error);
+    }
 };
 
 

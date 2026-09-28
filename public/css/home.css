@@ -794,3 +794,292 @@
         font-size: 18px;
     }
 }
+/* =========================================
+   HOMEPAGE EVENTS
+========================================= */
+
+.home-events-wrapper {
+    width: 100%;
+    padding: 0 5px;
+
+    box-sizing: border-box;
+}
+
+.home-events-section {
+    width: 100%;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.home-events-header {
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, .12);
+}
+
+.home-events-header h2 {
+    position: relative;
+
+    margin: 0;
+    padding-left: 12px;
+
+    color: #fff;
+
+    font-size: 24px;
+    font-weight: 900;
+
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.home-events-header h2::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 2px;
+
+    width: 4px;
+    height: 22px;
+
+    background: #ff4655;
+}
+
+
+/* =========================================
+   CATEGORY
+========================================= */
+
+.home-event-category {
+    margin-bottom: 20px;
+}
+
+.home-event-category h3 {
+    margin: 0 0 9px;
+
+    color: #858b94;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+
+/* =========================================
+   EVENT LIST
+========================================= */
+
+.home-events-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+/* =========================================
+   EVENT CARD
+========================================= */
+
+.home-event-card {
+    display: flex;
+    align-items: center;
+
+    min-width: 0;
+
+    padding: 10px;
+
+    color: #fff;
+    text-decoration: none;
+
+    background:
+        linear-gradient(110deg,
+            #101319,
+            #151920);
+
+    border: 1px solid rgba(255, 255, 255, .07);
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
+}
+
+.home-event-card:hover {
+    color: #fff;
+
+    background: #191c21;
+
+    border-color: #3a3a3a;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   EVENT LOGO
+========================================= */
+
+.home-event-logo {
+    flex-shrink: 0;
+
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 11px;
+
+    background: #0b0c0f;
+
+    border: 1px solid #292d33;
+
+    overflow: hidden;
+}
+
+.home-event-logo img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+.home-event-logo span {
+    color: #666;
+
+    font-size: 11px;
+    font-weight: 900;
+}
+
+
+/* =========================================
+   EVENT INFO
+========================================= */
+
+.home-event-info {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.home-event-info strong {
+    color: #eee;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.home-event-info span {
+    margin-top: 5px;
+
+    color: #666;
+
+    font-size: 9px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.home-event-status {
+    flex-shrink: 0;
+
+    margin-left: 7px;
+
+    font-size: 7px;
+    font-weight: 900;
+
+    letter-spacing: .8px;
+}
+
+.home-event-status.live {
+    color: #ff4655;
+}
+
+.home-event-status.upcoming {
+    color: #e7c66a;
+}
+
+.home-event-status.completed {
+    color: #666;
+}
+
+
+/* =========================================
+   VIEW ALL
+========================================= */
+
+.home-events-all {
+    display: block;
+
+    margin-top: 12px;
+
+    color: #888;
+
+    text-decoration: none;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    transition: color .2s ease;
+}
+
+.home-events-all:hover {
+    color: #ff4655;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .home-events-wrapper {
+        padding: 0 8px;
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .home-events-wrapper {
+        width: 100%;
+
+        padding: 30px 15px;
+
+        box-sizing: border-box;
+    }
+
+    .home-events-header h2 {
+        font-size: 21px;
+    }
+
+}

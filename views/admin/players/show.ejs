@@ -204,28 +204,27 @@
 
             <div class="km-verification-image-wrap">
 
-                <% if (player.verificationScreenshot) { %>
-                
-                    <% let screenshotUrl=player.verificationScreenshot; if (screenshotUrl.startsWith("public/")) { screenshotUrl="/" +
-                        screenshotUrl.replace(/^public\//, "" ); } else if (!screenshotUrl.startsWith("/")) { screenshotUrl="/" +
-                        screenshotUrl; } %>
-                
-                        <a href="<%= screenshotUrl %>" target="_blank" rel="noopener noreferrer"
-                            class="km-verification-screenshot-link">
-                            <img src="<%= screenshotUrl %>" alt="Verification Screenshot" class="km-verification-screenshot">
-                
-                            <span class="km-screenshot-overlay">
-                                VIEW FULL SCREEN ↗
-                            </span>
-                        </a>
-                
-                        <% } else { %>
-                
-                            <div class="km-player-no-screenshot">
-                                No verification screenshot uploaded.
-                            </div>
-                
-                            <% } %>
+            <% if (player.verificationScreenshot) { %>
+            
+                <a href="/admin/players/<%= player._id %>/screenshot" target="_blank" rel="noopener noreferrer"
+                    class="km-verification-screenshot-link">
+            
+                    <img src="/admin/players/<%= player._id %>/screenshot" alt="Verification Screenshot"
+                        class="km-verification-screenshot">
+            
+                    <span class="km-screenshot-overlay">
+                        VIEW FULL SCREEN ↗
+                    </span>
+            
+                </a>
+            
+                <% } else { %>
+            
+                    <div class="km-player-no-screenshot">
+                        No verification screenshot uploaded.
+                    </div>
+            
+                    <% } %>
 
             </div>
 

@@ -163,69 +163,99 @@
                 </div>
 
             </div>
-            <div class="player-stats-section">
+
+            <!-- ============================= -->
+            <!-- PLAYER STATISTICS -->
+            <!-- ============================= -->
+            
+            <section class="player-stats-section">
             
                 <div class="player-stats-header">
+            
                     <div>
+                        <span class="player-stats-kicker">
+                            MATCH DATA // PLAYER PERFORMANCE
+                        </span>
+            
                         <h2>Player Statistics</h2>
+            
                         <p>
-                            Type a player's IGN and select the matching player.
+                            Search for a verified player by IGN and enter their match statistics.
                         </p>
                     </div>
+            
+                    <div class="player-stats-count">
+                        10 PLAYER SLOTS
+                    </div>
+            
                 </div>
             
             
                 <div class="player-stats-table">
             
-                    <!-- Header -->
+                    <!-- TABLE HEADER -->
+            
                     <div class="player-stat-row player-stat-header">
             
-                        <div class="player-stat-field">
+                        <div class="player-stat-field player-column-player">
                             <label>Player</label>
                         </div>
             
-                        <div class="player-stat-field">
+                        <div class="player-stat-field player-column-team">
                             <label>Team</label>
                         </div>
             
-                        <div class="player-stat-field">
-                            <label>Kills</label>
+                        <div class="player-stat-field player-column-stat">
+                            <label>K</label>
                         </div>
             
-                        <div class="player-stat-field">
-                            <label>Deaths</label>
+                        <div class="player-stat-field player-column-stat">
+                            <label>D</label>
                         </div>
             
-                        <div class="player-stat-field">
-                            <label>Assists</label>
+                        <div class="player-stat-field player-column-stat">
+                            <label>A</label>
                         </div>
             
-                        <div class="player-stat-field player-mvp-field">
+                        <div class="player-stat-field player-column-mvp">
                             <label>MVP</label>
                         </div>
             
                     </div>
             
             
+                    <!-- PLAYER ROWS -->
+            
                     <% for (let i=0; i < 10; i++) { %>
             
                         <div class="player-stat-row">
             
                             <!-- PLAYER -->
+            
                             <div class="player-stat-field player-search-field">
-            
-                                <input type="text" name="players[<%= i %>][playerName]" class="player-search-input"
-                                    placeholder="Type player IGN..." autocomplete="off">
-            
+                            
+                                <input type="text" name="players[<%= i %>][playerName]" class="player-search-input" list="verified-players"
+                                    placeholder="Search IGN..." autocomplete="off">
+                            
                                 <input type="hidden" name="players[<%= i %>][player]" class="player-id-input">
-            
-                                <div class="player-search-results"></div>
-            
+                            
                             </div>
             
+                            <datalist id="verified-players">
+                            
+                                <% (players || []).forEach(function(player) { %>
+                            
+                                    <option value="<%= player.ign %>">
+                                        <%= player.name %>
+                                    </option>
+                            
+                                    <% }) %>
+                            
+                            </datalist>
             
                             <!-- TEAM -->
-                            <div class="player-stat-field">
+            
+                            <div class="player-stat-field player-column-team">
             
                                 <select name="players[<%= i %>][team]">
             
@@ -243,33 +273,43 @@
             
             
                             <!-- KILLS -->
-                            <div class="player-stat-field">
             
-                                <input type="number" name="players[<%= i %>][kills]" min="0" value="0">
+                            <div class="player-stat-field player-column-stat">
+            
+                                <input type="number" name="players[<%= i %>][kills]" min="0" value="0" aria-label="Kills">
             
                             </div>
             
             
                             <!-- DEATHS -->
-                            <div class="player-stat-field">
             
-                                <input type="number" name="players[<%= i %>][deaths]" min="0" value="0">
+                            <div class="player-stat-field player-column-stat">
+            
+                                <input type="number" name="players[<%= i %>][deaths]" min="0" value="0" aria-label="Deaths">
             
                             </div>
             
             
                             <!-- ASSISTS -->
-                            <div class="player-stat-field">
             
-                                <input type="number" name="players[<%= i %>][assists]" min="0" value="0">
+                            <div class="player-stat-field player-column-stat">
+            
+                                <input type="number" name="players[<%= i %>][assists]" min="0" value="0" aria-label="Assists">
             
                             </div>
             
             
                             <!-- MVP -->
-                            <div class="player-stat-field player-mvp-field">
             
-                                <input type="checkbox" name="players[<%= i %>][mvp]" value="true">
+                            <div class="player-stat-field player-column-mvp">
+            
+                                <label class="mvp-checkbox">
+            
+                                    <input type="checkbox" name="players[<%= i %>][mvp]" value="true">
+            
+                                    <span></span>
+            
+                                </label>
             
                             </div>
             
@@ -279,7 +319,7 @@
             
                 </div>
             
-            </div>
+            </section>
 
             <!-- ============================= -->
             <!-- SUBMIT -->
@@ -293,130 +333,48 @@
             
         </form>
         
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
+       <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
-                const players = <%-JSON.stringify(players||[])%>;
+            const players = <%- JSON.stringify(players||[]) %>;
 
-                const searchInputs = document.querySelectorAll(".player-search-input");
+            const searchInputs = document.querySelectorAll(".player-search-input");
 
-                searchInputs.forEach(function (input) {
+            searchInputs.forEach(function (input) {
 
-                    const row = input.closest(".player-stat-row");
+                const row = input.closest(".player-stat-row");
+                const hiddenInput = row.querySelector(".player-id-input");
 
-                    const hiddenInput =
-                        row.querySelector(".player-id-input");
+                input.addEventListener("input", function () {
 
-                    const resultsContainer =
-                        row.querySelector(".player-search-results");
+                    const value = input.value.trim().toLowerCase();
 
+                    hiddenInput.value = "";
 
-                    input.addEventListener("input", function () {
+                    if (!value) {
+                        return;
+                    }
 
-                        const searchText =
-                            input.value.trim().toLowerCase();
+                    const player = players.find(function (p) {
 
-                        // Clear selected player if admin changes the name
-                        hiddenInput.value = "";
-
-                        resultsContainer.innerHTML = "";
-
-
-                        if (!searchText) {
-                            return;
-                        }
-
-
-                        const matchingPlayers = players.filter(function (player) {
-
-                            const ign =
-                                (player.ign || "").toLowerCase();
-
-                            const name =
-                                (player.name || "").toLowerCase();
-
-                            return (
-                                ign.includes(searchText) ||
-                                name.includes(searchText)
-                            );
-
-                        }).slice(0, 8);
-
-
-                        matchingPlayers.forEach(function (player) {
-
-                            const result =
-                                document.createElement("button");
-
-                            result.type = "button";
-
-                            result.className =
-                                "player-search-result";
-
-
-                            result.innerHTML = `
-                                <strong>${escapeHtml(player.ign)}</strong>
-                                <span>${escapeHtml(player.name)}</span>
-                            `;
-
-
-                            result.addEventListener("click", function () {
-
-                                input.value = player.ign;
-
-                                hiddenInput.value = player._id;
-
-                                resultsContainer.innerHTML = "";
-
-                            });
-
-
-                            resultsContainer.appendChild(result);
-
-                        });
-
-
-                        if (matchingPlayers.length === 0) {
-
-                            const noResult =
-                                document.createElement("div");
-
-                            noResult.className =
-                                "player-search-no-result";
-
-                            noResult.textContent =
-                                "No verified player found.";
-
-                            resultsContainer.appendChild(noResult);
-
-                        }
+                        return String(p.ign || "").toLowerCase() === value;
 
                     });
 
+                    if (player) {
 
-                    // Close suggestions when clicking elsewhere
-                    document.addEventListener("click", function (event) {
+                        hiddenInput.value = player._id;
 
-                        if (!row.contains(event.target)) {
-                            resultsContainer.innerHTML = "";
-                        }
-
-                    });
-
+                        console.log(
+                            "Selected player:",
+                            player.ign,
+                            player._id
+                        );
+                    }
                 });
 
-
-                function escapeHtml(value) {
-
-                    return String(value)
-                        .replace(/&/g, "&amp;")
-                        .replace(/</g, "&lt;")
-                        .replace(/>/g, "&gt;")
-                        .replace(/"/g, "&quot;")
-                        .replace(/'/g, "&#039;");
-
-                }
-
             });
-        </script>
+
+        });
+    </script>
     </div>

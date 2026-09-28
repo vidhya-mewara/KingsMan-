@@ -95,14 +95,25 @@
     <!-- MATCHES SECTION -->
     <!-- ============================= -->
     
+    
+    <!-- ============================= -->
+    <!-- MATCHES SECTION -->
+    <!-- ============================= -->
+    
     <section class="matches-wrapper">
     
         <div class="matches-section">
     
+            <!-- HEADER -->
+    
             <div class="matches-header">
+    
                 <h2>Matches</h2>
     
-                
+                <a href="/matches" class="matches-view-all">
+                    VIEW ALL →
+                </a>
+    
             </div>
     
     
@@ -118,13 +129,22 @@
     
                     <div class="matches-list">
     
-                        <% ongoingMatches.forEach(match=> { %>
+                        <% ongoingMatches.slice(0, 2).forEach(match=> { %>
     
                             <a href="/matches/<%= match._id %>" class="match-card">
     
-                                <div class="match-series">
-                                    <%= match.seriesName %>
+                                <div class="match-card-top">
+    
+                                    <div class="match-series">
+                                        <%= match.seriesName %>
+                                    </div>
+    
+                                    <div class="match-status ongoing">
+                                        LIVE
+                                    </div>
+    
                                 </div>
+    
     
                                 <div class="match-teams">
     
@@ -142,23 +162,8 @@
     
                                 </div>
     
-                                <div class="match-score">
     
-                                    <span>
-                                        <%= match.teamAScore %>
-                                    </span>
-    
-                                    <span>-</span>
-    
-                                    <span>
-                                        <%= match.teamBScore %>
-                                    </span>
-    
-                                </div>
-    
-                                <div class="match-status ongoing">
-                                    LIVE
-                                </div>
+                               
     
                             </a>
     
@@ -184,13 +189,22 @@
     
                             <div class="matches-list">
     
-                                <% upcomingMatches.forEach(match=> { %>
+                                <% upcomingMatches.slice(0, 2).forEach(match=> { %>
     
                                     <a href="/matches/<%= match._id %>" class="match-card">
     
-                                        <div class="match-series">
-                                            <%= match.seriesName %>
+                                        <div class="match-card-top">
+    
+                                            <div class="match-series">
+                                                <%= match.seriesName %>
+                                            </div>
+    
+                                            <div class="match-status upcoming">
+                                                NEXT
+                                            </div>
+    
                                         </div>
+    
     
                                         <div class="match-teams">
     
@@ -208,19 +222,17 @@
     
                                         </div>
     
+    
                                         <div class="match-date">
     
-                                            <%= new Date(match.date).toLocaleDateString() %>
+                                            <%= new Date(match.date).toLocaleDateString("en-IN", { day: "2-digit" ,
+                                                month: "short" }) %>
     
                                                 <span>•</span>
     
                                                 <%= new Date(match.date).toLocaleTimeString([], { hour: "2-digit" ,
                                                     minute: "2-digit" }) %>
     
-                                        </div>
-    
-                                        <div class="match-status upcoming">
-                                            UPCOMING
                                         </div>
     
                                     </a>
@@ -243,17 +255,26 @@
     
                                 <div class="match-category">
     
-                                    <h3>Past</h3>
+                                    <h3>Completed</h3>
     
                                     <div class="matches-list">
     
-                                        <% pastMatches.forEach(match=> { %>
+                                        <% pastMatches.slice(0, 2).forEach(match=> { %>
     
                                             <a href="/matches/<%= match._id %>" class="match-card">
     
-                                                <div class="match-series">
-                                                    <%= match.seriesName %>
+                                                <div class="match-card-top">
+    
+                                                    <div class="match-series">
+                                                        <%= match.seriesName %>
+                                                    </div>
+    
+                                                    <div class="match-status past">
+                                                        DONE
+                                                    </div>
+    
                                                 </div>
+    
     
                                                 <div class="match-teams">
     
@@ -271,28 +292,15 @@
     
                                                 </div>
     
-                                                <div class="match-score">
     
-                                                    <span>
-                                                        <%= match.teamAScore %>
-                                                    </span>
+                                               
     
-                                                    <span>-</span>
-    
-                                                    <span>
-                                                        <%= match.teamBScore %>
-                                                    </span>
-    
-                                                </div>
     
                                                 <div class="match-date">
     
-                                                    <%= new Date(match.date).toLocaleDateString() %>
+                                                    <%= new Date(match.date).toLocaleDateString("en-IN", { day: "2-digit" ,
+                                                        month: "short" }) %>
     
-                                                </div>
-    
-                                                <div class="match-status past">
-                                                    COMPLETED
                                                 </div>
     
                                             </a>
@@ -319,6 +327,212 @@
                                         </div>
     
                                         <% } %>
+    
+    
+                                            <!-- VIEW ALL -->
+    
+                                            <a href="/matches" class="matches-view-all-bottom">
+                                                VIEW ALL MATCHES →
+                                            </a>
+    
+        </div>
+    
+    </section>
+    
+
+    <!-- ============================= -->
+    <!-- EVENTS SECTION -->
+    <!-- ============================= -->
+    
+    <section class="home-events-wrapper">
+    
+        <div class="home-events-section">
+    
+            <div class="home-events-header">
+                <h2>Events</h2>
+            </div>
+    
+    
+            <!-- ONGOING EVENTS -->
+    
+            <% if (ongoingEvents && ongoingEvents.length> 0) { %>
+    
+                <div class="home-event-category">
+    
+                    <h3>Ongoing</h3>
+    
+                    <div class="home-events-list">
+    
+                        <% ongoingEvents.forEach(event=> { %>
+    
+                            <a href="/tournament-events/<%= event._id %>" class="home-event-card">
+    
+                                <div class="home-event-logo">
+    
+                                    <% if (event.logo) { %>
+    
+                                        <img src="<%= event.logo %>" alt="<%= event.name %>">
+    
+                                        <% } else { %>
+    
+                                            <span>KM</span>
+    
+                                            <% } %>
+    
+                                </div>
+    
+                                <div class="home-event-info">
+    
+                                    <strong>
+                                        <%= event.name %>
+                                    </strong>
+    
+                                    <span>
+                                        <%= new Date(event.startDate).toLocaleDateString("en-IN", { day: "2-digit" ,
+                                            month: "short" }) %>
+                                            -
+                                            <%= new Date(event.endDate).toLocaleDateString("en-IN", { day: "2-digit" ,
+                                                month: "short" }) %>
+                                    </span>
+    
+                                </div>
+    
+                                <span class="home-event-status live">
+                                    LIVE
+                                </span>
+    
+                            </a>
+    
+                            <% }) %>
+    
+                    </div>
+    
+                </div>
+    
+                <% } %>
+    
+    
+                    <!-- UPCOMING EVENTS -->
+    
+                    <% if (upcomingEvents && upcomingEvents.length> 0) { %>
+    
+                        <div class="home-event-category">
+    
+                            <h3>Upcoming</h3>
+    
+                            <div class="home-events-list">
+    
+                                <% upcomingEvents.forEach(event=> { %>
+    
+                                    <a href="/tournament-events/<%= event._id %>" class="home-event-card">
+    
+                                        <div class="home-event-logo">
+    
+                                            <% if (event.logo) { %>
+    
+                                                <img src="<%= event.logo %>" alt="<%= event.name %>">
+    
+                                                <% } else { %>
+    
+                                                    <span>KM</span>
+    
+                                                    <% } %>
+    
+                                        </div>
+    
+                                        <div class="home-event-info">
+    
+                                            <strong>
+                                                <%= event.name %>
+                                            </strong>
+    
+                                            <span>
+                                                <%= new Date(event.startDate).toLocaleDateString("en-IN", { day: "2-digit" ,
+                                                    month: "short" }) %>
+                                                    -
+                                                    <%= new Date(event.endDate).toLocaleDateString("en-IN", { day: "2-digit"
+                                                        , month: "short" }) %>
+                                            </span>
+    
+                                        </div>
+    
+                                        <span class="home-event-status upcoming">
+                                            NEXT
+                                        </span>
+    
+                                    </a>
+    
+                                    <% }) %>
+    
+                            </div>
+    
+                        </div>
+    
+                        <% } %>
+    
+    
+                            <!-- COMPLETED EVENTS -->
+    
+                            <% if (completedEvents && completedEvents.length> 0) { %>
+    
+                                <div class="home-event-category">
+    
+                                    <h3>Completed</h3>
+    
+                                    <div class="home-events-list">
+    
+                                        <% completedEvents.forEach(event=> { %>
+    
+                                            <a href="/tournament-events/<%= event._id %>" class="home-event-card">
+    
+                                                <div class="home-event-logo">
+    
+                                                    <% if (event.logo) { %>
+    
+                                                        <img src="<%= event.logo %>" alt="<%= event.name %>">
+    
+                                                        <% } else { %>
+    
+                                                            <span>KM</span>
+    
+                                                            <% } %>
+    
+                                                </div>
+    
+                                                <div class="home-event-info">
+    
+                                                    <strong>
+                                                        <%= event.name %>
+                                                    </strong>
+    
+                                                    <span>
+                                                        <%= new Date(event.startDate).toLocaleDateString("en-IN", {
+                                                            day: "2-digit" , month: "short" }) %>
+                                                            -
+                                                            <%= new Date(event.endDate).toLocaleDateString("en-IN", {
+                                                                day: "2-digit" , month: "short" }) %>
+                                                    </span>
+    
+                                                </div>
+    
+                                                <span class="home-event-status completed">
+                                                    DONE
+                                                </span>
+    
+                                            </a>
+    
+                                            <% }) %>
+    
+                                    </div>
+    
+                                </div>
+    
+                                <% } %>
+    
+    
+                                    <a href="/tournament-events" class="home-events-all">
+                                        VIEW ALL EVENTS →
+                                    </a>
     
         </div>
     
