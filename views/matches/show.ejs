@@ -77,15 +77,13 @@
 
                             <div class="player-stat-card">
 
-                                <div class="player-info">
+                                <a href="/players/<%= entry.player._id %>" class="match-player-link player-info">
                                     <strong>
                                         <%= entry.player.ign %>
                                     </strong>
-
-                                    <span>
-                                        <%= entry.player.name %>
-                                    </span>
-                                </div>
+                                
+                                
+                                </a>
 
                                 <div class="player-stats">
 
@@ -157,9 +155,7 @@
                                         <%= entry.player.ign %>
                                     </strong>
                                 
-                                    <span>
-                                        <%= entry.player.name %>
-                                    </span>
+                                    
                                 
                                 </a>
 
@@ -215,8 +211,8 @@
         <% } %>
         
         <div class="match-back">
-            <a href="/" class="back-home-btn">
-                ← Back to Home
+            <a href="/matches" class="back-home-btn">
+                ← Back to matches
             </a>
         </div>
         <% if (currUser && currUser.role==="admin" ) { %>

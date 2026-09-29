@@ -18,61 +18,9 @@ footer {
     flex-shrink: 0;
     
 }
-.kingsman-footer {
-    position: relative;
 
-    background:
-        linear-gradient(180deg,
-            #16181b 0%,
-            #101114 100%);
 
-    color: #ffffff;
 
-    border-top: 1px solid #292a2e;
-    overflow: hidden;
-}
-
-/* Red esports accent */
-.kingsman-footer::before {
-    content: "";
-
-    position: absolute;
-    top: 0;
-    left: 10%;
-    right: 10%;
-
-    height: 2px;
-
-    background: linear-gradient(90deg,
-            transparent,
-            #ff4655,
-            #ffffff,
-            #ff4655,
-            transparent);
-
-    box-shadow: 0 0 15px rgba(255, 70, 85, 0.5);
-}
-
-/* Headings */
-.kingsman-footer h4,
-.kingsman-footer h5 {
-    color: #ffffff;
-}
-
-/* Links */
-.kingsman-footer a {
-    transition: color 0.2s ease;
-}
-
-.kingsman-footer a:hover {
-    color: #ff4655 !important;
-}
-
-/* Horizontal line */
-.kingsman-footer hr {
-    border-color: #292a2e;
-    opacity: 1;
-}
 /*/* =========================================
    KINGSMAN NAVBAR
 ========================================= */
@@ -1901,6 +1849,1861 @@ footer {
 /* =========================
    AGENT SELECTION
 ========================= */
+html,
+body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: #0a0a0c;
+    color: #ffffff;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
+
+}
+
+
+
+/*/* =========================================
+   KINGSMAN NAVBAR
+========================================= */
+
+.kingsman-navbar {
+    background: #101114;
+    border-bottom: 1px solid #292a2e;
+    padding: 0;
+    position: relative;
+    z-index: 1000;
+}
+
+.kingsman-navbar .container-fluid {
+    min-height: 64px;
+}
+
+.footer-description {
+    max-width: 320px;
+
+    margin-top: 12px;
+
+    color: #85868b;
+
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.kingsman-footer .d-flex a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    color: #aaa !important;
+
+    background: #1c1e22;
+
+    border: 1px solid #303238;
+    border-radius: 4px;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.kingsman-footer .d-flex a:hover {
+    color: #ffffff !important;
+
+    background: #ff4655;
+
+    border-color: #ff4655;
+
+    transform: translateY(-3px);
+}
+
+
+/* =========================================
+   LOGO
+========================================= */
+
+.kingsman-navbar .navbar-brand {
+    color: #ff4655 !important;
+
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    padding: 0;
+    margin-right: 40px;
+
+    text-decoration: none;
+}
+
+.kingsman-navbar .navbar-brand:hover {
+    color: #ff4655 !important;
+}
+
+
+/* =========================================
+   NAVIGATION
+========================================= */
+.kingsman-navbar .nav-link {
+    position: relative;
+
+    color: #aaa !important;
+
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    padding: 23px 16px !important;
+
+    text-transform: uppercase;
+    text-decoration: none;
+
+    border-bottom: 3px solid transparent;
+}
+
+.kingsman-navbar .nav-link:hover {
+    color: #ff4655 !important;
+}
+
+.kingsman-navbar .nav-link.active {
+    color: #ffffff !important;
+    border-bottom: 3px solid #ff4655;
+}
+
+
+/* =========================================
+   DROPDOWN
+========================================= */
+
+.kingsman-navbar .dropdown-menu {
+    background: #18191c;
+
+    border: 1px solid #292a2e;
+
+    border-radius: 4px;
+
+    padding: 5px;
+}
+
+.kingsman-navbar .dropdown-item {
+    color: #aaa;
+
+    font-size: 14px;
+
+    padding: 9px 12px;
+}
+
+.kingsman-navbar .dropdown-item:hover {
+    color: #ff4655;
+
+    background: #25262a;
+}
+
+
+/* =========================================
+   AUTH SECTION
+========================================= */
+
+.kingsman-navbar>div:last-child {
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    margin-left: auto;
+}
+
+
+/* Welcome */
+
+.kingsman-navbar>div:last-child span {
+    color: #aaa;
+
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.kingsman-navbar>div:last-child span strong {
+    color: #ffffff;
+}
+
+
+/* Online dot */
+
+.kingsman-navbar .status-dot {
+    display: inline-block;
+
+    width: 7px;
+    height: 7px;
+
+    margin-right: 6px;
+
+    background: #4cff88;
+
+    border-radius: 50%;
+}
+
+
+/* =========================================
+   LOGIN
+========================================= */
+
+.kingsman-navbar>div:last-child a {
+    color: #ffffff;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.kingsman-navbar>div:last-child a:hover {
+    color: #ff4655;
+}
+
+
+/* =========================================
+   REGISTER + LOGOUT
+========================================= */
+
+.kingsman-navbar>div:last-child a[href="/register"],
+.kingsman-navbar>div:last-child a[href="/logout"] {
+    color: #ffffff !important;
+
+    background: #ff4655;
+
+    padding: 10px 18px;
+
+    border: 1px solid #ff4655;
+
+    border-radius: 3px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+.kingsman-navbar>div:last-child a[href="/register"]:hover,
+.kingsman-navbar>div:last-child a[href="/logout"]:hover {
+    color: #ffffff !important;
+
+    background: #e63e4d;
+
+    border-color: #e63e4d;
+}
+
+
+/* =========================================
+   HAMBURGER
+========================================= */
+
+.kingsman-navbar .navbar-toggler {
+    border: 1px solid #333438;
+
+    border-radius: 5px;
+
+    padding: 8px;
+}
+
+.kingsman-navbar .navbar-toggler-icon {
+    background-image: none;
+
+    width: 22px;
+    height: 16px;
+
+    position: relative;
+
+    display: block;
+
+    border-top: 2px solid #aaa;
+    border-bottom: 2px solid #aaa;
+}
+
+.kingsman-navbar .navbar-toggler-icon::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 5px;
+
+    width: 22px;
+    height: 2px;
+
+    background: #aaa;
+}
+
+.kingsman-navbar .navbar-toggler:hover {
+    border-color: #ff4655;
+}
+
+.kingsman-navbar .navbar-toggler:hover .navbar-toggler-icon {
+    border-color: #ff4655;
+}
+
+.kingsman-navbar .navbar-toggler:hover .navbar-toggler-icon::after {
+    background: #ff4655;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 991.98px) {
+
+    .kingsman-navbar .container-fluid {
+        min-height: 64px;
+    }
+
+    .kingsman-navbar .navbar-brand {
+        margin-right: 0;
+    }
+
+    /* Hamburger stays on right */
+
+    .kingsman-navbar .navbar-toggler {
+        margin-left: auto;
+    }
+
+
+    /* RIGHT SIDE SLIDE MENU */
+
+    .kingsman-navbar .navbar-collapse {
+        position: fixed;
+
+        top: 64px;
+        right: 0;
+
+        width: 280px;
+        height: calc(100vh - 64px);
+
+        padding: 20px;
+
+        background: #101114;
+
+        border-left: 1px solid #292a2e;
+
+        overflow-y: auto;
+
+        transform: translateX(100%);
+
+        transition: transform 0.25s ease;
+
+        z-index: 999;
+    }
+
+    .kingsman-navbar .navbar-collapse.show {
+        transform: translateX(0);
+    }
+
+
+    /* Mobile links */
+
+    .kingsman-navbar .navbar-nav {
+        flex-direction: column;
+
+        gap: 0;
+
+        margin: 0;
+    }
+
+    .kingsman-navbar .nav-link {
+        width: 100%;
+
+        padding: 15px 10px !important;
+    }
+
+
+    /* Active line on mobile */
+
+    .kingsman-navbar .nav-link[aria-current="page"]::after {
+        left: 10px;
+        right: auto;
+
+        width: 35px;
+
+        bottom: 5px;
+    }
+
+
+    /* Dropdown */
+
+    .kingsman-navbar .dropdown-menu {
+        position: static !important;
+
+        width: 100%;
+
+        margin: 0;
+
+        border: 0;
+
+        background: #18191c;
+    }
+
+
+    /* AUTH */
+
+    .kingsman-navbar>div:last-child {
+        position: absolute;
+
+        right: 65px;
+        top: 50%;
+
+        transform: translateY(-50%);
+
+        margin: 0;
+
+        gap: 8px;
+
+        z-index: 1001;
+    }
+
+
+    /* Hide welcome on mobile */
+
+    .kingsman-navbar>div:last-child span {
+        display: none;
+    }
+
+}
+
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 576px) {
+
+    .kingsman-navbar>div:last-child {
+        right: 60px;
+    }
+
+    .kingsman-navbar>div:last-child a {
+        font-size: 12px;
+    }
+
+    .kingsman-navbar>div:last-child a[href="/register"],
+    .kingsman-navbar>div:last-child a[href="/logout"] {
+        padding: 8px 12px;
+
+        font-size: 11px;
+    }
+
+    .kingsman-navbar .navbar-collapse {
+        width: 260px;
+    }
+}
+
+/* =========================================
+   ROSTER HEADER
+========================================= */
+
+.roster-title {
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #ffffff;
+    font-size: 2.75rem;
+    text-shadow: 0 0 20px rgba(230, 57, 70, 0.3);
+}
+
+.roster-title .text-accent {
+    color: #e63946;
+}
+
+.roster-subtitle {
+    color: #999;
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+}
+
+.roster-divider {
+    width: 80px;
+    height: 3px;
+    background: #e63946;
+    margin: 1rem auto 0;
+    border-radius: 2px;
+}
+
+
+/* =========================================
+   PLAYERS DEN - CLICKABLE PLAYER CARD
+========================================= */
+
+.player-card-link {
+    display: block;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
+.player-card-link:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+/* Player card */
+
+.player-card-link .player-card {
+    position: relative;
+    height: 100%;
+
+    background:
+        linear-gradient(145deg,
+            rgba(255, 255, 255, 0.08),
+            rgba(255, 255, 255, 0.025));
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+
+/* Red glowing top line */
+
+.player-card-link .player-card::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+
+    height: 2px;
+
+    background: linear-gradient(90deg,
+            transparent,
+            #ff4655,
+            #ffffff,
+            #ff4655,
+            transparent);
+
+    box-shadow:
+        0 0 15px rgba(255, 70, 85, 0.7);
+
+    opacity: 0.9;
+}
+
+
+/* Decorative glow */
+
+.player-card-link .player-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    top: -100px;
+    right: -80px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 70, 85, 0.08);
+
+    filter: blur(30px);
+
+    pointer-events: none;
+}
+
+
+/* Hover */
+
+.player-card-link:hover .player-card {
+    transform: translateY(-8px);
+
+    border-color: rgba(255, 70, 85, 0.45);
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(255, 70, 85, 0.12);
+}
+
+
+/* Card content */
+
+.player-card-link .player-card-body {
+    position: relative;
+    z-index: 2;
+
+    padding: 2rem 1.5rem;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   PLAYERS DEN - ROLE BADGES
+========================================= */
+
+.player-card-link .role-list {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 20px;
+}
+
+.player-card-link .role-badge {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 13px;
+
+    border-radius: 999px;
+
+    font-size: 0.7rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.08em;
+
+    color: #ffffff;
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.player-card-link .role-badge:hover {
+    transform: translateY(-2px);
+}
+
+
+/* Duelist */
+
+.role-duelist {
+    background: rgba(255, 70, 85, 0.14);
+    border-color: rgba(255, 70, 85, 0.35);
+    color: #ff6470;
+}
+
+
+/* Initiator */
+
+.role-initiator {
+    background: rgba(255, 190, 70, 0.12);
+    border-color: rgba(255, 190, 70, 0.30);
+    color: #ffc45c;
+}
+
+
+/* Controller */
+
+.role-controller {
+    background: rgba(150, 100, 255, 0.13);
+    border-color: rgba(150, 100, 255, 0.30);
+    color: #b99aff;
+}
+
+
+/* Sentinel */
+
+.role-sentinel {
+    background: rgba(70, 210, 150, 0.12);
+    border-color: rgba(70, 210, 150, 0.30);
+    color: #63e0ad;
+}
+
+
+/* Flex */
+
+.role-flex {
+    background: rgba(80, 170, 255, 0.12);
+    border-color: rgba(80, 170, 255, 0.30);
+    color: #72baff;
+}
+
+.profile-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.profile-actions form {
+    margin: 0;
+}
+
+.profile-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 11px 20px;
+
+    border-radius: 7px;
+
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+
+    text-decoration: none;
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+/* EDIT */
+
+.edit-btn {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.edit-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* DELETE */
+
+.delete-btn {
+    color: #fff;
+    background: rgba(230, 57, 70, 0.1);
+    border: 1px solid rgba(230, 57, 70, 0.4);
+}
+
+.delete-btn:hover {
+    color: #fff;
+    background: rgba(230, 57, 70, 0.2);
+    border-color: #e63946;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 0 18px rgba(230, 57, 70, 0.15);
+}
+
+@media (max-width: 576px) {
+    .profile-actions {
+        flex-direction: column;
+    }
+
+    .profile-btn {
+        width: 100%;
+    }
+}
+
+/* =========================================
+   PLAYERS DEN - BIG WHITE IGN
+========================================= */
+
+.player-card-link .player-ign-big {
+    position: relative;
+    z-index: 2;
+
+    margin: 0 0 16px;
+
+    color: #ffffff;
+
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+
+    font-weight: 800;
+
+    letter-spacing: 0.02em;
+
+    line-height: 1.2;
+
+    text-align: center;
+
+    text-shadow:
+        0 0 15px rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================================
+   PLAYERS DEN - UID
+========================================= */
+
+.player-card-link .player-uid {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 18px;
+}
+
+.player-card-link .player-uid .detail-label {
+    color: rgba(255, 255, 255, 0.45);
+
+    font-size: 0.72rem;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.08em;
+}
+
+.player-card-link .player-uid .detail-value {
+    color: rgba(255, 255, 255, 0.85);
+
+    font-size: 0.9rem;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   PLAYERS DEN - STATUS
+========================================= */
+
+.player-card-link .status-pill {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 2px;
+}
+
+
+/* =========================================
+   STATUS PILL
+========================================= */
+
+.status-pill {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 7px 13px;
+
+    border-radius: 999px;
+
+    font-size: 0.72rem;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.07em;
+}
+
+.status-pill::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+
+    box-shadow:
+        0 0 10px currentColor;
+}
+
+
+/* Verified */
+
+.status-verified {
+    color: #55e6a5;
+
+    background: rgba(85, 230, 165, 0.10);
+
+    border: 1px solid rgba(85, 230, 165, 0.25);
+}
+
+
+/* Pending */
+
+.status-pending {
+    color: #ffc45c;
+
+    background: rgba(255, 196, 92, 0.10);
+
+    border: 1px solid rgba(255, 196, 92, 0.25);
+}
+
+
+/* Rejected */
+
+.status-rejected {
+    color: #ff6470;
+
+    background: rgba(255, 70, 85, 0.10);
+
+    border: 1px solid rgba(255, 70, 85, 0.25);
+}
+
+
+/* =========================================
+   INDIVIDUAL PLAYER PROFILE
+========================================= */
+
+.profile-card {
+    position: relative;
+
+    padding: 32px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(145deg,
+            rgba(255, 255, 255, 0.08),
+            rgba(255, 255, 255, 0.025));
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+
+/* Profile top glowing line */
+
+.profile-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 8%;
+    right: 8%;
+
+    height: 2px;
+
+    background: linear-gradient(90deg,
+            transparent,
+            #ff4655,
+            #ffffff,
+            #ff4655,
+            transparent);
+
+    box-shadow:
+        0 0 15px rgba(255, 70, 85, 0.7);
+
+    opacity: 0.9;
+}
+
+
+/* Profile decorative background */
+
+.profile-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    top: -100px;
+    right: -80px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 70, 85, 0.10);
+
+    filter: blur(30px);
+
+    pointer-events: none;
+}
+
+
+/* Profile hover */
+
+.profile-card:hover {
+    transform: translateY(-6px);
+
+    border-color: rgba(255, 70, 85, 0.35);
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.55),
+        0 0 30px rgba(255, 70, 85, 0.08);
+}
+
+
+/* =========================================
+   PROFILE ROLE BADGES
+========================================= */
+
+.profile-card .role-list {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.profile-card .role-badge {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 12px;
+
+    border-radius: 999px;
+
+    font-size: 0.72rem;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.08em;
+
+    color: #ffffff;
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    background: rgba(255, 255, 255, 0.06);
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.profile-card .role-badge:hover {
+    transform: translateY(-2px);
+}
+
+
+/* =========================================
+   PROFILE NAME
+========================================= */
+
+.profile-name {
+    position: relative;
+
+    z-index: 2;
+
+    margin-bottom: 4px;
+
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+
+    font-weight: 800;
+
+    letter-spacing: -0.02em;
+
+    color: #ffffff;
+}
+
+
+/* =========================================
+   PROFILE IGN
+========================================= */
+
+.profile-ign {
+    position: relative;
+
+    z-index: 2;
+
+    margin-bottom: 18px;
+
+    color: rgba(255, 255, 255, 0.55);
+
+    font-size: 0.95rem;
+
+    letter-spacing: 0.04em;
+}
+
+.profile-ign::first-letter {
+    color: #ff4655;
+}
+
+
+/* =========================================
+   PROFILE DETAILS
+========================================= */
+
+.profile-details {
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 10px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.detail-row {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 16px 0;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    flex-shrink: 0;
+
+    color: rgba(255, 255, 255, 0.45);
+
+    font-size: 0.78rem;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.07em;
+}
+
+.detail-value {
+    text-align: right;
+
+    color: #ffffff;
+
+    font-size: 0.92rem;
+
+    font-weight: 600;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   AGENT CHIPS
+========================================= */
+
+.agent-list {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    justify-content: flex-end;
+
+    gap: 7px;
+}
+
+.agent-chip {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 5px 10px;
+
+    border-radius: 7px;
+
+    color: rgba(255, 255, 255, 0.90);
+
+    background: rgba(255, 255, 255, 0.06);
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+
+    font-size: 0.76rem;
+
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.agent-chip:hover {
+    transform: translateY(-2px);
+
+    background: rgba(255, 70, 85, 0.12);
+
+    border-color: rgba(255, 70, 85, 0.30);
+
+    color: #ffffff;
+}
+
+
+/* =========================================
+   BACK LINK
+========================================= */
+
+.back-link {
+    position: relative;
+
+    z-index: 2;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: rgba(255, 255, 255, 0.55);
+
+    text-decoration: none;
+
+    font-size: 0.85rem;
+
+    font-weight: 600;
+
+    transition:
+        color 0.2s ease,
+        gap 0.2s ease;
+}
+
+.back-link:hover {
+    color: #ff4655;
+
+    gap: 12px;
+}
+
+/* =========================================
+   PLAYER COUNTRY / REGION / TEAM
+========================================= */
+
+.player-info {
+    position: relative;
+    z-index: 2;
+    margin-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.player-info-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 16px 0;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.player-info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    flex-shrink: 0;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    font-size: 0.78rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+}
+
+.info-value {
+    text-align: right;
+
+    color: #ffffff;
+
+    font-size: 0.95rem;
+    font-weight: 700;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   SOCIAL MEDIA
+========================================= */
+
+.social-links {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 18px;
+
+    margin-top: 24px;
+    padding-top: 20px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    color: rgba(255, 255, 255, 0.75);
+
+    font-size: 21px;
+
+    text-decoration: none;
+
+    background: rgba(255, 255, 255, 0.04);
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 9px;
+
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.social-icon:hover {
+    color: #ffffff;
+
+    background: rgba(255, 70, 85, 0.12);
+
+    border-color: rgba(255, 70, 85, 0.45);
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 0 15px rgba(255, 70, 85, 0.12);
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 576px) {
+
+    .player-info-item {
+        flex-direction: column;
+        align-items: flex-start;
+
+        gap: 5px;
+    }
+
+    .info-value {
+        width: 100%;
+        text-align: left;
+    }
+
+    .social-links {
+        gap: 14px;
+    }
+
+    .social-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 19px;
+    }
+}
+
+/* =========================================
+   PLAYER FORM PAGE
+========================================= */
+
+.player-form-page {
+    background:
+        radial-gradient(circle at top,
+            #151515 0%,
+            #0a0a0a 60%);
+
+    min-height: 100vh;
+
+    padding-bottom: 3rem;
+}
+
+.player-form-card {
+    text-align: left;
+}
+
+.player-form-card .form-label {
+    color: #ffffff;
+
+    font-weight: 600;
+
+    margin-bottom: 0.5rem;
+}
+
+.kingsman-input {
+    background-color: #111;
+
+    border: 1px solid #333;
+
+    color: #fff;
+
+    border-radius: 8px;
+
+    padding: 0.75rem;
+}
+
+.kingsman-input:focus {
+    background-color: #111;
+
+    color: #fff;
+
+    border-color: #e63946;
+
+    box-shadow:
+        0 0 0 0.2rem rgba(230, 57, 70, 0.15);
+}
+
+.kingsman-input::placeholder {
+    color: #666;
+}
+
+.form-text {
+    color: #777;
+}
+
+
+/* =========================================
+   ROLE SELECTION
+========================================= */
+
+.role-selection {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 10px;
+}
+
+.role-option {
+    cursor: pointer;
+
+    position: relative;
+}
+
+.role-option input {
+    display: none;
+}
+
+.role-option span {
+    display: block;
+
+    padding: 12px;
+
+    text-align: center;
+
+    background: #111;
+
+    border: 1px solid #333;
+
+    border-radius: 8px;
+
+    color: #aaa;
+
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.role-option input:checked+span {
+    background: rgba(230, 57, 70, 0.15);
+
+    border-color: #e63946;
+
+    color: #e63946;
+}
+
+.role-option:hover span {
+    border-color: #e63946;
+}
+
+/* =========================================
+   REGION & COUNTRY
+========================================= */
+
+#region,
+#country {
+    width: 100%;
+    padding: 12px 42px 12px 14px;
+    margin-top: 6px;
+
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.04);
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+
+    font-size: 0.92rem;
+    font-weight: 600;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#region:focus,
+#country:focus {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.06);
+
+    border-color: rgba(230, 57, 70, 0.7);
+
+    box-shadow:
+        0 0 0 3px rgba(230, 57, 70, 0.12),
+        0 0 15px rgba(230, 57, 70, 0.08);
+
+    outline: none;
+}
+
+#region option,
+#country option {
+    color: #ffffff;
+    background-color: #151515;
+}
+
+
+/* =========================================
+   SOCIAL MEDIA SECTION
+========================================= */
+
+.player-form-card h5 {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+
+/* Social media inputs */
+
+#instagram,
+#facebook,
+#youtube,
+#twitch,
+#kick {
+    padding: 12px 14px;
+
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.04);
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 8px;
+
+    font-size: 0.92rem;
+    font-weight: 600;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+#instagram:focus,
+#facebook:focus,
+#youtube:focus,
+#twitch:focus,
+#kick:focus {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.06);
+
+    border-color: rgba(230, 57, 70, 0.65);
+
+    box-shadow:
+        0 0 0 3px rgba(230, 57, 70, 0.10),
+        0 0 15px rgba(230, 57, 70, 0.08);
+
+    outline: none;
+}
+
+#instagram::placeholder,
+#facebook::placeholder,
+#youtube::placeholder,
+#twitch::placeholder,
+#kick::placeholder {
+    color: rgba(255, 255, 255, 0.30);
+}
+
+
+/* =========================================
+   TEAM TOGGLE
+========================================= */
+
+#inTeam {
+    cursor: pointer;
+}
+
+#inTeam.form-check-input {
+    width: 2.8em;
+    height: 1.45em;
+
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.20);
+
+    cursor: pointer;
+}
+
+#inTeam.form-check-input:focus {
+    border-color: rgba(230, 57, 70, 0.6);
+
+    box-shadow:
+        0 0 0 3px rgba(230, 57, 70, 0.12);
+}
+
+#inTeam.form-check-input:checked {
+    background-color: #e63946;
+    border-color: #e63946;
+}
+
+.form-check-label[for="inTeam"] {
+    margin-left: 6px;
+
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   TEAM NAME
+   Use this if you add #teamNameContainer
+========================================= */
+
+#teamNameContainer {
+    padding: 14px 16px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-left: 2px solid rgba(230, 57, 70, 0.55);
+
+    border-radius: 8px;
+
+    animation: teamFieldIn 0.25s ease;
+}
+
+#teamName {
+    padding: 12px 14px;
+
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.04);
+
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 8px;
+}
+
+#teamName:focus {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.06);
+
+    border-color: rgba(230, 57, 70, 0.65);
+
+    box-shadow:
+        0 0 0 3px rgba(230, 57, 70, 0.10);
+
+    outline: none;
+}
+
+#teamName::placeholder {
+    color: rgba(255, 255, 255, 0.30);
+}
+
+@keyframes teamFieldIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 576px) {
+
+    #region,
+    #country {
+        font-size: 0.88rem;
+    }
+
+    #instagram,
+    #facebook,
+    #youtube,
+    #twitch,
+    #kick {
+        font-size: 0.88rem;
+    }
+
+    .player-form-card h5 {
+        font-size: 0.9rem;
+    }
+}
+
+
+/* =========================================
+   SUBMIT BUTTON
+========================================= */
+
+.kingsman-submit {
+    background: #e63946;
+
+    border: none;
+
+    color: #fff;
+
+    font-weight: 700;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    transition: 0.2s ease;
+}
+
+.kingsman-submit:hover {
+    background: #c92f3b;
+
+    color: #fff;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================
+   ADD PLAYER BUTTON
+========================================= */
+
+.add-player-btn {
+    display: inline-block;
+
+    margin-top: 1rem;
+
+    padding: 10px 22px;
+
+    background: #e63946;
+
+    color: #fff;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+    transition: 0.2s ease;
+}
+
+.add-player-btn:hover {
+    background: #c92f3b;
+
+    color: #fff;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 576px) {
+
+    .roster-page {
+        padding-top: 10px;
+    }
+
+    .player-card-link .player-card-body {
+        padding: 1.7rem 1.2rem;
+    }
+
+    .player-card-link .player-ign-big {
+        font-size: 1.8rem;
+    }
+
+    .profile-card {
+        padding: 24px 20px;
+
+        border-radius: 16px;
+    }
+
+    .profile-name {
+        font-size: 1.8rem;
+    }
+
+    .detail-row {
+        flex-direction: column;
+
+        gap: 6px;
+    }
+
+    .detail-value {
+        width: 100%;
+
+        text-align: left;
+    }
+
+    .agent-list {
+        justify-content: flex-start;
+    }
+
+    .role-selection {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+/* =========================
+   AGENT SELECTION
+========================= */
 
 .agent-selection {
     display: grid;
@@ -1911,11 +3714,16 @@ footer {
 
 .agent-option {
     position: relative;
-    display: flex;
-    align-items: center;
-    gap: 10px;
 
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    align-items: center;
+    column-gap: 10px;
+
+    min-height: 58px;
     padding: 12px 14px;
+
+    box-sizing: border-box;
 
     background: rgba(255, 255, 255, 0.035);
     border: 1px solid rgba(255, 255, 255, 0.10);
@@ -1931,33 +3739,48 @@ footer {
     transform: translateY(-2px);
 }
 
-/* Hide default checkbox */
+/* Hide native checkbox */
 .agent-option input {
     position: absolute;
     opacity: 0;
+    width: 1px;
+    height: 1px;
     pointer-events: none;
 }
 
 /* Custom checkbox */
 .agent-option::before {
     content: "";
-    width: 17px;
-    height: 17px;
-    flex-shrink: 0;
+
+    display: block;
+
+    width: 18px;
+    height: 18px;
+
+    box-sizing: border-box;
 
     border: 1px solid rgba(255, 255, 255, 0.35);
     border-radius: 4px;
 
     background: rgba(255, 255, 255, 0.04);
 
+    grid-column: 1;
+    grid-row: 1;
+
     transition: all 0.2s ease;
 }
 
 /* Agent name */
 .agent-name {
+    grid-column: 2;
+    grid-row: 1;
+
     color: rgba(255, 255, 255, 0.85);
+
     font-size: 0.9rem;
     font-weight: 600;
+
+    line-height: 1.2;
 
     transition: color 0.2s ease;
 }
@@ -1969,6 +3792,7 @@ footer {
     box-shadow: 0 0 15px rgba(255, 70, 85, 0.08);
 }
 
+/* Selected checkbox */
 .agent-option:has(input:checked)::before {
     background: #e63946;
     border-color: #e63946;
@@ -1976,20 +3800,26 @@ footer {
     box-shadow: 0 0 10px rgba(230, 57, 70, 0.5);
 }
 
+/* Check mark */
 .agent-option:has(input:checked)::after {
     content: "✓";
 
     position: absolute;
-    left: 17px;
+
+    left: 14px;
     top: 50%;
 
     transform: translateY(-50%);
 
     color: #fff;
+
     font-size: 11px;
     font-weight: 800;
+
+    pointer-events: none;
 }
 
+/* Selected agent name */
 .agent-option:has(input:checked) .agent-name {
     color: #fff;
 }
@@ -1997,7 +3827,9 @@ footer {
 /* Help text */
 .form-help {
     margin-top: 12px;
+
     color: rgba(255, 255, 255, 0.45);
+
     font-size: 0.85rem;
 }
 
@@ -2023,6 +3855,617 @@ footer {
     }
 }
 
+/* =========================================
+   CONTACT PAGE
+========================================= */
+
+.contact-page {
+    min-height: calc(100vh - 64px);
+
+    background: #0b0c0e;
+
+    color: #ffffff;
+
+    padding-bottom: 80px;
+}
+
+
+/* =========================================
+   HERO
+========================================= */
+
+.contact-hero {
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    text-align: center;
+
+    padding: 80px 20px 55px;
+}
+
+.contact-label {
+    color: #ff4655;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 12px;
+}
+
+.contact-hero h1 {
+    margin: 0;
+
+    font-size: clamp(38px, 5vw, 64px);
+
+    font-weight: 800;
+
+    letter-spacing: -1px;
+}
+
+.contact-hero h1 span {
+    color: #ff4655;
+}
+
+.contact-intro {
+    max-width: 600px;
+
+    margin: 18px auto 0;
+
+    color: #96979c;
+
+    font-size: 16px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.contact-content {
+    padding: 20px 0;
+}
+
+
+/* =========================================
+   LEFT SIDE
+========================================= */
+
+.support-info {
+    padding: 20px 10px;
+}
+
+.section-label {
+    color: #ff4655;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 10px;
+}
+
+.support-info h2 {
+    font-size: 32px;
+
+    font-weight: 700;
+
+    margin-bottom: 15px;
+}
+
+.support-text {
+    color: #929398;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+
+    max-width: 480px;
+
+    margin-bottom: 35px;
+}
+
+
+/* =========================================
+   SUPPORT ITEMS
+========================================= */
+
+.support-item {
+    display: flex;
+
+    gap: 18px;
+
+    padding: 18px 0;
+
+    border-top: 1px solid #25262a;
+}
+
+.support-number {
+    color: #ff4655;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    min-width: 25px;
+}
+
+.support-item h3 {
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    margin: 0 0 5px;
+}
+
+.support-item p {
+    color: #85868b;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    margin: 0;
+}
+
+
+/* =========================================
+   CONTACT CARD
+========================================= */
+
+.contact-card {
+    background: #151619;
+
+    border: 1px solid #292a2e;
+
+    padding: 35px;
+
+    border-radius: 5px;
+}
+
+.contact-card-header {
+    margin-bottom: 25px;
+}
+
+.contact-card-header h2 {
+    color: #ffffff;
+
+    font-size: 25px;
+    font-weight: 700;
+
+    margin-bottom: 7px;
+}
+
+.contact-card-header p {
+    color: #85868b;
+
+    font-size: 14px;
+
+    margin: 0;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+
+    color: #d0d0d3;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    margin-bottom: 7px;
+
+    text-transform: uppercase;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+
+    color: #ffffff;
+
+    background: #0f1012;
+
+    border: 1px solid #303136;
+
+    border-radius: 3px;
+
+    padding: 11px 13px;
+
+    font-size: 14px;
+
+    outline: none;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #66676c;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #ff4655;
+}
+
+.form-group select {
+    cursor: pointer;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+
+/* =========================================
+   SUBMIT BUTTON
+========================================= */
+
+.contact-submit {
+    width: 100%;
+
+    padding: 12px;
+
+    color: #ffffff;
+
+    background: #ff4655;
+
+    border: 1px solid #ff4655;
+
+    border-radius: 3px;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+}
+
+.contact-submit:hover {
+    background: #e63e4d;
+
+    border-color: #e63e4d;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 767px) {
+
+    .contact-hero {
+        padding: 55px 20px 35px;
+    }
+
+    .contact-hero h1 {
+        font-size: 38px;
+    }
+
+    .contact-intro {
+        font-size: 14px;
+    }
+
+    .support-info {
+        padding: 10px 5px 25px;
+    }
+
+    .support-info h2 {
+        font-size: 27px;
+    }
+
+    .contact-card {
+        padding: 22px;
+    }
+
+}
+
+/* =========================================================
+   KINGSMAN ADMIN COMMAND CENTER NAV
+   ========================================================= */
+
+.kingsman-admin-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #ff4655 !important;
+    font-weight: 800;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.kingsman-admin-link:hover {
+    color: #ffffff !important;
+    background: rgba(255, 70, 85, 0.08);
+}
+
+.kingsman-admin-icon {
+    color: #ff4655;
+    font-size: 9px;
+    transition: transform 0.2s ease;
+}
+
+.kingsman-admin-link:hover .kingsman-admin-icon {
+    transform: rotate(45deg);
+}
+
+/* =========================================
+   KINGSMAN FOOTER
+========================================= */
+
+.kingsman-footer {
+    position: relative;
+    margin-top: 80px;
+    padding: 65px 0 0;
+    background: #0b0c0f;
+    border-top: 1px solid #202228;
+    overflow: hidden;
+}
+
+
+
+
+
+/* MAIN FOOTER */
+
+.kingsman-footer-main {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 60px;
+    padding-bottom: 55px;
+}
+
+
+/* =========================================
+   BRAND
+========================================= */
+
+.kingsman-footer-logo {
+    display: inline-block;
+    margin-bottom: 18px;
+
+    color: #ffffff;
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: 2px;
+
+    text-decoration: none;
+}
+
+.kingsman-footer-logo span {
+    color: #ff4655;
+}
+
+.kingsman-footer-brand p {
+    max-width: 360px;
+    margin: 0;
+
+    color: #8d929b;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.kingsman-footer-brand strong {
+    color: #d7d9dd;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   FOOTER HEADINGS
+========================================= */
+
+.kingsman-footer h5 {
+    position: relative;
+
+    margin: 5px 0 22px;
+
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+
+/* SMALL RED LINE */
+
+.kingsman-footer h5::after {
+    content: "";
+
+    display: block;
+
+    width: 28px;
+    height: 2px;
+
+    margin-top: 9px;
+
+    background: #ff4655;
+}
+
+
+/* =========================================
+   QUICK LINKS
+========================================= */
+
+.kingsman-footer-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.kingsman-footer-links a {
+    position: relative;
+
+    display: inline-block;
+
+    margin-bottom: 11px;
+
+    color: #8d929b;
+
+    font-size: 14px;
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.kingsman-footer-links a:hover {
+    color: #ff4655;
+    transform: translateX(4px);
+}
+
+
+/* =========================================
+   SOCIAL
+========================================= */
+
+.kingsman-footer-social p {
+    margin: 0 0 20px;
+
+    color: #8d929b;
+    font-size: 14px;
+}
+
+
+/* SOCIAL ICONS */
+
+.kingsman-social-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.kingsman-social-icons a {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    color: #a4a8af;
+
+    background: #14161a;
+    border: 1px solid #272a30;
+
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.kingsman-social-icons a:hover {
+    color: #ffffff;
+
+    background: #ff4655;
+    border-color: #ff4655;
+
+    transform: translateY(-3px);
+}
+
+
+/* =========================================
+   FOOTER BOTTOM
+========================================= */
+
+.kingsman-footer-bottom {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 65px;
+
+    border-top: 1px solid #202228;
+
+    color: #666b74;
+
+    font-size: 11px;
+    letter-spacing: 0.8px;
+}
+
+
+/* SYSTEM STATUS */
+
+.kingsman-footer-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #858a93;
+}
+
+.kingsman-footer-status i {
+    display: inline-block;
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #4ade80;
+
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 767px) {
+
+    .kingsman-footer {
+        margin-top: 55px;
+        padding-top: 50px;
+    }
+
+    .kingsman-footer-main {
+        grid-template-columns: 1fr;
+        gap: 38px;
+        padding-bottom: 40px;
+    }
+
+    .kingsman-footer-brand p {
+        max-width: 100%;
+    }
+
+    .kingsman-footer-bottom {
+        flex-direction: column;
+        justify-content: center;
+
+        gap: 10px;
+
+        padding: 22px 0;
+
+        text-align: center;
+    }
+
+}
 /* =========================================
    CONTACT PAGE
 ========================================= */
@@ -2374,4 +4817,368 @@ footer {
 
 .kingsman-admin-link:hover .kingsman-admin-icon {
     transform: rotate(45deg);
+}
+
+/* =========================================
+   KINGSMAN FOOTER
+========================================= */
+
+.kingsman-footer {
+    position: relative;
+    margin-top: 80px;
+    padding: 65px 0 0;
+    background: #0b0c0f;
+    border-top: 1px solid #202228;
+    overflow: hidden;
+}
+
+
+
+
+
+/* MAIN FOOTER */
+
+.kingsman-footer-main {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 60px;
+    padding-bottom: 55px;
+}
+
+
+/* =========================================
+   BRAND
+========================================= */
+
+.kingsman-footer-logo {
+    display: inline-block;
+    margin-bottom: 18px;
+
+    color: #ffffff;
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: 2px;
+
+    text-decoration: none;
+}
+
+.kingsman-footer-logo span {
+    color: #ff4655;
+}
+
+.kingsman-footer-brand p {
+    max-width: 360px;
+    margin: 0;
+
+    color: #8d929b;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.kingsman-footer-brand strong {
+    color: #d7d9dd;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   FOOTER HEADINGS
+========================================= */
+
+.kingsman-footer h5 {
+    position: relative;
+
+    margin: 5px 0 22px;
+
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+
+/* SMALL RED LINE */
+
+.kingsman-footer h5::after {
+    content: "";
+
+    display: block;
+
+    width: 28px;
+    height: 2px;
+
+    margin-top: 9px;
+
+    background: #ff4655;
+}
+
+
+/* =========================================
+   QUICK LINKS
+========================================= */
+
+.kingsman-footer-links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.kingsman-footer-links a {
+    position: relative;
+
+    display: inline-block;
+
+    margin-bottom: 11px;
+
+    color: #8d929b;
+
+    font-size: 14px;
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.kingsman-footer-links a:hover {
+    color: #ff4655;
+    transform: translateX(4px);
+}
+
+
+/* =========================================
+   SOCIAL
+========================================= */
+
+.kingsman-footer-social p {
+    margin: 0 0 20px;
+
+    color: #8d929b;
+    font-size: 14px;
+}
+
+
+/* SOCIAL ICONS */
+
+.kingsman-social-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.kingsman-social-icons a {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    color: #a4a8af;
+
+    background: #14161a;
+    border: 1px solid #272a30;
+
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.kingsman-social-icons a:hover {
+    color: #ffffff;
+
+    background: #ff4655;
+    border-color: #ff4655;
+
+    transform: translateY(-3px);
+}
+
+
+/* =========================================
+   FOOTER BOTTOM
+========================================= */
+
+.kingsman-footer-bottom {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 65px;
+
+    border-top: 1px solid #202228;
+
+    color: #666b74;
+
+    font-size: 11px;
+    letter-spacing: 0.8px;
+}
+
+
+/* SYSTEM STATUS */
+
+.kingsman-footer-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #858a93;
+}
+
+.kingsman-footer-status i {
+    display: inline-block;
+
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #4ade80;
+
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 767px) {
+
+    .kingsman-footer {
+        margin-top: 55px;
+        padding-top: 50px;
+    }
+
+    .kingsman-footer-main {
+        grid-template-columns: 1fr;
+        gap: 38px;
+        padding-bottom: 40px;
+    }
+
+    .kingsman-footer-brand p {
+        max-width: 100%;
+    }
+
+    .kingsman-footer-bottom {
+        flex-direction: column;
+        justify-content: center;
+
+        gap: 10px;
+
+        padding: 22px 0;
+
+        text-align: center;
+    }
+
+}
+/* =========================================
+   FINAL AGENT CHECKBOX FIX
+   ========================================= */
+
+.agent-option {
+    position: relative !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+
+    gap: 10px !important;
+
+    min-height: 58px !important;
+    padding: 12px 14px !important;
+
+    box-sizing: border-box !important;
+}
+
+/* Keep the real checkbox hidden */
+.agent-option input[type="checkbox"] {
+    position: absolute !important;
+
+    width: 1px !important;
+    height: 1px !important;
+
+    opacity: 0 !important;
+
+    pointer-events: none !important;
+}
+
+/* Checkbox */
+.agent-option::before {
+    content: "" !important;
+
+    display: block !important;
+
+    flex: 0 0 18px !important;
+
+    width: 18px !important;
+    height: 18px !important;
+
+    margin: 0 !important;
+
+    box-sizing: border-box !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+    border-radius: 4px !important;
+
+    background: #181818 !important;
+}
+
+/* Agent name */
+.agent-option .agent-name {
+    display: block !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: rgba(255, 255, 255, 0.85) !important;
+
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+
+    line-height: 1.2 !important;
+}
+
+/* Selected card */
+.agent-option:has(input[type="checkbox"]:checked) {
+    background: rgba(255, 70, 85, 0.12) !important;
+
+    border-color: rgba(255, 70, 85, 0.55) !important;
+}
+
+/* Selected checkbox */
+.agent-option:has(input[type="checkbox"]:checked)::before {
+    background: #e63946 !important;
+
+    border-color: #e63946 !important;
+
+    box-shadow: 0 0 10px rgba(230, 57, 70, 0.5) !important;
+}
+
+/* Checkmark */
+.agent-option:has(input[type="checkbox"]:checked)::after {
+    content: "✓" !important;
+
+    position: absolute !important;
+
+    left: 18px !important;
+    top: 50% !important;
+
+    transform: translateY(-50%) !important;
+
+    color: #fff !important;
+
+    font-size: 11px !important;
+    font-weight: 800 !important;
+
+    pointer-events: none !important;
+}
+
+/* Selected name */
+.agent-option:has(input[type="checkbox"]:checked) .agent-name {
+    color: #fff !important;
 }

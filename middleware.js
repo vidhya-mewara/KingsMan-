@@ -86,8 +86,13 @@ export const isPlayerOwner = async (req, res, next) => {
         throw new ExpressError(404, "Player Not Found");
     }
 
+    // Admin can modify any player profile
+    if (user.role === "admin") {
+        return next();
+    }
+
     /*
-    | User.player contains the Player _id
+    | Existing player-owner logic
     */
     if (
         !user.player ||

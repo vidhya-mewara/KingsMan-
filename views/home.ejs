@@ -36,55 +36,141 @@
 <!-- ============================= -->
 <div class="home-main-grid">
 
-<% if (promotion && promotion.image) { %>
+<% if (promotions && promotions.length> 0) { %>
 
     <section class="promotion-wrapper">
 
         <div class="promotion-section">
 
-            <!-- Promotion Image -->
-            <div class="promotion-image">
+            <div class="promotion-heading">
+                <div>
+                    <span class="promotion-kicker">KINGSMAN // FEATURED</span>
+                    <h2>PROMOTIONS & SPONSORS</h2>
+                </div>
 
-                <img src="<%= promotion.image %>" alt="Kingsman Esports Promotion">
+                <span class="promotion-live">
+                    <i></i>
+                    FEATURED
+                </span>
+            </div>
+
+
+            <div class="promotion-slider" id="promotionSlider">
+
+                <% promotions.forEach((promotion, index)=> { %>
+
+                    <article class="promotion-slide <%= index === 0 ? 'active' : '' %>" data-slide="<%= index %>">
+
+                        <div class="promotion-image">
+
+                            <img src="<%= promotion.image %>" alt="<%= promotion.title %>"
+                                loading="<%= index === 0 ? 'eager' : 'lazy' %>">
+
+                            <div class="promotion-image-overlay"></div>
+
+                        </div>
+
+
+                        <div class="promotion-content">
+
+                            <span class="promotion-label">
+                                SPONSORED / FEATURED
+                            </span>
+
+                            <h3>
+                                <%= promotion.title %>
+                            </h3>
+
+                            <% if (promotion.description) { %>
+
+                                <p>
+                                    <%= promotion.description %>
+                                </p>
+
+                                <% } %>
+
+
+                                    <div class="promotion-links">
+
+                                        <% if (promotion.websiteLink) { %>
+
+                                            <a href="<%= promotion.websiteLink %>" target="_blank"
+                                                rel="noopener noreferrer" class="promotion-social website">
+                                                <span>↗</span>
+                                                Website
+                                            </a>
+
+                                            <% } %>
+
+
+                                                <% if (promotion.youtubeLink) { %>
+
+                                                    <a href="<%= promotion.youtubeLink %>" target="_blank"
+                                                        rel="noopener noreferrer" class="promotion-social youtube">
+                                                        <span>▶</span>
+                                                        YouTube
+                                                    </a>
+
+                                                    <% } %>
+
+
+                                                        <% if (promotion.instagramLink) { %>
+
+                                                            <a href="<%= promotion.instagramLink %>" target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                class="promotion-social instagram">
+                                                                <span>◎</span>
+                                                                Instagram
+                                                            </a>
+
+                                                            <% } %>
+
+
+                                                                <% if (promotion.discordLink) { %>
+
+                                                                    <a href="<%= promotion.discordLink %>"
+                                                                        target="_blank" rel="noopener noreferrer"
+                                                                        class="promotion-social discord">
+                                                                        <span>💬</span>
+                                                                        Discord
+                                                                    </a>
+
+                                                                    <% } %>
+
+                                    </div>
+
+                        </div>
+
+                    </article>
+
+                    <% }) %>
 
             </div>
 
-            <!-- Social Links -->
-            <div class="promotion-links">
 
-                <% if (promotion.youtubeLink) { %>
+            <% if (promotions.length> 1) { %>
 
-                    <a href="<%= promotion.youtubeLink %>" target="_blank" rel="noopener noreferrer"
-                        class="social-link youtube">
-                        <span>▶</span>
-                        YouTube
-                    </a>
+                <button type="button" class="promotion-arrow promotion-prev" aria-label="Previous promotion">
+                    ‹
+                </button>
 
-                    <% } %>
+                <button type="button" class="promotion-arrow promotion-next" aria-label="Next promotion">
+                    ›
+                </button>
 
 
-                        <% if (promotion.instagramLink) { %>
+                <div class="promotion-dots">
 
-                            <a href="<%= promotion.instagramLink %>" target="_blank" rel="noopener noreferrer"
-                                class="social-link instagram">
-                                <span>◎</span>
-                                Instagram
-                            </a>
+                    <% promotions.forEach((promotion, index)=> { %>
 
-                            <% } %>
+                        <button type="button" class="promotion-dot <%= index === 0 ? 'active' : '' %>"
+                            data-slide="<%= index %>" aria-label="Go to promotion <%= index + 1 %>"></button>
 
+                        <% }) %>
 
-                                <% if (promotion.discordLink) { %>
+                </div>
 
-                                    <a href="<%= promotion.discordLink %>" target="_blank" rel="noopener noreferrer"
-                                        class="social-link discord">
-                                        <span>💬</span>
-                                        Discord
-                                    </a>
-
-                                    <% } %>
-
-            </div>
+                <% } %>
 
         </div>
 
@@ -110,9 +196,7 @@
     
                 <h2>Matches</h2>
     
-                <a href="/matches" class="matches-view-all">
-                    VIEW ALL →
-                </a>
+                
     
             </div>
     
@@ -541,4 +625,5 @@
 </div>
 
 <script src="/js/home.js"></script>
+<script src="/js/promotion-slider.js"></script>
 

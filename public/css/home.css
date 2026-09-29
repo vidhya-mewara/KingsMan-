@@ -231,32 +231,151 @@
 /* ============================= */
 /* PROMOTION WRAPPER */
 /* ============================= */
+/* =========================================
+   PROMOTION / SPONSOR SLIDER
+========================================= */
 
 .promotion-wrapper {
-    width: 96%;
-
-    margin: 0 auto;
-
-    padding: 40px 0;
+    width: 100%;
+    padding: 24px 12px;
 }
-/* ============================= */
-/* PROMOTION SECTION */
-/* ============================= */
 
 .promotion-section {
+    position: relative;
+
     width: 100%;
-    background: #111;
+    max-width: 1400px;
+    margin: 0 auto;
+
     overflow: hidden;
+
+    background:
+        linear-gradient(135deg,
+            #151515 0%,
+            #0d0d0d 55%,
+            #111 100%);
+
+    border: 1px solid #242424;
 }
-/* ============================= */
-/* PROMOTION IMAGE */
-/* ============================= */
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.promotion-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 18px 18px 14px;
+
+    border-bottom: 1px solid #222;
+}
+
+.promotion-kicker {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #ff4655;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+.promotion-heading h2 {
+    margin: 0;
+
+    color: #fff;
+
+    font-size: 19px;
+    font-weight: 800;
+
+    letter-spacing: .5px;
+    text-transform: uppercase;
+}
+
+.promotion-live {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: #999;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.promotion-live i {
+    width: 6px;
+    height: 6px;
+
+    border-radius: 50%;
+
+    background: #ff4655;
+
+    box-shadow: 0 0 10px rgba(255, 70, 85, .7);
+}
+
+
+/* =========================================
+   SLIDER
+========================================= */
+
+.promotion-slider {
+    position: relative;
+
+    width: 100%;
+}
+
+.promotion-slide {
+    display: none;
+
+    width: 100%;
+}
+
+.promotion-slide.active {
+    display: block;
+
+    animation: promotionFade .45s ease;
+}
+
+@keyframes promotionFade {
+
+    from {
+        opacity: 0;
+        transform: translateX(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+}
+
+
+/* =========================================
+   IMAGE
+========================================= */
 
 .promotion-image {
+    position: relative;
+
     width: 100%;
-    height: 320px;
+
+    aspect-ratio: 16 / 9;
 
     overflow: hidden;
+
+    background: #080808;
 }
 
 .promotion-image img {
@@ -266,94 +385,343 @@
     display: block;
 
     object-fit: cover;
+
+    transition: transform .6s ease;
 }
 
-/* ============================= */
-/* SOCIAL LINKS */
-/* ============================= */
+.promotion-slide.active .promotion-image img {
+    transform: scale(1.02);
+}
 
-.promotion-links {
-    width: 100%;
+.promotion-image-overlay {
+    position: absolute;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    inset: 0;
 
-    gap: 12px;
+    background:
+        linear-gradient(to bottom,
+            transparent 55%,
+            rgba(0, 0, 0, .5));
+}
 
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.promotion-content {
     padding: 18px;
 }
 
-.social-link {
+.promotion-label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #ff4655;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+}
+
+.promotion-content h3 {
+    margin: 0 0 7px;
+
+    color: #fff;
+
+    font-size: 22px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+.promotion-content p {
+    margin: 0 0 16px;
+
+    color: #999;
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   SOCIAL LINKS
+========================================= */
+
+.promotion-links {
     display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.promotion-social {
+    display: inline-flex;
+
     align-items: center;
     justify-content: center;
 
     gap: 7px;
 
-    padding: 11px 18px;
+    min-height: 38px;
 
-    color: white;
+    padding: 0 13px;
+
+    color: #ddd;
+
+    border: 1px solid #303030;
+
+    background: #171717;
 
     text-decoration: none;
 
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 700;
 
-    border: 1px solid #333;
-
-    transition: all 0.3s ease;
+    transition:
+        color .2s ease,
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
 }
 
-.social-link.youtube:hover {
+.promotion-social span {
+    font-size: 13px;
+}
+
+.promotion-social:hover {
+    color: #fff;
+
+    transform: translateY(-2px);
+}
+
+.promotion-social.youtube:hover {
     background: #ff0000;
     border-color: #ff0000;
 }
 
-.social-link.instagram:hover {
+.promotion-social.instagram:hover {
     background: #e1306c;
     border-color: #e1306c;
 }
 
-.social-link.discord:hover {
+.promotion-social.discord:hover {
     background: #5865f2;
     border-color: #5865f2;
 }
 
-/* ============================= */
-/* MOBILE */
-/* ============================= */
+.promotion-social.website:hover {
+    background: #ff4655;
+    border-color: #ff4655;
+}
 
-@media (max-width: 768px) {
 
-    .hero-slider {
-        width: 100%;
-        height: 35vh;
-        min-height: 220px;
-    }
+/* =========================================
+   ARROWS
+========================================= */
+
+.promotion-arrow {
+    position: absolute;
+
+    top: 50%;
+
+    z-index: 5;
+
+    width: 38px;
+    height: 38px;
+
+    padding: 0;
+
+    border: 1px solid rgba(255, 255, 255, .2);
+
+    background: rgba(0, 0, 0, .65);
+
+    color: #fff;
+
+    font-size: 25px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transform: translateY(-50%);
+
+    transition: .2s ease;
+}
+
+.promotion-arrow:hover {
+    background: #ff4655;
+
+    border-color: #ff4655;
+}
+
+.promotion-prev {
+    left: 10px;
+}
+
+.promotion-next {
+    right: 10px;
+}
+
+
+/* =========================================
+   DOTS
+========================================= */
+
+.promotion-dots {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 14px 0 17px;
+}
+
+.promotion-dot {
+    width: 7px;
+    height: 7px;
+
+    padding: 0;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background: #444;
+
+    cursor: pointer;
+
+    transition: all .25s ease;
+}
+
+.promotion-dot.active {
+    width: 22px;
+
+    border-radius: 10px;
+
+    background: #ff4655;
+
+    box-shadow: 0 0 8px rgba(255, 70, 85, .45);
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 576px) {
 
     .promotion-wrapper {
-        width: 100%;
-        padding: 30px 15px;
+        padding: 18px 10px;
     }
 
-    .promotion-section {
-        width: 100%;
+    .promotion-heading {
+        padding: 15px;
+    }
+
+    .promotion-heading h2 {
+        font-size: 16px;
+    }
+
+    .promotion-live {
+        display: none;
     }
 
     .promotion-image {
-        height: 220px;
+        aspect-ratio: 4 / 3;
+    }
+
+    .promotion-content {
+        padding: 16px;
+    }
+
+    .promotion-content h3 {
+        font-size: 19px;
+    }
+
+    .promotion-content p {
+        font-size: 12px;
     }
 
     .promotion-links {
-        flex-direction: column;
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 7px;
     }
 
-    .social-link {
+    .promotion-social {
         width: 100%;
+        padding: 0 8px;
     }
 
-}/* =========================================
+    .promotion-arrow {
+        width: 34px;
+        height: 34px;
+
+        font-size: 22px;
+    }
+
+    .promotion-prev {
+        left: 7px;
+    }
+
+    .promotion-next {
+        right: 7px;
+    }
+
+}
+
+
+/* =========================================
+   TABLET / DESKTOP
+========================================= */
+
+@media (min-width: 768px) {
+
+    .promotion-wrapper {
+        padding: 30px 0;
+    }
+
+    .promotion-slide {
+        position: relative;
+    }
+
+    .promotion-image {
+        aspect-ratio: 21 / 8;
+    }
+
+    .promotion-content {
+        position: absolute;
+
+        left: 0;
+        bottom: 0;
+
+        z-index: 2;
+
+        width: 100%;
+
+        padding: 30px;
+
+        background:
+            linear-gradient(to top,
+                rgba(0, 0, 0, .95),
+                rgba(0, 0, 0, .7),
+                transparent);
+    }
+
+    .promotion-content h3 {
+        font-size: 28px;
+    }
+
+}
+/* =========================================
    KINGSMAN HOME CONTENT
    PROMOTION + MATCHES + EVENTS
    ========================================= */
@@ -366,7 +734,37 @@
     display: grid;
     grid-template-columns: 40% 30% 30%;
 
-    align-items: start;
+    align-items: stretch;
+}
+/* =========================================
+   EQUAL HEIGHT HOMEPAGE SECTIONS
+========================================= */
+
+.home-main-grid>.promotion-wrapper,
+.home-main-grid>.matches-wrapper,
+.home-main-grid>.home-events-wrapper {
+    height: 100%;
+}
+
+.home-main-grid .promotion-section,
+.home-main-grid .matches-section,
+.home-main-grid .home-events-section {
+    height: 100%;
+}
+
+/* Promotion keeps its social links at the bottom */
+.promotion-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.promotion-image {
+    flex: 1;
+    min-height: 320px;
+}
+
+.promotion-links {
+    flex-shrink: 0;
 }
 
 
@@ -1083,3 +1481,93 @@
     }
 
 }
+
+
+
+
+
+/* =========================================
+   PROMOTION SECTION - IMPROVED SIZE
+   ========================================= */
+
+.home-main-grid {
+    grid-template-columns: 45% 27.5% 27.5%;
+    gap: 0;
+}
+
+/* Make promotion use its complete column */
+.home-main-grid>.promotion-wrapper {
+    width: 100%;
+}
+
+/* Larger promotion image */
+.promotion-image {
+    width: 100%;
+    height: 400px;
+}
+
+/* Keep image filling the larger area */
+.promotion-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Give social section a little more presence */
+.promotion-links {
+    min-height: 70px;
+    padding: 18px;
+}
+
+/* =========================================
+   TABLET
+   ========================================= */
+
+@media (max-width: 1000px) {
+
+    .home-main-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .home-main-grid>.promotion-wrapper {
+        grid-column: 1 / -1;
+    }
+
+    .promotion-image {
+        height: 380px;
+    }
+}
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    .home-main-grid {
+        width: 100%;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .home-main-grid>.promotion-wrapper {
+        grid-column: auto;
+    }
+
+    .promotion-image {
+        height: 260px;
+    }
+
+    .promotion-links {
+        flex-direction: column;
+        min-height: auto;
+    }
+
+    .social-link {
+        width: 100%;
+    }
+}
+
+
+

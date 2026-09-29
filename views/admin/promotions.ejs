@@ -1,0 +1,391 @@
+<% layout("/layouts/boilerplate") %>
+
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/admin-promotions.css">
+
+
+    <div class="promotion-admin">
+
+
+        <!-- =========================================
+         HEADER
+    ========================================== -->
+
+        <section class="promotion-admin-header">
+
+            <div>
+
+                <span class="promotion-admin-kicker">
+                    KINGSMAN // ADMINISTRATION
+                </span>
+
+                <h1>
+                    PROMOTIONS
+                    <span>& SPONSORS</span>
+                </h1>
+
+                <p>
+                    Manage the promotions and sponsors
+                    displayed on the KingsMan homepage.
+                </p>
+
+            </div>
+
+
+            <div class="promotion-admin-code">
+
+                PROMOTION
+                <strong>
+                    CONTROL // 01
+                </strong>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+         ADD PROMOTION
+    ========================================== -->
+
+        <section class="promotion-admin-card">
+
+            <div class="promotion-admin-card-heading">
+
+                <div>
+
+                    <span>
+                        01 / CREATE
+                    </span>
+
+                    <h2>
+                        Add New Promotion
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <form action="/admin/promotions" method="POST" enctype="multipart/form-data">
+
+
+                <!-- IMAGE -->
+
+                <div class="promotion-form-group">
+
+                    <label for="image">
+                        Promotion Image
+                    </label>
+
+                    <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp" required>
+
+                    <small>
+                        JPG, PNG or WEBP. Maximum 5MB.
+                    </small>
+
+                </div>
+
+
+                <!-- TITLE -->
+
+                <div class="promotion-form-group">
+
+                    <label for="title">
+                        Promotion / Sponsor Name
+                    </label>
+
+                    <input type="text" id="title" name="title" placeholder="RED BULL GAMING" required>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="promotion-form-group">
+
+                    <label for="description">
+                        Description
+                    </label>
+
+                    <textarea id="description" name="description"
+                        placeholder="Official gaming partner of KingsMan Esports."></textarea>
+
+                </div>
+
+
+                <!-- WEBSITE -->
+
+                <div class="promotion-form-group">
+
+                    <label for="websiteLink">
+                        Website
+                    </label>
+
+                    <input type="url" id="websiteLink" name="websiteLink" placeholder="https://example.com">
+
+                </div>
+
+
+                <!-- INSTAGRAM -->
+
+                <div class="promotion-form-group">
+
+                    <label for="instagramLink">
+                        Instagram
+                    </label>
+
+                    <input type="url" id="instagramLink" name="instagramLink"
+                        placeholder="https://instagram.com/example">
+
+                </div>
+
+
+                <!-- YOUTUBE -->
+
+                <div class="promotion-form-group">
+
+                    <label for="youtubeLink">
+                        YouTube
+                    </label>
+
+                    <input type="url" id="youtubeLink" name="youtubeLink" placeholder="https://youtube.com/@example">
+
+                </div>
+
+
+                <!-- DISCORD -->
+
+                <div class="promotion-form-group">
+
+                    <label for="discordLink">
+                        Discord
+                    </label>
+
+                    <input type="url" id="discordLink" name="discordLink" placeholder="https://discord.gg/example">
+
+                </div>
+
+
+                <!-- POSITION -->
+
+                <div class="promotion-form-group">
+
+                    <label for="position">
+                        Display Position
+                    </label>
+
+                    <input type="number" id="position" name="position" value="0" min="0">
+
+                    <small>
+                        Lower numbers appear first.
+                    </small>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="promotion-form-group">
+
+                    <label>
+                        Promotion Status
+                    </label>
+
+                    <label class="status-toggle">
+
+                        <input type="checkbox" name="active" value="true" checked>
+
+                        <span class="toggle-slider"></span>
+
+                        <span class="toggle-label">
+                            ACTIVE
+                        </span>
+
+                    </label>
+
+                    <small>
+                        Active promotions appear on the homepage.
+                    </small>
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button type="submit" class="promotion-admin-submit">
+                    ADD PROMOTION
+                </button>
+
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =========================================
+         EXISTING PROMOTIONS
+    ========================================== -->
+
+        <section class="promotion-admin-card">
+
+            <div class="promotion-admin-card-heading">
+
+                <div>
+
+                    <span>
+                        02 / MANAGE
+                    </span>
+
+                    <h2>
+                        Existing Promotions
+                    </h2>
+
+                </div>
+
+                <div class="promotion-count">
+
+                    <%= promotions.length %>
+
+                </div>
+
+            </div>
+
+
+            <% if (!promotions || promotions.length===0) { %>
+
+
+                <div class="promotion-empty">
+
+                    <strong>
+                        NO PROMOTIONS
+                    </strong>
+
+                    <span>
+                        Add your first sponsor above.
+                    </span>
+
+                </div>
+
+
+                <% } else { %>
+
+
+                    <div class="promotion-admin-list">
+
+
+                        <% promotions.forEach((promotion)=> { %>
+
+
+                            <article class="promotion-admin-item">
+
+
+                                <!-- IMAGE -->
+
+                                <div class="promotion-admin-image">
+
+                                    <img src="<%= promotion.image %>" alt="<%= promotion.title %>">
+
+                                </div>
+
+
+                                <!-- INFO -->
+
+                                <div class="promotion-admin-info">
+
+                                    <span class="promotion-admin-position">
+
+                                        POSITION
+                                        <strong>
+                                            <%= promotion.position %>
+                                        </strong>
+
+                                    </span>
+
+
+                                    <h3>
+                                        <%= promotion.title %>
+                                    </h3>
+
+
+                                    <% if (promotion.description) { %>
+
+                                        <p>
+                                            <%= promotion.description %>
+                                        </p>
+
+                                        <% } %>
+
+
+                                            <% if (promotion.active) { %>
+
+                                                <span class="promotion-status active">
+                                                    ACTIVE
+                                                </span>
+
+                                                <% } else { %>
+
+                                                    <span class="promotion-status inactive">
+                                                        INACTIVE
+                                                    </span>
+
+                                                    <% } %>
+
+
+                                </div>
+
+
+                                <!-- ACTIONS -->
+
+                                <div class="promotion-admin-actions">
+
+
+                                    <a href="/admin/promotions/<%= promotion._id %>/edit" class="promotion-action edit">
+                                        EDIT
+                                    </a>
+
+
+                                    <form action="/admin/promotions/<%= promotion._id %>/toggle" method="POST">
+
+                                        <input type="hidden" name="_method" value="PATCH">
+
+                                        <button type="submit" class="promotion-action toggle">
+
+                                            <%= promotion.active ? "DISABLE" : "ACTIVATE" %>
+
+                                        </button>
+
+                                    </form>
+
+
+                                    <form action="/admin/promotions/<%= promotion._id %>?_method=DELETE" method="POST"
+                                        onsubmit="return confirm('Delete this promotion permanently?');">
+
+                                        <button type="submit" class="promotion-action delete">
+                                            DELETE
+                                        </button>
+
+                                    </form>
+
+
+                                </div>
+
+
+                            </article>
+
+
+                            <% }) %>
+
+
+                    </div>
+
+
+                    <% } %>
+
+
+        </section>
+
+
+    </div>

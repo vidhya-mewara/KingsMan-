@@ -87,17 +87,10 @@ app.use((req, res, next) => {
 
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
-  },
-
-  tls: {
-    rejectUnauthorized: false
   }
 });
 const validateUser = (req, res, next) => { 
@@ -597,15 +590,52 @@ app.post("/register", wrapAsync(async (req, res) => {
 
   // Send OTP
   await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+    from: `"KingsMan Esports" <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: "KingsMan Email Verification",
+    subject: "Your KingsMan verification code",
+
+    text: `
+Your KingsMan Esports verification code is: ${otp}
+
+This code expires in 5 minutes.
+
+If you did not request this code, you can safely ignore this email.
+  `,
+
     html: `
-      <h2>KingsMan Email Verification</h2>
-      <p>Your OTP is:</p>
-      <h1>${otp}</h1>
-      <p>This OTP expires in 5 minutes.</p>
-    `
+    <div style="
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 30px;
+      color: #222;
+    ">
+
+      <h2>KingsMan Esports</h2>
+
+      <p>Your email verification code is:</p>
+
+      <h1 style="
+        letter-spacing: 8px;
+        font-size: 32px;
+      ">
+        ${otp}
+      </h1>
+
+      <p>
+        This code expires in <strong>5 minutes</strong>.
+      </p>
+
+      <p style="
+        font-size: 12px;
+        color: #777;
+      ">
+        If you did not request this code,
+        you can safely ignore this email.
+      </p>
+
+    </div>
+  `
   });
 
   // Save user ID in verification session
@@ -687,15 +717,52 @@ app.post("/resend-otp", wrapAsync(async (req, res) => {
 
   // Send new OTP
   await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+    from: `"KingsMan Esports" <${process.env.EMAIL_USER}>`,
     to: user.email,
-    subject: "KingsMan - New Verification OTP",
+    subject: "Your new KingsMan verification code",
+
+    text: `
+Your new KingsMan Esports verification code is: ${otp}
+
+This code expires in 5 minutes.
+
+If you did not request this code, you can safely ignore this email.
+  `,
+
     html: `
-      <h2>KingsMan Email Verification</h2>
-      <p>Your new OTP is:</p>
-      <h1>${otp}</h1>
-      <p>This OTP expires in 5 minutes.</p>
-    `
+    <div style="
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 30px;
+      color: #222;
+    ">
+
+      <h2>KingsMan Esports</h2>
+
+      <p>Your new email verification code is:</p>
+
+      <h1 style="
+        letter-spacing: 8px;
+        font-size: 32px;
+      ">
+        ${otp}
+      </h1>
+
+      <p>
+        This code expires in <strong>5 minutes</strong>.
+      </p>
+
+      <p style="
+        font-size: 12px;
+        color: #777;
+      ">
+        If you did not request this code,
+        you can safely ignore this email.
+      </p>
+
+    </div>
+  `
   });
 
   req.flash("success", "A new OTP has been sent to your email.");
@@ -889,8 +956,11 @@ app.get("/", async (req, res) => {
       position: 1
     });
 
-    const promotion = await Promotion.findOne({
+    const promotions = await Promotion.find({
       active: true
+    }).sort({
+      position: 1,
+      createdAt: -1
     });
     const ongoingMatches = await Match.find({
       status: "ongoing"
@@ -918,7 +988,7 @@ app.get("/", async (req, res) => {
 
     res.render("home", {
       sliders,
-      promotion,
+      promotions,
 
       ongoingMatches,
       upcomingMatches,
@@ -1211,6 +1281,413 @@ app.delete(
 
   })
 );
+
+// ============================================================
+// ADMIN PROMOTION MANAGEMENT
+// ============================================================
+
+
+// ===============================
+// VIEW ALL PROMOTIONS
+// ===============================
+
+app.get(
+  "/admin/promotions",
+  requireLogin,
+  requireAdmin,
+  wrapAsync(async (req, res) => {
+
+    const promotions = await Promotion.find({})
+      .sort({
+        position: 1,
+        createdAt: -1
+      });
+
+    res.render("admin/promotions", {
+      promotions
+    });
+
+  })
+);
+
+
+// ===============================
+// ADD PROMOTION
+// ===============================
+
+app.post(
+  "/admin/promotions",
+  requireLogin,
+  requireAdmin,
+  promotionUpload.single("image"),
+
+  wrapAsync(async (req, res) => {
+
+    if (!req.file) {
+
+      req.flash(
+        "error",
+        "Promotion image is required."
+      );
+
+      return res.redirect(
+        "/admin/promotions"
+      );
+    }
+
+
+    const promotion = new Promotion({
+
+      title:
+        req.body.title,
+
+      description:
+        req.body.description || "",
+
+      image:
+        "/uploads/promotions/" +
+        req.file.filename,
+
+      websiteLink:
+        req.body.websiteLink || "",
+
+      youtubeLink:
+        req.body.youtubeLink || "",
+
+      instagramLink:
+        req.body.instagramLink || "",
+
+      discordLink:
+        req.body.discordLink || "",
+
+      position:
+        Number(req.body.position) || 0,
+
+      active:
+        req.body.active === "true"
+
+    });
+
+
+    await promotion.save();
+
+
+    req.flash(
+      "success",
+      "Promotion added successfully."
+    );
+
+
+    res.redirect(
+      "/admin/promotions"
+    );
+
+  })
+);
+
+
+// ===============================
+// EDIT PROMOTION PAGE
+// ===============================
+
+app.get(
+  "/admin/promotions/:id/edit",
+  requireLogin,
+  requireAdmin,
+
+  wrapAsync(async (req, res) => {
+
+    const promotion =
+      await Promotion.findById(
+        req.params.id
+      );
+
+
+    if (!promotion) {
+
+      req.flash(
+        "error",
+        "Promotion not found."
+      );
+
+      return res.redirect(
+        "/admin/promotions"
+      );
+    }
+
+
+    res.render(
+      "admin/edit-promotions",
+      {
+        promotion
+      }
+    );
+
+  })
+);
+
+
+// ===============================
+// UPDATE PROMOTION
+// ===============================
+
+app.put(
+  "/admin/promotions/:id",
+  requireLogin,
+  requireAdmin,
+  promotionUpload.single("image"),
+
+  wrapAsync(async (req, res) => {
+
+    const promotion =
+      await Promotion.findById(
+        req.params.id
+      );
+
+
+    if (!promotion) {
+
+      req.flash(
+        "error",
+        "Promotion not found."
+      );
+
+      return res.redirect(
+        "/admin/promotions"
+      );
+    }
+
+
+    const oldImage =
+      promotion.image;
+
+
+    // ===============================
+    // UPDATE CONTENT
+    // ===============================
+
+    promotion.title =
+      req.body.title;
+
+
+    promotion.description =
+      req.body.description || "";
+
+
+    promotion.websiteLink =
+      req.body.websiteLink || "";
+
+
+    promotion.youtubeLink =
+      req.body.youtubeLink || "";
+
+
+    promotion.instagramLink =
+      req.body.instagramLink || "";
+
+
+    promotion.discordLink =
+      req.body.discordLink || "";
+
+
+    promotion.position =
+      Number(req.body.position) || 0;
+
+
+    promotion.active =
+      req.body.active === "true";
+
+
+    // ===============================
+    // REPLACE IMAGE
+    // ===============================
+
+    if (req.file) {
+
+      promotion.image =
+        "/uploads/promotions/" +
+        req.file.filename;
+
+    }
+
+
+    await promotion.save();
+
+
+    // ===============================
+    // DELETE OLD IMAGE
+    // ===============================
+
+    if (req.file && oldImage) {
+
+      const oldImagePath =
+        path.join(
+          import.meta.dirname,
+          "public",
+          oldImage.replace(/^\/+/, "")
+        );
+
+
+      if (
+        fs.existsSync(oldImagePath)
+      ) {
+
+        fs.unlinkSync(
+          oldImagePath
+        );
+
+      }
+
+    }
+
+
+    req.flash(
+      "success",
+      "Promotion updated successfully."
+    );
+
+
+    res.redirect(
+      "/admin/promotions"
+    );
+
+  })
+);
+
+
+// ===============================
+// TOGGLE PROMOTION STATUS
+// ===============================
+
+app.patch(
+  "/admin/promotions/:id/toggle",
+  requireLogin,
+  requireAdmin,
+
+  wrapAsync(async (req, res) => {
+
+    const promotion =
+      await Promotion.findById(
+        req.params.id
+      );
+
+
+    if (!promotion) {
+
+      req.flash(
+        "error",
+        "Promotion not found."
+      );
+
+      return res.redirect(
+        "/admin/promotions"
+      );
+    }
+
+
+    promotion.active =
+      !promotion.active;
+
+
+    await promotion.save();
+
+
+    req.flash(
+      "success",
+      promotion.active
+        ? "Promotion activated."
+        : "Promotion deactivated."
+    );
+
+
+    res.redirect(
+      "/admin/promotions"
+    );
+
+  })
+);
+
+
+// ===============================
+// DELETE PROMOTION
+// ===============================
+
+app.delete(
+  "/admin/promotions/:id",
+  requireLogin,
+  requireAdmin,
+
+  wrapAsync(async (req, res) => {
+
+    const promotion =
+      await Promotion.findById(
+        req.params.id
+      );
+
+
+    if (!promotion) {
+
+      req.flash(
+        "error",
+        "Promotion not found."
+      );
+
+      return res.redirect(
+        "/admin/promotions"
+      );
+    }
+
+
+    const imagePath =
+      promotion.image;
+
+
+    await Promotion.findByIdAndDelete(
+      req.params.id
+    );
+
+
+    // ===============================
+    // DELETE IMAGE FROM SERVER
+    // ===============================
+
+    if (imagePath) {
+
+      const fullImagePath =
+        path.join(
+          import.meta.dirname,
+          "public",
+          imagePath.replace(/^\/+/, "")
+        );
+
+
+      if (
+        fs.existsSync(fullImagePath)
+      ) {
+
+        fs.unlinkSync(
+          fullImagePath
+        );
+
+      }
+
+    }
+
+
+    req.flash(
+      "success",
+      "Promotion deleted successfully."
+    );
+
+
+    res.redirect(
+      "/admin/promotions"
+    );
+
+  })
+);
+
+
 app.get("/events/:id", async (req, res) => {
 
   try {
@@ -2834,6 +3311,7 @@ app.get(
       playerCount,
       matchCount,
       sliderCount,
+      promotionCount,
       eventCount,
       teamCount,
       pendingPlayerCount
@@ -2844,6 +3322,8 @@ app.get(
       Match.countDocuments(),
 
       Slider.countDocuments(),
+
+      Promotion.countDocuments(),
 
       Event.countDocuments(),
 
@@ -2886,6 +3366,8 @@ app.get(
         matches: matchCount,
 
         sliders: sliderCount,
+
+        promotions: promotionCount,
 
         events: eventCount,
 

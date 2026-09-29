@@ -216,7 +216,8 @@
                             </div>
 
                         </div>
-                        <% if (currUser && currUser.player && currUser.player.toString()===player._id.toString()) { %>
+                        <% if ( currUser && ( currUser.role==="admin" || (currUser.player && currUser.player.toString()===player._id.toString())
+                            ) ) { %>
                         <div class="profile-actions">
                         
                             <a href="/players/<%= player._id %>/edit" class="profile-btn edit-btn">

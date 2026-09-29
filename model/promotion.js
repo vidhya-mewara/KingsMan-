@@ -2,9 +2,26 @@ import mongoose from "mongoose";
 
 const promotionSchema = new mongoose.Schema(
     {
+        title: {
+            type: String,
+            required: true,
+            trim: true
+        },
+
+        description: {
+            type: String,
+            default: "",
+            trim: true
+        },
+
         image: {
             type: String,
             required: true
+        },
+
+        websiteLink: {
+            type: String,
+            default: ""
         },
 
         youtubeLink: {
@@ -25,6 +42,11 @@ const promotionSchema = new mongoose.Schema(
         active: {
             type: Boolean,
             default: true
+        },
+
+        position: {
+            type: Number,
+            default: 0
         }
     },
     {

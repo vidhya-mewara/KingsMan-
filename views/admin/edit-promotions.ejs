@@ -1,0 +1,183 @@
+<% layout("/layouts/boilerplate") %>
+
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/admin-promotions.css">
+
+
+    <div class="promotion-admin">
+
+
+        <section class="promotion-admin-header">
+
+            <div>
+
+                <span class="promotion-admin-kicker">
+                    KINGSMAN // ADMINISTRATION
+                </span>
+
+                <h1>
+                    EDIT
+                    <span>PROMOTION</span>
+                </h1>
+
+                <p>
+                    Update sponsor information,
+                    social links and homepage display settings.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <section class="promotion-admin-card">
+
+
+            <div class="promotion-current-image">
+
+                <img src="<%= promotion.image %>" alt="<%= promotion.title %>">
+
+            </div>
+
+
+            <form action="/admin/promotions/<%= promotion._id %>?_method=PUT" method="POST"
+                enctype="multipart/form-data">
+
+
+                <div class="promotion-form-group">
+
+                    <label for="image">
+                        Replace Image
+                    </label>
+
+                    <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/webp">
+
+                    <small>
+                        Leave empty to keep the current image.
+                    </small>
+
+                </div>
+
+
+                <div class="promotion-form-group">
+
+                    <label for="title">
+                        Promotion / Sponsor Name
+                    </label>
+
+                    <input type="text" id="title" name="title" value="<%= promotion.title %>" required>
+
+                </div>
+
+
+                <div class="promotion-form-group">
+
+                    <label for="description">
+                        Description
+                    </label>
+
+                    <textarea id="description" name="description"><%= promotion.description || "" %></textarea>
+
+                </div>
+
+
+                <div class="promotion-form-group">
+
+                    <label for="websiteLink">
+                        Website
+                    </label>
+
+                    <input type="url" id="websiteLink" name="websiteLink" value="<%= promotion.websiteLink || "" %>">
+
+                </div>
+
+
+                <div class="promotion-form-group">
+
+                    <label for="instagramLink">
+                        Instagram
+                    </label>
+
+                    <input type="url" id="instagramLink" name="instagramLink"
+                        value="<%= promotion.instagramLink || "" %>">
+
+                </div>
+
+
+                <div class="promotion-form-group">
+
+                    <label for="youtubeLink">
+                        YouTube
+                    </label>
+
+                    <input type="url" id="youtubeLink" name="youtubeLink" value="<%= promotion.youtubeLink || "" %>">
+
+                </div>
+
+
+                <div class="promotion-form-group">
+
+                    <label for="discordLink">
+                        Discord
+                    </label>
+
+                    <input type="url" id="discordLink" name="discordLink" value="<%= promotion.discordLink || "" %>">
+
+                </div>
+
+
+                <div class="promotion-form-group">
+
+                    <label for="position">
+                        Display Position
+                    </label>
+
+                    <input type="number" id="position" name="position" value="<%= promotion.position %>" min="0">
+
+                </div>
+
+
+                <div class="promotion-form-group">
+
+                    <label>
+                        Promotion Status
+                    </label>
+
+                    <label class="status-toggle">
+
+                        <input type="checkbox" name="active" value="true" <%=promotion.active ? "checked" : "" %>
+                        >
+
+                        <span class="toggle-slider"></span>
+
+                        <span class="toggle-label">
+                            ACTIVE
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+                <div class="promotion-edit-actions">
+
+                    <button type="submit" class="promotion-admin-submit">
+                        SAVE CHANGES
+                    </button>
+
+
+                    <a href="/admin/promotions" class="promotion-admin-cancel">
+                        CANCEL
+                    </a>
+
+                </div>
+
+
+            </form>
+
+
+        </section>
+
+
+    </div>

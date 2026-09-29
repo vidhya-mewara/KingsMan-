@@ -1,41 +1,93 @@
-<footer class="kingsman-footer text-light pt-5 pb-4 ">
+
+<footer class="kingsman-footer">
+
     <div class="container">
-        <div class="row">
 
-            <div class="col-md-4 mb-4">
-                <h4 class="fw-bold">KINGSMAN ESPORTS</h4>
-                <p class="footer-description"">
+        <!-- MAIN FOOTER -->
+        <div class="kingsman-footer-main">
+
+            <!-- BRAND -->
+            <div class="kingsman-footer-brand">
+
+                <a href="/" class="kingsman-footer-logo">
+                    KINGS<span>MAN</span>
+                </a>
+
+                <p>
                     Competing at the highest level in Valorant Mobile.
-                    Discipline. Strategy. Victory.
+                    <br>
+                    <strong>Discipline. Strategy. Victory.</strong>
                 </p>
+
             </div>
 
-            <div class="col-md-4 mb-4">
-                <h5>Quick Links</h5>
-                <ul class="list-unstyled">
-                    <li><a href="/" class="text-light text-decoration-none">Home</a></li>
-                    <li><a href="/players" class="text-light text-decoration-none">Players</a></li>
-                    <li><a href="/schedule" class="text-light text-decoration-none">Schedule</a></li>
-                    <li><a href="/contact" class="text-light text-decoration-none">Contact</a></li>
-                </ul>
+
+            <!-- QUICK LINKS -->
+            <div class="kingsman-footer-links">
+
+                <h5>QUICK LINKS</h5>
+
+                <a href="/">Home</a>
+                <a href="/players">Players</a>
+                <a href="/matches">Matches</a>
+                <a href="/tournament-events">Events</a>
+                <a href="/contact">Contact & Support</a>
+
             </div>
 
-            <div class="col-md-4 mb-4">
-                <h5>Follow Us</h5>
-                <div class="d-flex gap-3">
-                    <a href="#" class="text-light fs-4"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" class="text-light fs-4"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#" class="text-light fs-4"><i class="fa-brands fa-twitter"></i></a>
-                    <a href="#" class="text-light fs-4"><i class="fa-brands fa-discord"></i></a>
+
+            <!-- SOCIAL -->
+            <div class="kingsman-footer-social">
+
+                <h5>FOLLOW KINGSMAN</h5>
+
+                <p>
+                    Stay connected with the team.
+                </p>
+
+                <div class="kingsman-social-icons">
+
+                    <a href="#" aria-label="Instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+
+                    <a href="#" aria-label="YouTube">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+
+                    <a href="#" aria-label="Twitter">
+                        <i class="fa-brands fa-x-twitter"></i>
+                    </a>
+
+                    <a href="#" aria-label="Discord">
+                        <i class="fa-brands fa-discord"></i>
+                    </a>
+
                 </div>
+
             </div>
 
         </div>
 
-        <hr class="border-secondary">
 
-        <div class="text-center text-muted small">
-            &copy; <%= new Date().getFullYear() %> Kingsman Esports. All rights reserved.
+        <!-- FOOTER BOTTOM -->
+        <div class="kingsman-footer-bottom">
+
+            <span>
+                © <%= new Date().getFullYear() %> KINGSMAN ESPORTS
+            </span>
+
+            <span class="kingsman-footer-status">
+                <i></i>
+                SYSTEM ONLINE
+            </span>
+
+            <span>
+                ALL RIGHTS RESERVED
+            </span>
+
         </div>
+
     </div>
+
 </footer>
